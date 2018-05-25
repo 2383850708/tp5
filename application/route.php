@@ -9,7 +9,7 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-return [
+/*return [
     '__pattern__' => [
         'name' => '\w+',
     ],
@@ -18,4 +18,14 @@ return [
         ':name' => ['index/hello', ['method' => 'post']],
     ],
 
-];
+];*/
+
+use think\Route;
+Route::rule([
+    'admin/index'  =>  'admin/auth.admin/index',
+],'','GET',['ext'=>'html']);
+
+
+
+
+

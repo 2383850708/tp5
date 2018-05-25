@@ -1,0 +1,9 @@
+ {load href="/static/layuiAdmin/layui/layui.js" /}
+  <script>
+
+  layui.config({
+    base: '/static/layuiAdmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use('index');
+  </script>
