@@ -11,27 +11,27 @@
 
 return [
     // 数据库类型
-    'type'            => 'mysql',
+    'type'            => \think\Env::get('database.type', 'mysql'),
     // 服务器地址
-    'hostname'        => '127.0.0.1',
+    'hostname'        => \think\Env::get('database.hostname', '127.0.0.1'),
     // 数据库名
-    'database'        => '',
+    'database'        => \think\Env::get('database.database', '127'),
     // 用户名
-    'username'        => 'root',
+    'username'        => \think\Env::get('database.username', 'root'),
     // 密码
-    'password'        => '',
+    'password'        => \think\Env::get('database.password', 'root'),
     // 端口
-    'hostport'        => '',
+    'hostport'        => \think\Env::get('database.hostport', ''),
     // 连接dsn
     'dsn'             => '',
     // 数据库连接参数
     'params'          => [],
     // 数据库编码默认采用utf8
-    'charset'         => 'utf8',
+    'charset'         => \think\Env::get('database.charset', 'utf8'),
     // 数据库表前缀
-    'prefix'          => '',
+    'prefix'          => \think\Env::get('database.prefix', 'fa_'),
     // 数据库调试模式
-    'debug'           => true,
+    'debug'           => \think\Env::get('database.debug', true),
     // 数据库部署方式:0 集中式(单一服务器),1 分布式(主从服务器)
     'deploy'          => 0,
     // 数据库读写是否分离 主从式有效
@@ -49,5 +49,5 @@ return [
     // 时间字段取出后的默认时间格式
     'datetime_format' => 'Y-m-d H:i:s',
     // 是否需要进行SQL性能分析
-    'sql_explain'     => false,
+    'sql_explain'     => true,
 ];

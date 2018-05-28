@@ -8,6 +8,10 @@ class Admin extends Backend
 		return $this->fetch();
 	}
 
+	public function add()
+	{
+		return $this->fetch();
+	}
 	
 }
 

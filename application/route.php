@@ -23,6 +23,7 @@
 use think\Route;
 Route::rule([
     'admin/index'  =>  'admin/auth.admin/index',
+    'admin/add'  =>  'admin/auth.admin/add',
 ],'','GET',['ext'=>'html']);
 
 
