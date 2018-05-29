@@ -7,12 +7,12 @@
 <body style="padding:15px">
 	<div class="layui-card">
           <div class="layui-card-body">
-            <form class="layui-form" action="" lay-filter="component-form-element">
+            <form class="layui-form" action="" onsubmit="return false" lay-filter="component-form-element">
               <div class="layui-row layui-col-space10 layui-form-item">
 				<div class="layui-col-lg6">
                   <label class="layui-form-label">分组：</label>
                   <div class="layui-input-block">
-                    <select name="type" lay-verify="required" lay-filter="aihao">
+                    <select name="group[]" lay-verify="required" lay-filter="aihao">
                       <option value=""></option>
                       <option value="0">前端工程师</option>
                       <option value="1">Node.js工程师</option>
@@ -41,43 +41,46 @@
                 <div class="layui-col-lg6">
                   <label class="layui-form-label">用户名：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="fullname" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    <input type="text" name="row[username]" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
                 <div class="layui-col-lg6">
                   <label class="layui-form-label">密码：</label>
                   <div class="layui-input-block">
-                    <input type="password" name="fullname" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    <input type="password" name="row[password]" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
                 <div class="layui-col-lg6">
                   <label class="layui-form-label">昵称：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="fullname" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    <input type="text" name="row[nickname]" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
                 <div class="layui-col-lg6">
                   <label class="layui-form-label">Email：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="fullname" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    <input type="text" name="row[email]" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 				
 				<div class="layui-form-item">
-                <label class="layui-form-label">所属职称：</label>
+                <label class="layui-form-label">状态：</label>
                 <div class="layui-input-block">
-                  <input type="radio" name="role" checked="checked" value="" title="正常"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>正常</div></div>
-                  <input type="radio" name="role" value="" title="隐藏"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>隐藏</div></div>
+                  <input type="radio" name="row[status]" checked="checked" value="1" title="正常">
+                  <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
+                  <div>正常</div>
+                  </div>
+                  <input type="radio" name="row[status]" value="2" title="隐藏"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>隐藏</div></div>
                 </div>
               </div>
                 
                
               <div class="layui-form-item">
                 <div class="layui-input-block">
-                  <button class="layui-btn" lay-submit="" lay-filter="component-form-element">立即提交</button>
+                  <button class="layui-btn" lay-submit="" lay-filter="demo1" id="sub">立即提交</button>
                   <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                 </div>
               </div>
@@ -90,14 +93,34 @@
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
 
-layui.use('table', function(){
+layui.use(['form','table', 'layedit','laydate'], function(){
   var table = layui.table;
+  var form = layui.form;
 
-
+  form.on('submit(demo1)', function(data){  
+  	var index = parent.layer.getFrameIndex(window.name);
+  	$.ajax({
+	 	  url:"{:url('admin/add')}",
+	 	  data:$("form").serialize(),
+		  type: "GET",
+		  dataType: "json",
+		  success:function(data)
+		  {
+		  	layer.msg(data.msg);
+		  	if(data.status==1)
+		  	{
+				parent.layer.close(index);
+		  	}
+		  }
+		});
+  });
+  return false;
 
 });
 
+ $(function(){
 
+ })
 
 </script>
 </html> 
