@@ -16,7 +16,11 @@
               <a><cite>导航元素</cite></a>
         </span>
 	</div>
-
+<div class="layui-btn-group demoTable">
+  <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
+  <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+  <button class="layui-btn" data-type="isAll">验证是否全选</button>
+</div>
 	<div class="layui-card">
 		
 		<div class="layui-card-body">
@@ -35,7 +39,7 @@
 		<blockquote class="layui-elem-quote" style="padding:10px;border-left:5px solid #18bc9c">
 		    <a class="layui-btn layui-btn-sm" onclick="refresh()" title="刷新" style="background: #2c3e50"><i class="layui-icon layui-icon-refresh" ></i></a>
 			<a class="layui-btn layui-btn-sm layui-btn-warm"  id="parentIframe" style="background: #18bc9c"><i class="layui-icon layui-icon-add-circle-fine"></i> 添加</a>
-			<a class="layui-btn layui-btn-sm layui-btn-normal" style="background: #e74c3c"><i class="layui-icon"></i> 删除</a>
+			<a class="layui-btn layui-btn-sm layui-btn-normal" style="background: #e74c3c" onclick="del()"><i class="layui-icon"></i> 删除</a>
 	
 			<!-- <a href="#" class="layui-btn layui-btn-small" id="import">
 							<i class="layui-icon"></i> 导入信息
@@ -60,7 +64,7 @@
 </body>
 
  {include file="public/foot" /} 
-
+ <!-- {load href="/static/layuiAdmin/layui/dist/layui.js" /} -->
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script type="text/html" id="barDemo">
   <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
@@ -69,8 +73,6 @@
 </script>
 
 <script>
-
-
 
 var condition = new Array();
 layui.config({
@@ -142,7 +144,32 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     //console.log(count);
   	}
   });
-
+  
+  //监听复选框
+  table.on('checkbox(demo)',function(obj){
+    console.log(obj)
+  })
+  layui.$, active = {
+    getCheckData: function(){ //获取选中数据
+      var checkStatus = table.checkStatus('idTest')
+      ,data = checkStatus.data;
+      layer.alert(JSON.stringify(data));
+    }
+    ,getCheckLength: function(){ //获取选中数目
+      var checkStatus = table.checkStatus('idTest')
+      ,data = checkStatus.data;
+      layer.msg('选中了：'+ data.length + ' 个');
+    }
+    ,isAll: function(){ //验证是否全选
+      var checkStatus = table.checkStatus('idTest');
+      layer.msg(checkStatus.isAll ? '全选': '未全选')
+    }
+  };
+    
+  $('.demoTable .layui-btn').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
 
   //监听工具条
   table.on('tool(demo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
@@ -154,9 +181,28 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
       //layer.msg('查看操作');
     } else if(layEvent === 'del'){
       layer.confirm('真的删除行么', function(index){
-        obj.del(); //删除对应行（tr）的DOM结构
-        layer.close(index);
-        //向服务端发送删除指令
+        var ids = new Array;
+        var id = data.id;
+        ids[0] = id;
+        ids = JSON.stringify(ids);
+       
+        $.ajax({
+          url:"{:url('admin/del')}",
+          data:{ids:ids},
+          type: "GET",
+          dataType: "json",
+          success:function(data)
+          {
+            layer.msg(data.msg);
+
+            if(data.status==1)
+            {
+              obj.del();//删除对应行（tr）的DOM结构
+            }
+            layer.close(index);
+          }
+        });
+
       });
     } else if(layEvent === 'edit'){
     	layer.open({
@@ -202,7 +248,10 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 	  }
 	});
  }
+function del()
+{
 
+}
 
 </script>
 <script type="text/html" id="status">

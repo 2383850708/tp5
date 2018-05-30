@@ -25,6 +25,7 @@ Route::rule([
     'admin/index'  =>  'admin/auth.admin/index',
     'admin/add'  =>  'admin/auth.admin/add',
     'admin/edit'  =>  'admin/auth.admin/edit',
+    'admin/del'  =>  'admin/auth.admin/del',
 ],'','GET',['ext'=>'html']);
 
 Route::rule([

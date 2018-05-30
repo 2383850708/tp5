@@ -18,6 +18,11 @@ class Admin extends Model
 		return $result;
 	}
 
+	public function setPasswordAttr($value)
+    {
+        return MD5($value);
+    }
+
 	public function handleData($result)
 	{
 		foreach ($result as $key => $value) 

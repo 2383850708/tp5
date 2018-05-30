@@ -22,7 +22,6 @@ class Admin extends Backend
 
 	public function add()
 	{
-		
 		if($this->request->isAjax())
 		{
 			$res = array();
@@ -88,14 +87,10 @@ class Admin extends Backend
 		if($this->request->isAjax())
 		{
 			$res = array();
-			$id = input('get.id');
+			
 			$data=$this->request->get("row/a");
-
-			$condition = array();
-			$condition['id'] = array('eq',$id);
-			$condition['id'] = array('neq',$id);
-
-			$result = $this->model->validate('Admin.edit')->save($data,$condition);
+			$id =  input('param.row.id');
+			$result = $this->model->validate('Admin.edit')->save($data,['id'=>$id]);
 			
 			if ($result === false)
             {
@@ -113,12 +108,40 @@ class Admin extends Backend
 		else
 		{
 			$id = input('get.id');
+			
 			$info =  $this->model->get($id)->toArray();
 			$this->assign('info',$info);
 			$this->assign('id',$id);
 			return $this->fetch();
 		}
 		
+	}
+
+	public function del($ids='')
+	{
+		$data = array();
+
+		if($ids)
+		{
+			$ids = json_decode(input('param.ids'));
+			$res = $this->model->destroy($ids);
+			if($res)
+			{
+				$data['status'] = 1;
+				$data['msg'] = '删除成功';
+			}
+			else
+			{
+				$data['status'] = 0;
+				$data['msg'] = '删除失败';
+			}
+		}
+		else
+		{
+			$data['status'] = 0;
+			$data['msg'] = '操作异常';
+		}
+		return json($data);
 	}
 
 	public function checkForm()
