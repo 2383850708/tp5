@@ -13,7 +13,7 @@ class Login extends Backend
 
 	public function login()
 	{
-		echo 11;exit;
+		
 	}
 
 	/**

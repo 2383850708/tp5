@@ -14,9 +14,8 @@
 <!--webfonts-->
 	{load href="/static/layuiAdmin/layui/css/layui.css" /}
 	{load href="/static/f9938/css/style.css" /}
-
-<link href='http://fonts.googleapis.com/css?family=Nixie+One' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    {load href="/static/f9938/css/latin.css" /}
+    {load href="/static/f9938/css/cyrillic.css" /}
 
 <style>
 .inp {
@@ -34,8 +33,8 @@
     cursor: pointer;
 }
 #embed-captcha {
-    width: 300px;
-    margin: 0 auto;
+    width: 100%;
+
 }
 .show {
     display: block;
@@ -72,7 +71,7 @@
 		                <p id="notice" class="hide">请先完成验证</p>
 					 </div>
 					<div class="sign">
-						<button class="layui-btn">默认按钮</button>
+						<button class="layui-btn">登录</button>
 					</div>
 					</form>
 				</div>
@@ -127,6 +126,7 @@
             }, handlerEmbed);
         }
     });
+
 </script>
 </body>
 </html>
