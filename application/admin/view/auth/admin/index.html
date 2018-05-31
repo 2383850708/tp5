@@ -75,7 +75,8 @@ layui.config({
   version: '1527505940714' //为了更新 js 缓存，可忽略
 });
  var u = "{:url('admin/add')}";
-var tableIns = '';
+ var tableIns = '';
+
 layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function(){
   var laydate = layui.laydate //日期
   ,laypage = layui.laypage //分页
@@ -143,29 +144,11 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   
   //监听复选框
   table.on('checkbox(demo)',function(obj){
-    console.log(obj)
+ 		
   })
-  layui.$, active = {
-    getCheckData: function(){ //获取选中数据
-      var checkStatus = table.checkStatus('idTest')
-      ,data = checkStatus.data;
-      layer.alert(JSON.stringify(data));
-    }
-    ,getCheckLength: function(){ //获取选中数目
-      var checkStatus = table.checkStatus('idTest')
-      ,data = checkStatus.data;
-      layer.msg('选中了：'+ data.length + ' 个');
-    }
-    ,isAll: function(){ //验证是否全选
-      var checkStatus = table.checkStatus('idTest');
-      layer.msg(checkStatus.isAll ? '全选': '未全选')
-    }
-  };
+
     
-  $('.demoTable .layui-btn').on('click', function(){
-    var type = $(this).data('type');
-    active[type] ? active[type].call(this) : '';
-  });
+ 
 
   //监听工具条
   table.on('tool(demo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
@@ -174,7 +157,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     ,layEvent = obj.event; //获得 lay-event 对应的值
     if(layEvent === 'detail'){
 
-      //layer.msg('查看操作');
+      layer.msg('暂未开发');
     } else if(layEvent === 'del'){
       layer.confirm('真的删除行么', function(index){
         var ids = new Array;
@@ -194,6 +177,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
             if(data.status==1)
             {
               obj.del();//删除对应行（tr）的DOM结构
+              heavyLoad(condition);
             }
             layer.close(index);
           }
@@ -214,40 +198,44 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   
 });
 
- function refresh()
- {
-	heavyLoad(condition);
- }
+	function refresh()
+	{
+		heavyLoad(condition);
+	}
 
- /**
-  * 搜索
-  */
- function search()
- {
- 	var id = $('#id').val();
- 	var username = $('#username').val();
+	/**
+	* 搜索
+	*/
+	function search()
+	{
+		var id = $('#id').val();
+		var username = $('#username').val();
 
- 	var condition = new Array();
- 	condition['id'] =id;
- 	condition['username'] =username;
- 	
- 	heavyLoad(condition);
- }
+		var condition = new Array();
+		condition['id'] =id;
+		condition['username'] =username;
+		
+		heavyLoad(condition);
+	}
 
- /*重载方法*/
- function heavyLoad(condition)
- {
- 	tableIns.reload({
-	  where: condition
-	  ,page: {
-	    curr: 1 //重新从第 1 页开始
-	  }
-	});
- }
-function del()
-{
+	/*重载方法*/
+	function heavyLoad(condition)
+	{
+		tableIns.reload({
+		  where: condition
+		  ,page: {
+		    curr: 1 //重新从第 1 页开始
+		  }
+		});
+	}
 
-}
+	function del()
+	{
+		layer.msg('暂未开发');
+		/*layer.confirm('确定删除么', function(index){
+
+		});*/
+	}
 
 </script>
 <script type="text/html" id="status">

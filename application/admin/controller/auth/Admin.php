@@ -3,7 +3,7 @@ namespace app\admin\controller\auth;
 use app\admin\common\controller\Backend;
 use blog\Random;
 use think\Db;
-use app\admin\model\Admin as AdminMOdel;
+//use app\admin\model\Admin as AdminMOdel;
 
 
 class Admin extends Backend

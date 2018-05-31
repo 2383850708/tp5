@@ -9,7 +9,7 @@
           <div class="layui-card-body">
             <form class="layui-form" action="" onsubmit="return false" lay-filter="component-form-element">
               <div class="layui-row layui-col-space10 layui-form-item">
-				<div class="layui-col-lg6">
+				<div class="layui-col-lg11">
                   <label class="layui-form-label">分组：</label>
                   <div class="layui-input-block">
                     <select name="group[]" lay-verify="required" lay-filter="aihao">
@@ -38,28 +38,28 @@
                   </div>
                 </div>
 
-                <div class="layui-col-lg6">
+                <div class="layui-col-lg11">
                   <label class="layui-form-label">用户名：</label>
                   <div class="layui-input-block">
                     <input type="text" name="row[username]" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
-                <div class="layui-col-lg6">
+                <div class="layui-col-lg11">
                   <label class="layui-form-label">密码：</label>
                   <div class="layui-input-block">
                     <input type="password" name="row[password]" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
-                <div class="layui-col-lg6">
+                <div class="layui-col-lg11">
                   <label class="layui-form-label">昵称：</label>
                   <div class="layui-input-block">
                     <input type="text" name="row[nickname]" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
-                <div class="layui-col-lg6">
+                <div class="layui-col-lg11">
                   <label class="layui-form-label">Email：</label>
                   <div class="layui-input-block">
                     <input type="text" name="row[email]" lay-verify="" placeholder="" autocomplete="off" class="layui-input">
@@ -67,7 +67,7 @@
                 </div>
 				      
 
-				      <div class="layui-form-item">
+				<div class="layui-form-item">
                 <label class="layui-form-label">状态：</label>
                 <div class="layui-input-block">
                   <input type="radio" name="row[status]" checked="checked" value="1" title="正常">
@@ -110,7 +110,7 @@ layui.use(['form','table', 'layedit','laydate'], function(){
 		  	if(data.status==1)
 		  	{
 		  		parent.heavyLoad(condition);
-				parent.layer.close(index);
+				  parent.layer.close(index);
 		  	}
 		  }
 		});
