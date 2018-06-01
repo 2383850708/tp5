@@ -17,6 +17,11 @@ class Rule extends Backend
 		return $this->fetch();
 	}
 
+	public function add()
+	{
+		return $this->fetch();
+	}
+
 }
 
 

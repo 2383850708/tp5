@@ -29,7 +29,7 @@ img{max-width:100%;}
 /*end reset*/
 /****-----start-body----****/
 body{
-	background-color:#0091e6;
+	background: url(../images/bg-pattern.png), linear-gradient(to left, #328944, #247cdc);
 }
 .main{
     margin: 5em auto 0;

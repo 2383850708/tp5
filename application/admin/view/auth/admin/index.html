@@ -2,12 +2,7 @@
 <html lang="en">
 <head>
 	{include file="public/header" title="管理员管理"  /}
-	<style>
-    .layui-form-label{padding:9px 0px;}
-    .layui-input-block{margin-left:86px;}
-    .layui-form-item{margin-bottom: 0px;}
-   
-	</style>
+
 </head>
 <body style="padding:15px">
 
@@ -88,7 +83,7 @@ var condition = new Array();
 layui.config({
   version: '1527505940714' //为了更新 js 缓存，可忽略
 });
- var u = "{:url('admin/add')}";
+
  var tableIns = '';
 
 layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function(){
@@ -108,7 +103,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 	  area: ['800px', '480px'],
 	  fixed: false, //不固定
 	  maxmin: true,
-	  content: u
+	  content: "{:url('admin/add')}"
 	});
   })
   
@@ -246,9 +241,6 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 	function del()
 	{
 		layer.msg('暂未开发');
-		/*layer.confirm('确定删除么', function(index){
-
-		});*/
 	}
 
 </script>

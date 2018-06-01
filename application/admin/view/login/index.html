@@ -59,11 +59,11 @@
 			         <div>
 			         	<h2>Login Form</h2>
 						<span><label>Username</label></span>
-						<span><input type="text" class="textbox" id="active"></span>
+						<span><input type="text" class="textbox" name="username" id="username"></span>
 					 </div>
 					 <div>
 						<span><label>Password</label></span>
-					    <span><input type="password" class="password"></span>
+					    <span><input type="password" name="password" class="password"></span>
 					 </div>
 					 <div>
 						<div id="embed-captcha"></div>
@@ -71,7 +71,7 @@
 		                <p id="notice" class="hide">请先完成验证</p>
 					 </div>
 					<div class="sign">
-						<button class="layui-btn">登录</button>
+						<button class="layui-btn" id='embed-submit'>登录</button>
 					</div>
 					</form>
 				</div>
@@ -82,14 +82,14 @@
   <script typet="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
   {js href="/static/login/js/gt.js" /}
 <div class="copy-right">
-	<p>&copy; 2015 Ethos Login Form. All Rights Reserved | Powered by <a href="http://www.smallseashell.com/">小贝壳网站模板</a></p>
-
+	<p>&copy; 浙ICP备17029284号-1 <a href="http://www.aliyunceo.com/" style="color:white">小雯个人博客</a></p>
 </div>
 <script>
 	var handlerEmbed = function (captchaObj) {
         $("#embed-submit").click(function (e) {
            
             var validate = captchaObj.getValidate();
+           
             if (!validate) {
                 $("#notice")[0].className = "show";
                 setTimeout(function () {
@@ -98,12 +98,15 @@
                 e.preventDefault();
             }
         });
+
         // 将验证码加到id为captcha的元素里，同时会有三个input的值：geetest_challenge, geetest_validate, geetest_seccode
         captchaObj.appendTo("#embed-captcha");
+
         captchaObj.onReady(function () {
             $("#wait")[0].className = "hide";
         });
-        
+       
+       
     };
 
 
@@ -113,10 +116,12 @@
         type: "get",
         dataType: "json",
         success: function (data) {
+
             // 使用initGeetest接口
             // 参数1：配置参数
             // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
             initGeetest({
+
                 gt: data.gt,
                 challenge: data.challenge,
                 new_captcha: data.new_captcha,

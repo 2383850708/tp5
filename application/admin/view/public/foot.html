@@ -1,6 +1,52 @@
  {load href="/static/layuiAdmin/layui/layui.js" /}
   <script>
+(function() { 
+try { 
+var $_console$$ = console; 
+Object.defineProperty(window, "console", { 
+get: function() { 
+if ($_console$$._commandLineAPI) 
+throw "抱歉, 为了用户安全, 本网站已禁用console脚本功能"; 
+return $_console$$ 
+}, 
+set: function($val$$) { 
+$_console$$ = $val$$ 
+} 
+}) 
+} catch ($ignore$$) { 
+} 
+})(); 
+  
+	document.onkeydown = function(){
 
+	    if(window.event && window.event.keyCode == 123) {
+	        alert("F12被禁用");
+	        event.keyCode=0;
+	        event.returnValue=false;
+	    }
+	    if(window.event && window.event.keyCode == 13) {
+	        window.event.keyCode = 505;
+	    }
+	    if(window.event && window.event.keyCode == 8) {
+	        alert(str+"\n请使用Del键进行字符的删除操作！");
+	        window.event.returnValue=false;
+	    }
+
+	}
+
+	document.oncontextmenu = function (event){
+	if(window.event){
+	event = window.event;
+	}try{
+	var the = event.srcElement;
+	if (!((the.tagName == "INPUT" && the.type.toLowerCase() == "text") || the.tagName == "TEXTAREA")){
+	return false;
+	}
+	return true;
+	}catch (e){
+	return false;
+	}
+	}
   layui.config({
     base: '/static/layuiAdmin/' //静态资源所在路径
   }).extend({

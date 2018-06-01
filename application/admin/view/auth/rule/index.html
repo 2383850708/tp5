@@ -8,30 +8,31 @@
 </head>
 <body style="padding:15px">
 
-	<div class="layui-title clearfloat" style="margin-bottom: 15px">
-		<span style="float:left"><i class="layui-icon layui-icon-console"></i>&nbsp;控制器</span>
-		<span class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;float: right">
-              <a href="javascript:;">首页</a><span lay-separator="">/</span>
-              <a href="javascript:;">演示</a><span lay-separator="">/</span>
-              <a><cite>导航元素</cite></a>
-        </span>
-	</div>
-
 	<div class="layui-card">
 		
 		<div class="layui-card-body">
 	
-		<div class="test-table-reload-btn" style="margin-bottom: 10px;">
-		  搜索ID：
-		  <div class="layui-inline">
-		    <input class="layui-input" name="id" id="id" value='' autocomplete="off">
-		  </div>
-		  用户名：
-		  <div class="layui-inline">
-		    <input class="layui-input" name="username" id="username" value='' autocomplete="off">
-		  </div>
-		  <button class="layui-btn" data-type="reload" onclick="search()">搜索</button>
-		</div>
+  <div class="layui-form layui-card-header layuiadmin-card-header-auto" style="padding:15px 0px 15px 0px;height:100%;line-height:100%">
+    <div class="layui-form-item">
+      <div class="layui-inline">
+        <label class="layui-form-label">搜索ID</label>
+        <div class="layui-input-block">
+          <input type="text" name="id" id="id" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+     <div class="layui-inline">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+          <input type="text" name="username" id="username" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+     
+      <div class="layui-inline">
+        <button class="layui-btn" data-type="reload" onclick="search()">搜索</button>
+      </div>
+    </div>
+  </div>
+
 		<blockquote class="layui-elem-quote" style="padding:10px;border-left:5px solid #18bc9c">
 		    <a class="layui-btn layui-btn-sm" onclick="refresh()" title="刷新" style="background: #2c3e50"><i class="layui-icon layui-icon-refresh" ></i></a>
 			<a class="layui-btn layui-btn-sm layui-btn-warm"  id="parentIframe" style="background: #18bc9c"><i class="layui-icon layui-icon-add-circle-fine"></i> 添加</a>
@@ -105,6 +106,37 @@
 
 <script>
 
+document.onkeydown = function(){
+
+    if(window.event && window.event.keyCode == 123) {
+        alert("F12被禁用");
+        event.keyCode=0;
+        event.returnValue=false;
+    }
+    if(window.event && window.event.keyCode == 13) {
+        window.event.keyCode = 505;
+    }
+    if(window.event && window.event.keyCode == 8) {
+        alert(str+"\n请使用Del键进行字符的删除操作！");
+        window.event.returnValue=false;
+    }
+
+}
+
+document.oncontextmenu = function (event){
+if(window.event){
+event = window.event;
+}try{
+var the = event.srcElement;
+if (!((the.tagName == "INPUT" && the.type.toLowerCase() == "text") || the.tagName == "TEXTAREA")){
+return false;
+}
+return true;
+}catch (e){
+return false;
+}
+}
+
 var condition = new Array();
 layui.config({
   version: '1527505940714' //为了更新 js 缓存，可忽略
@@ -119,7 +151,16 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   ,upload = layui.upload //上传
   ,element = layui.element; //元素操作
   
-
+  $('#parentIframe').click(function(){
+   layer.open({
+    type: 2,
+    title:'添加',
+    area: ['800px', '480px'],
+    fixed: false, //不固定
+    maxmin: true,
+    content: "{:url('rule/add')}"
+  });
+  })
     
 
 });
