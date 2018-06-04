@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 	{include file="public/header" title="菜单添加"  /}
-	
+	<style>
+  
+  </style>
 </head>
 <body style="padding:15px">
 	<div class="layui-card">
@@ -24,15 +26,25 @@
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">父级：</label>
                   <div class="layui-input-block">
-                    <select name="quiz">
+                  <select name="row[pid]" style="padding-left:100px;">
                   <option value="">请选择问题</option>
-                  <optgroup label="城市记忆">
+                  <option value="0">顶级</option>
+                  {volist name="treelist" id="vo" empty="暂时没有数据" }
+                  <option value="{$vo.id}">{$vo.title}</option>
+                    {notempty name="vo['children']"}
+                        {volist name="vo['children']" id="v" empty="暂时没有数据" }
+                          <option value="{$v.id}">&nbsp;&nbsp;&nbsp;|— {$v.title}</option>
+                        {/volist}
+                    {/notempty}
+                 
+                  {/volist}
+                  <!-- <optgroup label="城市记忆">
                     <option value="你工作的第一个城市">你工作的第一个城市</option>
                   </optgroup>
                   <optgroup label="学生时代">
                     <option value="你的工号">你的工号</option>
                     <option value="你最喜欢的老师">你最喜欢的老师</option>
-                  </optgroup>
+                  </optgroup> -->
                 </select>
                   </div>
                   
@@ -55,14 +67,14 @@
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">图标：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="row[icon]" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" >
+                    <input type="text" name="row[icon]" lay-verify="" placeholder="" autocomplete="off" class="layui-input" >
                   </div>
                 </div>
 
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">权重：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="row[weigh]" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    <input type="text" name="row[weigh]" value='0'  lay-verify="" placeholder="" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
@@ -110,15 +122,6 @@ layui.use(['form','table', 'layedit','laydate'], function(){
   var table = layui.table;
   var form = layui.form;
 
-/*  var pid ='';
-  form.on('select(aihao)', function(data){
-
-    pid = data.value;
-   
-　　form.render('select');
-
-  });*/
-
   form.on('submit(demo1)', function(data){  
   	var index = parent.layer.getFrameIndex(window.name);
   	$.ajax({
@@ -133,15 +136,10 @@ layui.use(['form','table', 'layedit','laydate'], function(){
           ,closeBtn: 0
           ,anim: 1 //动画类型
         });
-		  	/*if(data.status==1)
-		  	{
-		  		//parent.heavyLoad(condition);
-				  parent.layer.close(index);
-		  	}*/
 		  }
 		});
   });
-  return false;
+
 
 });
 

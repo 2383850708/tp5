@@ -22,10 +22,12 @@ class Rule extends Backend
 	{
 		if($this->request->isAjax())
 		{
+
 			$res = array();
 			$data=$this->request->get("row/a");
-			
+			 
 			$result = $this->model->validate('AuthRule')->save($data);
+
 			if(false === $result)
 			{
 			    $res['status'] = 0;
@@ -40,14 +42,11 @@ class Rule extends Backend
 		}
 		else
 		{
-			$result = collection($this->model->field('id,pid,name,title')->order('weigh', 'desc')->select())->toArray();
+			$result = collection($this->model->field('id,pid,name,title')->where('status',1)->order('weigh', 'desc')->select())->toArray();
 			$tree = new Tree();
 			$tree->load($result);
 			$treelist=$tree->DeepTree();//所有分类树结构
-
-
-			print_r($treelist);exit;//查看结果
-
+			$this->assign('treelist',$treelist);
 			return $this->fetch();
 		}
 		

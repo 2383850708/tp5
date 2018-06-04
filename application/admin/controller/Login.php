@@ -14,8 +14,10 @@ class Login extends Controller
 
 	public function login()
 	{
+
 	  	if($this->request->isPost())
 		{
+			$this->checkForm();exit;
 			$geetest_id=config('GEETEST_ID');
 	        $geetest_key=config('GEETEST_KEY');
 			$GtSdk = new \blog\GeetestLib($geetest_id,$geetest_key);

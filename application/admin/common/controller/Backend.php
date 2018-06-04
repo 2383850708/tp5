@@ -14,6 +14,7 @@ class Backend extends Controller
     	{
     		$this->redirect(url('login/index'));
     	}
+        //$this->cancellation();
     }
 
     /**
@@ -36,6 +37,7 @@ class Backend extends Controller
     protected function cancellation()
     {
         session(null);
+        $this->success('退出成功',url('login/index'));
     }
 
 	
