@@ -99,7 +99,11 @@ layui.use(['form','table', 'layedit','laydate'], function(){
 		  dataType: "json",
 		  success:function(data)
 		  {
-		  	layer.msg(data.msg);
+        layer.alert(data.msg, {
+          skin: 'layui-layer-lan'
+          ,closeBtn: 0
+          ,anim: 1 //动画类型
+        });
 		  	if(data.status==1)
 		  	{
 		  		parent.heavyLoad(condition);
