@@ -28,6 +28,7 @@ Route::rule([
     'admin/del'  =>  'admin/auth.admin/del',
     'rule/index'  =>  'admin/auth.rule/index',
     'rule/add'  =>  'admin/auth.rule/add',
+    'rule/ajax_load_data'  =>  'admin/auth.rule/ajax_load_data',
 ],'','GET',['ext'=>'html']);
 
 Route::rule([

@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
 	{include file="public/header" title="管理员管理"  /}
-	<style>
-
-	</style>
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body style="padding:15px">
 
@@ -39,56 +37,10 @@
 			<a class="layui-btn layui-btn-sm layui-btn-normal" style="background: #e74c3c" onclick="del()"><i class="layui-icon"></i> 删除</a>
 	
 		</blockquote>
-		<div class="layui-card-body" style="padding:0px">
-            <table class="layui-table">
-              <colgroup>
-                <col width="150">
-                <col width="150">
-                <col width="200">
-                <col>
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>人物</th>
-                  <th>民族</th>
-                  <th>出场时间</th>
-                  <th>格言</th>
-                </tr> 
-              </thead>
-              <tbody>
-                <tr>
-                  <td>贤心</td>
-                  <td>汉族</td>
-                  <td>1989-10-14</td>
-                  <td>人生似修行</td>
-                </tr>
-                <tr>
-                  <td>张爱玲</td>
-                  <td>汉族</td>
-                  <td>1920-09-30</td>
-                  <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
-                </tr>
-                <tr>
-                  <td>Helen Keller</td>
-                  <td>拉丁美裔</td>
-                  <td>1880-06-27</td>
-                  <td> Life is either a daring adventure or nothing.</td>
-                </tr>
-                <tr>
-                  <td>岳飞</td>
-                  <td>汉族</td>
-                  <td>1103-北宋崇宁二年</td>
-                  <td>教科书再滥改，也抹不去“民族英雄”的事实</td>
-                </tr>
-                <tr>
-                  <td>孟子</td>
-                  <td>华夏族（汉族）</td>
-                  <td>公元前-372年</td>
-                  <td>猿强，则国强。国强，则猿更强！ </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+		
+    <div class="admin-main">
+      <table class="layui-hide" id="demo" lay-filter="demo"></table>
+    </div>
 		</div>
 	</div>
 	
@@ -106,12 +58,11 @@
 
 <script>
 
-
-
 var condition = new Array();
 layui.config({
   version: '1527505940714' //为了更新 js 缓存，可忽略
 });
+
 
 layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function(){
   var laydate = layui.laydate //日期
@@ -121,23 +72,53 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   ,carousel = layui.carousel //轮播
   ,upload = layui.upload //上传
   ,element = layui.element; //元素操作
-  
-  $('#parentIframe').click(function(){
-   layer.open({
-    type: 2,
-    title:'添加',
-    area: ['800px', '700px'],
-    fixed: false, //不固定
-    maxmin: true,
-    content: "{:url('rule/add')}"
-  });
-  })
-    
 
+  table.render({
+    elem: '#demo'
+    ,height: 'full'
+    ,url: "{:url('rule/ajax_load_data')}" //数据接口
+    ,page: false //开启分页
+    ,cols: [[ //表头
+       {type:'checkbox',fixed: 'left'}
+      ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left',align:'center'}
+      ,{field: 'title', title: '标题'}
+      ,{field: 'name', title: '规则'} 
+      ,{field: 'icon', title: '图标', width:80,align:'center',templet: '#icon'}
+      ,{field: 'weigh', title: '权重',align:'center', width: 110}
+      ,{field: 'status', title: '状态', width: 110,align:'center',templet: '#status'}
+      ,{field: 'type', title: '菜单', width: 110,align:'center',templet:'#type'}
+      ,{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}
+    ]]
+    ,
+    text: {
+    none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+    }
+    });
+
+    table.on('tool(demo)', function(obj)
+    {
+        alert(1);
+    });
+  
 });
 
 
 
 </script>
+<script type="text/html" id="icon">
+  <i class="{{d.icon}}"> </i>
+</script>
 
+<script type="text/html" id="status">
+  {{#  if(d.status === '1'){ }}
+  <span style="color:#18bc9c"><i class="layui-badge-dot layui-bg-green" ></i> 正常</span>   
+  {{#  } else { }}
+    <span style="color:red"><i class="layui-badge-dot layui-bg-red" ></i> 隐藏</span>   
+  {{#  } }}
+</script>
+
+<script type="text/html" id="type">
+  <!-- 这里的 checked 的状态只是演示 -->
+  <input type="checkbox" name="sex" value="{{d.type}}" lay-skin="switch" lay-text="是|否" lay-filter="sexDemo" {{ d.type == 'menu' ? 'checked' : '' }}>
+</script>
 </html> 

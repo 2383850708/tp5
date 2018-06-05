@@ -10,13 +10,60 @@ class Rule extends Backend
 	{
 		parent::_initialize();
 		$this->model = model('AuthRule');
+		$this->commonModel = model('Common');
 	}
 
 	public function index()
 	{
-
 		return $this->fetch();
 	}
+
+	public function ajax_load_data()
+	{
+		//field('id,pid,name,title,level,icon,type,')->
+		$count = $this->model->where('status',1)->count();
+		$result = collection($this->model->order('weigh', 'desc')->select())->toArray();
+		$result = $this->getSubTree($result,0,0);
+
+		$data = array();
+		$data['code'] = 0;
+		$data['count'] = $count;
+		$data['data'] = $result;
+		$data['msg'] = '';
+		return json($data);
+	}
+
+	public function del($ids='')
+	{
+		echo 11;exit;
+		$this->commonModel->del($ids);
+	}
+
+ 	function getSubTree($data , $id = 0 , $lev = 0) {
+	    static $son = array();
+
+	    foreach($data as $key => $value) 
+	    {
+	        if($value['pid'] == $id) 
+	        {
+	        	$data[$key]['level'] = $lev;
+	        	if($value['pid']==0)
+	        	{
+					$value['title'] = str_repeat('&nbsp;',$lev*7).$value['title'];
+	        	}
+	        	else
+	        	{
+					$value['title'] = str_repeat('&nbsp;',$lev*7).'|— '.$value['title'];
+	        	}
+	        	
+	            $son[] = $value;
+	           
+	            $this->getSubTree($data , $value['id'] , $lev+1);
+	        }
+	    }
+    	return $son;
+ 	}
+
 
 	public function add()
 	{
