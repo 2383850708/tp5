@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 	{include file="public/header" title="管理员管理"  /}
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body style="padding:15px">
 
@@ -59,11 +58,12 @@
 <script>
 
 var condition = new Array();
+
 layui.config({
   version: '1527505940714' //为了更新 js 缓存，可忽略
 });
 
-
+ var tableIns = '';
 layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function(){
   var laydate = layui.laydate //日期
   ,laypage = layui.laypage //分页
@@ -73,7 +73,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   ,upload = layui.upload //上传
   ,element = layui.element; //元素操作
 
-  table.render({
+  tableIns=table.render({
     elem: '#demo'
     ,height: 'full'
     ,url: "{:url('rule/ajax_load_data')}" //数据接口
@@ -95,14 +95,90 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     }
     });
 
-    table.on('tool(demo)', function(obj)
-    {
-        alert(1);
+  $('#parentIframe').click(function(){
+      layer.open({
+      type: 2,
+      title:'添加',
+      area: ['800px', '700px'],
+      fixed: false, //不固定
+      maxmin: true,
+      content: "{:url('rule/add')}"
     });
+  })
+
+    //监听工具条
+  table.on('tool(demo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+
+    var data = obj.data //获得当前行数据
+    ,layEvent = obj.event; //获得 lay-event 对应的值
+   
+    if(layEvent === 'detail'){
+
+      layer.msg('暂未开发');
+    } else if(layEvent === 'del'){
+      layer.confirm('真的删除行么', function(index){
+     
+        var id = data.id;
+
+        $.ajax({
+          url:"{:url('admin/auth.rule/del')}",
+          data:{id:id},
+          type: "GET",
+          dataType: "json",
+          success:function(data)
+          {
+            layer.alert(data.msg, {
+              skin: data.skin
+              ,closeBtn: 0
+              ,anim: data.anim //动画类型
+              ,icon: data.status
+            }
+            ,function()
+            {
+              if(data.status==1)
+              {
+                obj.del();//删除对应行（tr）的DOM结构
+                heavyLoad(condition);
+              }
+                layer.closeAll('dialog');
+            });
+            
+          }
+        });
+
+      });
+    } else if(layEvent === 'edit'){
+      layer.open({
+      type: 2,
+      title:'修改',
+      area: ['800px', '480px'],
+      fixed: false, //不固定
+      maxmin: true,
+      content: "{:url('admin/edit')}"+'?id='+data.id
+    });
+    }
+  });
   
 });
-
-
+  function refresh()
+  {
+    heavyLoad(condition);
+  }
+/*重载方法*/
+  function heavyLoad(condition)
+  {
+    tableIns.reload({
+      page: false
+      ,where: condition
+      ,page: {
+        curr: 1 //重新从第 1 页开始
+      }
+    });
+  }
+  function del()
+  {
+    layer.msg('暂不支持批量删除');
+  }
 
 </script>
 <script type="text/html" id="icon">

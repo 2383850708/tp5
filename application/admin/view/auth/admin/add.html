@@ -107,15 +107,25 @@ layui.use(['form','table', 'layedit','laydate'], function(){
 		  success:function(data)
 		  {
         layer.alert(data.msg, {
-          skin: 'layui-layer-lan'
+          skin: data.skin
           ,closeBtn: 0
-          ,anim: 1 //动画类型
-        });
-		  	if(data.status==1)
-		  	{
-		  		parent.heavyLoad(condition);
-				  parent.layer.close(index);
-		  	}
+          ,anim: data.anim //动画类型
+          ,icon: data.icon
+        }
+        ,function()
+        {
+          if(data.status==1)
+          {
+            parent.heavyLoad(condition);
+            parent.layer.close(index);
+          }
+          else
+          {
+            layer.closeAll('dialog');
+          }
+        }
+        );
+		  	
 		  }
 		});
   });

@@ -2,6 +2,7 @@
 namespace app\admin\common\controller;
 use think\Controller;
 use think\Session;
+use think\Db;
 /**
  * 后台控制器基类
  */
@@ -14,7 +15,16 @@ class Backend extends Controller
     	{
     		$this->redirect(url('login/index'));
     	}
-        //$this->cancellation();
+
+        $promptIcon = db('prompt')->find();
+        if($promptIcon)
+        {
+            define('SUCCESS',$promptIcon['success']);
+            define('ERROR',$promptIcon['error']);
+            define('SKIN',$promptIcon['skin']);
+            define('ANIM',$promptIcon['anim']);
+        }
+
     }
 
     /**

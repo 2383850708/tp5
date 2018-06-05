@@ -27,6 +27,27 @@ class AuthRule extends Model
 		}
 	}
 
+	/**
+	 * 验证子类是否存在
+	 * @Author   wyk
+	 * @DateTime 2018-06-05
+	 */
+	public static function isCheckSubclass($id)
+	{
+		
+		$id = AuthRule::where('pid',$id)->value('id');
+		
+		if($id)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+	}
+
 }
 
 

@@ -1,11 +1,21 @@
 <?php 
-namespace app\admin\model;
-use think\Model;
-class Common extends Model
+
+namespace app\admin\controller;
+use app\admin\common\controller\Backend;
+use think\Db;
+
+
+class Common extends Backend
 {
+	/**
+	 * 公共删除方法
+	 * @Author   wyk
+	 * @DateTime 2018-06-05
+	 * @return   json
+	 */
 	public function del($ids='')
 	{
-		echo 11;exit;
+		print_r(json_decode(input('param.')));exit;
 		$data = array();
 
 		if($ids)
@@ -31,6 +41,8 @@ class Common extends Model
 		return json($data);
 	}
 }
+
+
 
 
 

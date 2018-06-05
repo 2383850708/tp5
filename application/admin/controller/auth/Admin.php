@@ -12,6 +12,7 @@ class Admin extends Backend
 	{
 		parent::_initialize();
 		$this->model = model('Admin');
+		$this->view->assign('a', 1414);
 	}
 
 
@@ -25,6 +26,8 @@ class Admin extends Backend
 		if($this->request->isAjax())
 		{
 			$res = array();
+			$res['skin'] = SKIN;
+        	$res['anim'] = ANIM;
 			$data=$this->request->get("row/a");
 
 			$salt = Random::alnum();//密码盐
@@ -36,11 +39,13 @@ class Admin extends Backend
             {
             	$msg = $this->model->getError();
                 $res['msg'] = $msg;
+                $res['icon'] = ERROR;
                 $res['status'] = 0;
             }
             else
             {
             	$res['msg'] = '添加成功';
+                $res['icon'] = SUCCESS;
                 $res['status'] = 1;
             }
             return json($res);
@@ -87,7 +92,8 @@ class Admin extends Backend
 		if($this->request->isAjax())
 		{
 			$res = array();
-			
+			$res['skin'] = SKIN;
+            $res['anim'] = ANIM;
 			$data=$this->request->get("row/a");
 			$id =  input('param.row.id');
 			$result = $this->model->validate('Admin.edit')->save($data,['id'=>$id]);
@@ -96,11 +102,13 @@ class Admin extends Backend
             {
             	$msg = $this->model->getError();
                 $res['msg'] = $msg;
+                $res['icon'] = ERROR;
                 $res['status'] = 0;
             }
             else
             {
             	$res['msg'] = '修改成功';
+                $res['icon'] = SUCCESS;
                 $res['status'] = 1;
             }
             return json($res);
@@ -120,24 +128,28 @@ class Admin extends Backend
 	public function del($ids='')
 	{
 		$data = array();
-
+		$data['skin'] = SKIN;
+        $data['anim'] = ANIM;
 		if($ids)
 		{
 			$ids = json_decode(input('param.ids'));
 			$res = $this->model->destroy($ids);
 			if($res)
 			{
+				$data['icon'] = SUCCESS;
 				$data['status'] = 1;
 				$data['msg'] = '删除成功';
 			}
 			else
 			{
+				$data['icon'] = ERROR;
 				$data['status'] = 0;
 				$data['msg'] = '删除失败';
 			}
 		}
 		else
 		{
+			$data['icon'] = ERROR;
 			$data['status'] = 0;
 			$data['msg'] = '操作异常';
 		}

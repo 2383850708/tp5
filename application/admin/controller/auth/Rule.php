@@ -1,7 +1,6 @@
 <?php 
 namespace app\admin\controller\auth;
 use app\admin\common\controller\Backend;
-use think\Db;
 use blog\Tree;
 
 class Rule extends Backend
@@ -10,7 +9,6 @@ class Rule extends Backend
 	{
 		parent::_initialize();
 		$this->model = model('AuthRule');
-		$this->commonModel = model('Common');
 	}
 
 	public function index()
@@ -33,10 +31,49 @@ class Rule extends Backend
 		return json($data);
 	}
 
-	public function del($ids='')
+	/**
+	 * 公共删除方法
+	 * @Author   wyk
+	 * @DateTime 2018-06-05
+	 * @return   json
+	 */
+	public function del($id='')
 	{
-		echo 11;exit;
-		$this->commonModel->del($ids);
+		$data = array();
+		$data['skin'] = SKIN;
+        $data['anim'] = ANIM;
+		$id = input('param.id');
+
+		if($id)
+		{
+			$info = $this->model->isCheckSubclass($id);
+			if($info)
+			{
+				$data['status'] = ERROR;
+				$data['msg'] = '有子类不能删除';
+			}
+			else
+			{
+				$res = $this->model->destroy($id);
+				
+				if($res)
+				{
+					$data['status'] = SUCCESS;
+					$data['msg'] = '删除成功';
+				}
+				else
+				{
+					$data['status'] = ERROR;
+					$data['msg'] = '删除失败';
+				}
+			}
+		}
+		else
+		{
+			$data['status'] = 0;
+			$data['msg'] = '操作异常';
+		}
+		return json($data);
 	}
 
  	function getSubTree($data , $id = 0 , $lev = 0) {
@@ -53,7 +90,15 @@ class Rule extends Backend
 	        	}
 	        	else
 	        	{
-					$value['title'] = str_repeat('&nbsp;',$lev*7).'|— '.$value['title'];
+					
+					if($value['level']==3)
+					{
+						$value['title'] = str_repeat('&nbsp;',$lev*7).'└ '.$value['title'];
+					}
+					else
+					{
+						$value['title'] = str_repeat('&nbsp;',$lev*7).'|— '.$value['title'];
+					}
 	        	}
 	        	
 	            $son[] = $value;
@@ -71,18 +116,20 @@ class Rule extends Backend
 		{
 
 			$res = array();
+			$res['skin'] = SKIN;
+        	$res['anim'] = ANIM;
 			$data=$this->request->get("row/a");
 			 
 			$result = $this->model->validate('AuthRule')->save($data);
 
 			if(false === $result)
 			{
-			    $res['status'] = 0;
+			    $res['status'] = ERROR;
 			    $res['msg'] = $this->model->getError();
 			}
 			else
 			{
-				$res['status'] = 1;
+				$res['status'] = SUCCESS;
 			    $res['msg'] = '添加成功';
 			}
 			return json($res);
