@@ -15,16 +15,6 @@ class Backend extends Controller
     	{
     		$this->redirect(url('login/index'));
     	}
-
-        $promptIcon = db('prompt')->find();
-        if($promptIcon)
-        {
-            define('SUCCESS',$promptIcon['success']);
-            define('ERROR',$promptIcon['error']);
-            define('SKIN',$promptIcon['skin']);
-            define('ANIM',$promptIcon['anim']);
-        }
-
     }
 
     /**
@@ -48,6 +38,27 @@ class Backend extends Controller
     {
         session(null);
         $this->success('退出成功',url('login/index'));
+    }
+
+    public function returnJson($msg,$type=0)
+    {
+        $promptIcon = db('prompt')->find();
+        $data = array();
+
+        if($type==0)
+        {
+            $data['icon'] = $promptIcon['error_icon'];
+        }
+        else
+        {
+            $data['icon'] = $promptIcon['success_icon'];
+        }
+        $data['skin'] = $promptIcon['skin'];
+        $data['anim'] = $promptIcon['anim'];
+        $data['status'] = $type;
+        $data['msg'] = $msg;
+
+        return json($data);
     }
 
 	

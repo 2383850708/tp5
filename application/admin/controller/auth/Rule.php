@@ -39,9 +39,6 @@ class Rule extends Backend
 	 */
 	public function del($id='')
 	{
-		$data = array();
-		$data['skin'] = SKIN;
-        $data['anim'] = ANIM;
 		$id = input('param.id');
 
 		if($id)
@@ -49,8 +46,7 @@ class Rule extends Backend
 			$info = $this->model->isCheckSubclass($id);
 			if($info)
 			{
-				$data['status'] = ERROR;
-				$data['msg'] = '有子类不能删除';
+				return parent::returnJson('有子类不能删除',0);
 			}
 			else
 			{
@@ -58,22 +54,18 @@ class Rule extends Backend
 				
 				if($res)
 				{
-					$data['status'] = SUCCESS;
-					$data['msg'] = '删除成功';
+					return parent::returnJson('删除成功',1);
 				}
 				else
 				{
-					$data['status'] = ERROR;
-					$data['msg'] = '删除失败';
+					return parent::returnJson('删除失败',0);
 				}
 			}
 		}
 		else
 		{
-			$data['status'] = 0;
-			$data['msg'] = '操作异常';
+			return parent::returnJson('操作异常',0);
 		}
-		return json($data);
 	}
 
  	function getSubTree($data , $id = 0 , $lev = 0) {
@@ -90,7 +82,6 @@ class Rule extends Backend
 	        	}
 	        	else
 	        	{
-					
 					if($value['level']==3)
 					{
 						$value['title'] = str_repeat('&nbsp;',$lev*7).'└ '.$value['title'];
@@ -115,22 +106,17 @@ class Rule extends Backend
 		if($this->request->isAjax())
 		{
 
-			$res = array();
-			$res['skin'] = SKIN;
-        	$res['anim'] = ANIM;
 			$data=$this->request->get("row/a");
 			 
 			$result = $this->model->validate('AuthRule')->save($data);
 
 			if(false === $result)
 			{
-			    $res['status'] = ERROR;
-			    $res['msg'] = $this->model->getError();
+			    return parent::returnJson($this->model->getError(),0);
 			}
 			else
 			{
-				$res['status'] = SUCCESS;
-			    $res['msg'] = '添加成功';
+			    return parent::returnJson('添加成功',1);
 			}
 			return json($res);
 		}

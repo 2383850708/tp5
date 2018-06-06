@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	{include file="public/header" title="菜单管理"  /}
+	{include file="public/header" title="角色管理"  /}
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body style="padding:15px">
 
@@ -18,9 +19,9 @@
         </div>
       </div>
      <div class="layui-inline">
-        <label class="layui-form-label">用户名</label>
+        <label class="layui-form-label">角色名</label>
         <div class="layui-input-block">
-          <input type="text" name="username" id="username" placeholder="请输入" autocomplete="off" class="layui-input">
+          <input type="text" name="title" id="title" placeholder="请输入" autocomplete="off" class="layui-input">
         </div>
       </div>
      
@@ -50,7 +51,6 @@
  <!-- {load href="/static/layuiAdmin/layui/dist/layui.js" /} -->
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script type="text/html" id="barDemo">
-  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
   <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -58,12 +58,23 @@
 <script>
 
 var condition = new Array();
-
+var tableIns = '';
 layui.config({
   version: '1527505940714' //为了更新 js 缓存，可忽略
 });
 
- var tableIns = '';
+
+$('#parentIframe').click(function(){
+    layer.open({
+    type: 2,
+    title:'添加',
+    area: ['800px', '480px'],
+    fixed: false, //不固定
+    maxmin: true,
+    content: "{:url('admin/auth.group/add')}"
+  });
+  })
+
 layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function(){
   var laydate = layui.laydate //日期
   ,laypage = layui.laypage //分页
@@ -76,17 +87,13 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   tableIns=table.render({
     elem: '#demo'
     ,height: 'full'
-    ,url: "{:url('rule/ajax_load_data')}" //数据接口
+    ,url: "{:url('admin/auth.group/ajax_load_data')}" //数据接口
     ,page: false //开启分页
     ,cols: [[ //表头
        {type:'checkbox',fixed: 'left'}
       ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left',align:'center'}
-      ,{field: 'title', title: '标题'}
-      ,{field: 'name', title: '规则'} 
-      ,{field: 'icon', title: '图标', width:80,align:'center',templet: '#icon'}
-      ,{field: 'weigh', title: '权重',align:'center', width: 110}
-      ,{field: 'status', title: '状态', width: 110,align:'center',templet: '#status'}
-      ,{field: 'type', title: '菜单', width: 110,align:'center',templet:'#type'}
+      ,{field: 'title', title: '名称', align:'center'}
+      ,{field: 'status', title: '状态',toolbar: '#status', align:'center'} 
       ,{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}
     ]]
     ,
@@ -95,34 +102,24 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     }
     });
 
-  $('#parentIframe').click(function(){
-      layer.open({
-      type: 2,
-      title:'添加',
-      area: ['800px', '700px'],
-      fixed: false, //不固定
-      maxmin: true,
-      content: "{:url('rule/add')}"
-    });
-  })
-
     //监听工具条
   table.on('tool(demo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 
     var data = obj.data //获得当前行数据
     ,layEvent = obj.event; //获得 lay-event 对应的值
-   
     if(layEvent === 'detail'){
 
       layer.msg('暂未开发');
     } else if(layEvent === 'del'){
       layer.confirm('真的删除行么', function(index){
-     
+        var ids = new Array;
         var id = data.id;
-
+        ids[0] = id;
+        ids = JSON.stringify(ids);
+       
         $.ajax({
-          url:"{:url('admin/auth.rule/del')}",
-          data:{id:id},
+          url:"{:url('admin/auth.group/del')}",
+          data:{ids:ids},
           type: "GET",
           dataType: "json",
           success:function(data)
@@ -131,18 +128,18 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
               skin: data.skin
               ,closeBtn: 0
               ,anim: data.anim //动画类型
-              ,icon: data.status
+              ,icon: data.icon
             }
             ,function()
             {
               if(data.status==1)
               {
                 obj.del();//删除对应行（tr）的DOM结构
+                layer.closeAll();
                 heavyLoad(condition);
               }
-                layer.closeAll('dialog');
+              layer.close('dialog');
             });
-            
           }
         });
 
@@ -154,44 +151,55 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
       area: ['800px', '480px'],
       fixed: false, //不固定
       maxmin: true,
-      content: "{:url('admin/edit')}"+'?id='+data.id
+      content: "{:url('admin/auth.group/edit')}"+'?id='+data.id
     });
     }
   });
   
 });
+
   function refresh()
   {
     heavyLoad(condition);
   }
+
 /*重载方法*/
   function heavyLoad(condition)
   {
     tableIns.reload({
       page: false
       ,where: condition
+     
     });
+  }
+
+  /**
+  * 搜索
+  */
+  function search()
+  {
+    var id = $('#id').val();
+    var username = $('#title').val();
+
+    var condition = new Array();
+    condition['id'] =id;
+    condition['title'] =username;
+    
+    heavyLoad(condition);
   }
   function del()
   {
-    layer.msg('暂不支持批量删除');
+    layer.msg('暂未开发');
   }
+</script>
 
-</script>
-<script type="text/html" id="icon">
-  <i class="{{d.icon}}"> </i>
-</script>
 
 <script type="text/html" id="status">
-  {{#  if(d.status === '1'){ }}
+  {{#  if(d.status === 1){ }}
   <span style="color:#18bc9c"><i class="layui-badge-dot layui-bg-green" ></i> 正常</span>   
   {{#  } else { }}
     <span style="color:red"><i class="layui-badge-dot layui-bg-red" ></i> 隐藏</span>   
   {{#  } }}
 </script>
 
-<script type="text/html" id="type">
-  <!-- 这里的 checked 的状态只是演示 -->
-  <input type="checkbox" name="sex" value="{{d.type}}" lay-skin="switch" lay-text="是|否" lay-filter="sexDemo" {{ d.type == 'menu' ? 'checked' : '' }}>
-</script>
 </html> 

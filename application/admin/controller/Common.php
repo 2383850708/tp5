@@ -7,6 +7,7 @@ use think\Db;
 
 class Common extends Backend
 {
+<<<<<<< HEAD:application/admin/controller/Common.php
 	/**
 	 * 公共删除方法
 	 * @Author   wyk
@@ -17,29 +18,9 @@ class Common extends Backend
 	{
 		print_r(json_decode(input('param.')));exit;
 		$data = array();
+=======
+>>>>>>> 568c6adc0c4514797aa029f72376facbcb0e4832:application/admin/model/Common.php
 
-		if($ids)
-		{
-			$ids = json_decode(input('param.ids'));
-			$res = $this->model->destroy($ids);
-			if($res)
-			{
-				$data['status'] = 1;
-				$data['msg'] = '删除成功';
-			}
-			else
-			{
-				$data['status'] = 0;
-				$data['msg'] = '删除失败';
-			}
-		}
-		else
-		{
-			$data['status'] = 0;
-			$data['msg'] = '操作异常';
-		}
-		return json($data);
-	}
 }
 
 

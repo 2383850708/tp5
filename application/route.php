@@ -29,6 +29,9 @@ Route::rule([
     'rule/index'  =>  'admin/auth.rule/index',
     'rule/add'  =>  'admin/auth.rule/add',
     'rule/ajax_load_data'  =>  'admin/auth.rule/ajax_load_data',
+    'group/index'  =>  'admin/auth.group/index',
+    'group/add'  =>  'admin/auth.group/add',
+    
 ],'','GET',['ext'=>'html']);
 
 Route::rule([
