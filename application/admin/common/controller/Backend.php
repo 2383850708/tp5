@@ -40,6 +40,14 @@ class Backend extends Controller
         $this->success('退出成功',url('login/index'));
     }
 
+    public function returnJson($msg,$type)
+    {
+        $data = array();
+        $data['status'] = $type;
+        $data['msg'] = $msg;
+        return json($data);
+    }
+
 	
 }
 

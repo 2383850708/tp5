@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	{include file="public/header" title="菜单管理"  /}
+	{include file="public/header" title="角色管理"  /}
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body style="padding:15px">
@@ -64,6 +64,17 @@ layui.config({
 });
 
 
+$('#parentIframe').click(function(){
+      layer.open({
+    type: 2,
+    title:'添加',
+    area: ['800px', '480px'],
+    fixed: false, //不固定
+    maxmin: true,
+    content: "{:url('admin/auth.group/add')}"
+  });
+  })
+
 layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function(){
   var laydate = layui.laydate //日期
   ,laypage = layui.laypage //分页
@@ -76,17 +87,13 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   table.render({
     elem: '#demo'
     ,height: 'full'
-    ,url: "{:url('rule/ajax_load_data')}" //数据接口
+    ,url: "{:url('admin/auth.group/ajax_load_data')}" //数据接口
     ,page: false //开启分页
     ,cols: [[ //表头
        {type:'checkbox',fixed: 'left'}
       ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left',align:'center'}
-      ,{field: 'title', title: '标题'}
-      ,{field: 'name', title: '规则'} 
-      ,{field: 'icon', title: '图标', width:80,align:'center',templet: '#icon'}
-      ,{field: 'weigh', title: '权重',align:'center', width: 110}
-      ,{field: 'status', title: '状态', width: 110,align:'center',templet: '#status'}
-      ,{field: 'type', title: '菜单', width: 110,align:'center',templet:'#type'}
+      ,{field: 'title', title: '名称'}
+      ,{field: 'name', title: '状态'} 
       ,{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}
     ]]
     ,

@@ -4,13 +4,15 @@ class Tree{
     private $OriginalList;
     public $pk;//主键字段名
     public $parentKey;//上级id字段名
-    public $childrenKey;//用来存储子分类的数组key名
+    public $childrenKey;//用来存储子分类的数组key名children
+    public $type;//是否在每个数组中加一个daa 属性的空数组  arr:加  notarr:不加
     
-    function __construct($pk="id",$parentKey="pid",$childrenKey="children"){
+    function __construct($pk="id",$parentKey="pid",$childrenKey="children",$type='notarr'){
         if(!empty($pk) && !empty($parentKey) && !empty($childrenKey)){
             $this->pk=$pk;
             $this->parentKey=$parentKey;
             $this->childrenKey=$childrenKey;
+            $this->type = $type;
         }else{
             return false;
         }
@@ -49,13 +51,15 @@ class Tree{
         //遍历2
       // print_r($OriginalList);
         foreach($OriginalList as $k=>$v){
-
-            //echo $this->num;exit;
+            if($this->type=='arr')
+            {
+                $OriginalList[$k]['data'] = array();
+            }
+            
             if($v[$this->parentKey]==$root){//根分类直接添加引用到tree中
                 
                 $tree[]=&$OriginalList[$k];
 
-                //$this->num++;
             }else{
                 if(isset($refer[$v[$this->parentKey]])){
 
@@ -63,10 +67,10 @@ class Tree{
 
                     $parent[$this->childrenKey][]=&$OriginalList[$k];//在父分类的children中再添加一个引用成员
                 }
+               
             }
             
         }
-       // print_r($OriginalList);exit;
         return $tree;
     }
 }
