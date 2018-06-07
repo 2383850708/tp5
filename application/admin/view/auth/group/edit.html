@@ -48,11 +48,12 @@
 
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
+
 var condition = new Array();
 layui.use(['form','table', 'layedit','laydate'], function(){
   var table = layui.table;
   var form = layui.form;
-
+ 
   form.on('submit(demo1)', function(data){  
   	var index = parent.layer.getFrameIndex(window.name);
   	$.ajax({

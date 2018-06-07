@@ -32,13 +32,7 @@
                   {volist name="treelist" id="vo" empty="暂时没有数据" }
                     <option value="{$vo.id}" ischeck='true'>{$vo.title}</option>
                   {/volist}
-                  <!-- <optgroup label="城市记忆">
-                    <option value="你工作的第一个城市">你工作的第一个城市</option>
-                  </optgroup>
-                  <optgroup label="学生时代">
-                    <option value="你的工号">你的工号</option>
-                    <option value="你最喜欢的老师">你最喜欢的老师</option>
-                  </optgroup> -->
+
                 </select>
                   </div>
                   
@@ -111,10 +105,12 @@
 
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
+
 var condition = new Array();
 layui.use(['form','table', 'layedit','laydate'], function(){
   var table = layui.table;
   var form = layui.form;
+
   $("#selected").find("option[value={$info.pid}]").prop("selected",true);
 
   form.render();

@@ -67,6 +67,7 @@ layui.config({
 
 layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function(){
   var laydate = layui.laydate //日期
+
   ,laypage = layui.laypage //分页
   layer = layui.layer //弹层
   ,table = layui.table //表格
@@ -74,7 +75,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   ,carousel = layui.carousel //轮播
   ,upload = layui.upload //上传
   ,element = layui.element; //元素操作
-
+  
 
 
   $('#parentIframe').click(function(){
@@ -109,7 +110,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
       ,{field: 'city', title: '所属组别',  align:'center'} 
       ,{field: 'email', title: 'Email',  align:'center'}
       ,{field: 'status', title: '状态',  sort: false, align:'center',templet: '#status'}
-      ,{field: 'logintime', title: '最后登录时间',  sort: true, align:'center'}
+      ,{field: 'logintime', title: '最后登录时间',  sort: true, align:'center',templet: '#time'}
       ,{fixed: 'right',  align:'center', toolbar: '#barDemo'}
 
     ]]
@@ -229,6 +230,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 	{
 		layer.msg('暂未开发');
 	}
+//在Jquery里格式化Date日期时间数据
 
 </script>
 <script type="text/html" id="status">
@@ -238,4 +240,5 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     <span style="color:red"><i class="layui-badge-dot layui-bg-red" ></i> {{ d.status }}</span>   
   {{#  } }}
 </script>
+
 </html> 

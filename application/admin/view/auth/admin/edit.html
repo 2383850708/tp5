@@ -55,7 +55,7 @@
                 
               <input type="hidden" name="row[id]" value="{$info.id}" >
               <input type="hidden" name="group" value="">
-              <input type="hidden" value='{$aa}' id="group">
+
               <div class="layui-form-item">
                 <div class="layui-input-block">
                   <button class="layui-btn" lay-submit="" lay-filter="demo1" id="sub">立即提交</button>
@@ -78,19 +78,24 @@ layui.use(['form','table', 'layedit','laydate','formSelects'], function(){
   var formSelects = layui.formSelects;
   var group = $('#group').val();
 
-  formSelects.debug(true);
-  formSelects.value('select', [128, 3]);
 
+  formSelects.value('select', {$check});
+form.render('select');
   function handlerVals(arr)
   {
     var str = arr.map(function(val){
+      alert(arr);return;
       return val.val;
     }).join(',');
 
     $("input[name='group']").val(str);
   }
 
-  formSelects.render({
+  
+
+  form.on('submit(demo1)', function(data){  
+  	var index = parent.layer.getFrameIndex(window.name);
+    formSelects.render({
       name:'select',
       on:function(data,arr)
       {
@@ -98,9 +103,6 @@ layui.use(['form','table', 'layedit','laydate','formSelects'], function(){
       }
 
   });
-
-  form.on('submit(demo1)', function(data){  
-  	var index = parent.layer.getFrameIndex(window.name);
   	$.ajax({
 	 	  url:"{:url('admin/edit')}",
 	 	  data:$("form").serialize(),

@@ -7,13 +7,13 @@ use think\Db;
 class Admin extends Model
 {
 	//开启自动写入时间戳字段
-	protected $autoWriteTimestamp = 'int';
+	protected $autoWriteTimestamp = true;
 	//定义时间戳字段名
 	protected $createTime = 'createtime';
 	protected $updateTime = 'updatetime';
 
 	protected $insert = ['ip','ip_address'];
-	protected $update = ['login_ip','logintime','login_ip_address'];
+	protected $update = ['login_ip','login_ip_address'];
 
 	
 	protected function setPasswordAttr($value)
@@ -57,10 +57,7 @@ class Admin extends Model
         return request()->ip();
     }
 
-    protected function setLoginTimeAttr()
-    {
-        return time();
-    }
+ 
 
     protected function taobaoIP()
 	{

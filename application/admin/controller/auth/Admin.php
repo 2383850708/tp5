@@ -101,14 +101,30 @@ class Admin extends Backend
 	{
 		if($this->request->isAjax())
 		{
+
 			$data=$this->request->get("row/a");
 			$id =  input('param.row.id');
+			$group = input('param.group');
+			print_r($group);exit;
+			// if(empty($group))
+			// {
+			// 	return parent::returnJson('请选择分组',0);
+			// }
 			$result = $this->model->validate('Admin.edit')->save($data,['id'=>$id]);
-			
+			echo  $this->model->getLastSql();exit;
 			if ($result === false)
             {
             	$msg = $this->model->getError();
+            	$group = explode(',',$group);
+            	Db::table('auth_group_access')->where('uid',$id)->delete();
 
+            	foreach ($group as $key => $value) 
+            	{
+            		$data = array();
+            		$data['uid'] = $id;
+            		$data['group_id'] = $value;
+            		Db::name('auth_group_access')->insert($data);
+            	}
                 return parent::returnJson($msg,0);
             }
             else
@@ -130,7 +146,7 @@ class Admin extends Backend
 				$data[] = $value['group_id'];
 			}
 
-			$this->assign('aa',json_encode($data));
+			$this->assign('check',json_encode($data));
 			$this->assign('result',$result);
 			$this->assign('info',$info);
 			
