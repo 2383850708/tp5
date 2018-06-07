@@ -26,69 +26,77 @@
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">父级：</label>
                   <div class="layui-input-block">
-                  <select name="row[pid]" style="padding-left:100px;">
+                  <select name="row[pid]" style="padding-left:100px;" id="selected">
                   <option value="">请选择问题</option>
                   <option value="0">顶级</option>
                   {volist name="treelist" id="vo" empty="暂时没有数据" }
-                    <option value="{$vo.id}" >{$vo.title}</option>
+                    <option value="{$vo.id}" ischeck='true'>{$vo.title}</option>
                   {/volist}
-                  </select>
+                  <!-- <optgroup label="城市记忆">
+                    <option value="你工作的第一个城市">你工作的第一个城市</option>
+                  </optgroup>
+                  <optgroup label="学生时代">
+                    <option value="你的工号">你的工号</option>
+                    <option value="你最喜欢的老师">你最喜欢的老师</option>
+                  </optgroup> -->
+                </select>
                   </div>
+                  
                 </div>
 
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">标题：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="row[title]" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    <input type="text" name="row[title]" lay-verify="required" value="{$info.title}" placeholder="" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">规则：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="row[name]" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    <input type="text" name="row[name]" lay-verify="required" value="{$info.name}" placeholder="" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">图标：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="row[icon]" lay-verify="" placeholder="" value="fa fa-bars" autocomplete="off" class="layui-input" >
+                    <input type="text" name="row[icon]" lay-verify="" value="{$info.icon}" placeholder="" autocomplete="off" class="layui-input" >
                   </div>
                 </div>
 
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">权重：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="row[weigh]" value='0'  lay-verify="" placeholder="" autocomplete="off" class="layui-input">
+                    <input type="text" name="row[weigh]" value='0'  lay-verify="" value="{$info.weigh}" placeholder="" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">规则条件：</label>
                   <div class="layui-input-block">
-                    <textarea name="row[condition]" placeholder="请输入" class="layui-textarea"></textarea>
+                    <textarea name="row[condition]" placeholder="请输入"  class="layui-textarea">{$info.condition}</textarea>
                   </div>
                 </div>
 
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">备注：</label>
                   <div class="layui-input-block">
-                    <textarea name="row[remark]" placeholder="请输入" class="layui-textarea"></textarea>
+                    <textarea name="row[remark]" placeholder="请输入" class="layui-textarea">{$info.remark}</textarea>
                   </div>
                 </div>
 
   				      <div class="layui-form-item">
                   <label class="layui-form-label">状态：</label>
                   <div class="layui-input-block">
-                    <input type="radio" name="row[status]" checked="checked" value="1" title="正常">
+                    <input type="radio" name="row[status]" checked="checked" value="1" {if condition="$info.status eq 1"}checked="checked"{/if} title="正常">
                     <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
                     <div>正常</div>
                     </div>
-                    <input type="radio" name="row[status]" value="2" title="隐藏"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>隐藏</div></div>
+                    <input type="radio" name="row[status]" value="2" {if condition="$info.status eq 2"}checked="checked"{/if} title="隐藏"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>隐藏</div></div>
                   </div>
                 </div>
-                
+                <input type="hidden" value="{$info.id}" name="row[id]" />
                 <div class="layui-form-item">
                   <div class="layui-input-block">
                     <button class="layui-btn" lay-submit="" lay-filter="demo1" id="sub">立即提交</button>
@@ -107,11 +115,14 @@ var condition = new Array();
 layui.use(['form','table', 'layedit','laydate'], function(){
   var table = layui.table;
   var form = layui.form;
+  $("#selected").find("option[value={$info.pid}]").prop("selected",true);
+
+  form.render();
 
   form.on('submit(demo1)', function(data){  
   	var index = parent.layer.getFrameIndex(window.name);
   	$.ajax({
-	 	  url:"{:url('rule/add')}",
+	 	  url:"{:url('admin/auth.rule/edit')}",
 	 	  data:$("form").serialize(),
 		  type: "GET",
 		  dataType: "json",

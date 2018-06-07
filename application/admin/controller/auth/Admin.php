@@ -12,9 +12,7 @@ class Admin extends Backend
 	{
 		parent::_initialize();
 		$this->model = model('Admin');
-		$this->view->assign('a', 1414);
 	}
-
 
 	public function index()
 	{
@@ -51,8 +49,12 @@ class Admin extends Backend
 	{
 		if($this->request->isAjax())
 		{
-
 			$data=$this->request->get("row/a");
+			$group = input('param.group');
+			if(empty($group))
+			{
+				return parent::returnJson('请选择分组',0);
+			}
 
 			$salt = Random::alnum();//密码盐
 			$data['salt'] = $salt;
@@ -66,11 +68,26 @@ class Admin extends Backend
             }
             else
             {
+            	$id = $this->model->getLastInsID();
+            	$group = explode(',',$group);
+            	foreach ($group as $key => $value) 
+            	{
+            		$data = array();
+            		$data['uid'] = $id;
+            		$data['group_id'] = $value;
+            		Db::name('auth_group_access')->insert($data);
+            	}
+
                 return parent::returnJson('添加成功',1);
             }
 		}
-	
-		return $this->fetch();
+		else
+		{
+			$result = collection(model('authGroup')->field('id,title')->where('status',1)->select())->toArray();
+			$this->assign('result',$result);
+			return $this->fetch();
+		}
+		
 	}
 
 	/**
@@ -105,8 +122,18 @@ class Admin extends Backend
 			$id = input('get.id');
 			
 			$info =  $this->model->get($id)->toArray();
+			$result = collection(model('authGroup')->field('id,title')->where('status',1)->select())->toArray();
+			$groups = Db::name('auth_group_access')->where('uid',$id)->select();
+			$data = array();
+			foreach ($groups as $key => $value) 
+			{
+				$data[] = $value['group_id'];
+			}
+
+			$this->assign('aa',json_encode($data));
+			$this->assign('result',$result);
 			$this->assign('info',$info);
-			$this->assign('id',$id);
+			
 			return $this->fetch();
 		}
 		

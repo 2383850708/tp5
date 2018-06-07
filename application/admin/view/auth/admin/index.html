@@ -70,10 +70,12 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   ,laypage = layui.laypage //分页
   layer = layui.layer //弹层
   ,table = layui.table //表格
+  ,form = layui.form
   ,carousel = layui.carousel //轮播
   ,upload = layui.upload //上传
   ,element = layui.element; //元素操作
-  
+
+
 
   $('#parentIframe').click(function(){
   	  layer.open({
@@ -221,6 +223,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 		  }
 		});
 	}
+
 
 	function del()
 	{

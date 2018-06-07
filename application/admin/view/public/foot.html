@@ -32,9 +32,14 @@
 	return false;
 	}
 	}*/
-  layui.config({
+  /* layui.config({
+	  version: '1527505940714' //为了更新 js 缓存，可忽略
+    });*/
+   layui.config({
     base: '/static/layuiAdmin/' //静态资源所在路径
   }).extend({
-    index: 'lib/index' //主入口模块
+   // index: 'lib/index' //主入口模块
+   index:'lib/index'
+   ,formSelects: 'lib/formSelects-v3'
   }).use('index');
   </script>

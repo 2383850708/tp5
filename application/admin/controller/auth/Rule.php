@@ -31,6 +31,69 @@ class Rule extends Backend
 		return json($data);
 	}
 
+
+	public function add()
+	{
+		if($this->request->isAjax())
+		{
+
+			$data=$this->request->get("row/a");
+			 
+			$result = $this->model->validate('AuthRule')->save($data);
+
+			if(false === $result)
+			{
+			    return parent::returnJson($this->model->getError(),0);
+			}
+			else
+			{
+			    return parent::returnJson('添加成功',1);
+			}
+			return json($res);
+		}
+		else
+		{
+			$result = collection($this->model->field('id,pid,name,title,level')->where('status',1)->order('weigh', 'desc')->select())->toArray();
+
+			$treelist = $this->getSubTree($result,0,0);
+			
+			$this->assign('treelist',$treelist);
+			return $this->fetch();
+		}
+		
+	}
+
+	public function edit()
+	{
+		if($this->request->isAjax())
+		{
+			$data=$this->request->get("row/a");
+			
+			$result = $this->model->validate('AuthRule')->save($data,['id',$data['id']]);
+
+			if(false === $result)
+			{
+			    return parent::returnJson($this->model->getError(),0);
+			}
+			else
+			{
+			    return parent::returnJson('修改成功',1);
+			}
+			return json($res);
+		}
+		else
+		{
+			$result = collection($this->model->field('id,pid,name,title,level')->where('status',1)->order('weigh', 'desc')->select())->toArray();
+			$treelist = $this->getSubTree($result,0,0);
+
+			$id = input('param.');
+			$info = $this->model->get($id)->toArray();
+			$this->assign('info',$info);
+			$this->assign('treelist',$treelist);
+			return $this->fetch();
+		}
+	}
+
 	/**
 	 * 公共删除方法
 	 * @Author   wyk
@@ -68,7 +131,8 @@ class Rule extends Backend
 		}
 	}
 
- 	function getSubTree($data , $id = 0 , $lev = 0) {
+	function getSubTree($data , $id = 0 , $lev = 0) 
+	{
 	    static $son = array();
 
 	    foreach($data as $key => $value) 
@@ -99,38 +163,6 @@ class Rule extends Backend
 	    }
     	return $son;
  	}
-
-
-	public function add()
-	{
-		if($this->request->isAjax())
-		{
-
-			$data=$this->request->get("row/a");
-			 
-			$result = $this->model->validate('AuthRule')->save($data);
-
-			if(false === $result)
-			{
-			    return parent::returnJson($this->model->getError(),0);
-			}
-			else
-			{
-			    return parent::returnJson('添加成功',1);
-			}
-			return json($res);
-		}
-		else
-		{
-			$result = collection($this->model->field('id,pid,name,title')->where('status',1)->order('weigh', 'desc')->select())->toArray();
-			$tree = new Tree();
-			$tree->load($result);
-			$treelist=$tree->DeepTree();//所有分类树结构
-			$this->assign('treelist',$treelist);
-			return $this->fetch();
-		}
-		
-	}
 
 }
 

@@ -61,7 +61,24 @@ class Group extends Backend
 	{
 		if($this->request->isAjax())
 		{
+			$data = $this->request->get("row/a");
+			$group =  $this->request->get('group/a');
 
+			if(empty($group))
+			{
+				return parent::returnJson('权限不能为空',0);
+			}
+			$data['rules'] = implode(',', $group);
+
+			$result = $this->model->validate('AuthGroup')->save($data,['id'=>$data['id']]);
+			if(false === $result)
+			{
+			    return parent::returnJson($this->model->getError(),0);
+			}
+			else
+			{
+				return parent::returnJson('分配成功',1);
+			}
 		}
 		else
 		{
@@ -120,10 +137,43 @@ class Group extends Backend
 		return json($treelist);
 	}
 
+	function getSubTree($data , $id = 0 , $lev = 0) 
+	{
+	    static $son = array();
+
+	    foreach($data as $key => $value) 
+	    {
+	        if($value['pid'] == $id) 
+	        {
+	        	$data[$key]['level'] = $lev;
+	        	if($value['pid']==0)
+	        	{
+					$value['title'] = str_repeat('&nbsp;',$lev*7).$value['title'];
+	        	}
+	        	else
+	        	{
+					if($value['level']==3)
+					{
+						$value['title'] = str_repeat('&nbsp;',$lev*7).'└ '.$value['title'];
+					}
+					else
+					{
+						$value['title'] = str_repeat('&nbsp;',$lev*7).'|— '.$value['title'];
+					}
+	        	}
+	        	
+	            $son[] = $value;
+	           
+	            $this->getSubTree($data , $value['id'] , $lev+1);
+	        }
+	    }
+    	return $son;
+ 	}
+
 	public function checkForm()
 	{
 		$data = array();
-		$data['status'] = 1;
+		//$data['status'] = 1;
 		if(input('param.id'))
 		{	
 			$data['id'] = input('get.id');

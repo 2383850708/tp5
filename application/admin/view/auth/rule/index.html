@@ -151,10 +151,10 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
       layer.open({
       type: 2,
       title:'修改',
-      area: ['800px', '480px'],
+      area: ['800px', '700px'],
       fixed: false, //不固定
       maxmin: true,
-      content: "{:url('admin/edit')}"+'?id='+data.id
+      content: "{:url('admin/auth.rule/edit')}"+'?id='+data.id
     });
     }
   });

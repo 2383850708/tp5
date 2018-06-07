@@ -12,29 +12,12 @@
 				<div class="layui-col-lg6">
                   <label class="layui-form-label">分组：</label>
                   <div class="layui-input-block">
-                    <select name="group[]" lay-verify="required" lay-filter="aihao">
+                    <select xm-select="select" xm-select-type="2" xm-select-skin="primary">
                       <option value=""></option>
-                      <option value="0">前端工程师</option>
-                      <option value="1">Node.js工程师</option>
-                      <option value="2">PHP工程师</option>
-                      <option value="3">Java工程师</option>
-                      <option value="4">运维</option>
-                      <option value="4">视觉设计师</option>
+                      {foreach name="result" item="vo"}
+                          <option value="{$vo.id}">{$vo.title}</option>
+                      {/foreach}
                     </select>
-                    <div class="layui-unselect layui-form-select">
-        					  <div class="layui-select-title">
-        					    <input type="text" placeholder="请选择" value="" readonly="" class="layui-input layui-unselect">
-        					    <i class="layui-edge"></i>
-        					  </div>
-        					  <dl class="layui-anim layui-anim-upbit">
-        					    <dd lay-value="" class="layui-select-tips">请选择</dd>
-        					    <dd lay-value="0" class="">前端工程师</dd>
-        					    <dd lay-value="1" class="">Node.js工程师</dd>
-        					    <dd lay-value="2" class="">PHP工程师</dd>
-        					    <dd lay-value="3" class="">Java工程师</dd>
-        					    <dd lay-value="4" class="">运维</dd>
-        					    <dd lay-value="4" class="">视觉设计师</dd></dl>
-        					</div>
                   </div>
                 </div>
 
@@ -70,7 +53,9 @@
                 </div>
               </div>
                 
-              <input type="hidden" name="row[id]" value="{$id}" >
+              <input type="hidden" name="row[id]" value="{$info.id}" >
+              <input type="hidden" name="group" value="">
+              <input type="hidden" value='{$aa}' id="group">
               <div class="layui-form-item">
                 <div class="layui-input-block">
                   <button class="layui-btn" lay-submit="" lay-filter="demo1" id="sub">立即提交</button>
@@ -82,13 +67,37 @@
         </div>
 </body>
  {include file="public/foot" /} 
-
+  
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
+
 var condition = new Array();
-layui.use(['form','table', 'layedit','laydate'], function(){
+layui.use(['form','table', 'layedit','laydate','formSelects'], function(){
   var table = layui.table;
   var form = layui.form;
+  var formSelects = layui.formSelects;
+  var group = $('#group').val();
+
+  formSelects.debug(true);
+  formSelects.value('select', [128, 3]);
+
+  function handlerVals(arr)
+  {
+    var str = arr.map(function(val){
+      return val.val;
+    }).join(',');
+
+    $("input[name='group']").val(str);
+  }
+
+  formSelects.render({
+      name:'select',
+      on:function(data,arr)
+      {
+        handlerVals(arr);
+      }
+
+  });
 
   form.on('submit(demo1)', function(data){  
   	var index = parent.layer.getFrameIndex(window.name);
