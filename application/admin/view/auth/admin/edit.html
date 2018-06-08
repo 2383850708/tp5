@@ -12,7 +12,7 @@
 				<div class="layui-col-lg6">
                   <label class="layui-form-label">分组：</label>
                   <div class="layui-input-block">
-                    <select xm-select="select" xm-select-type="2" xm-select-skin="primary">
+                    <select xm-select="select" xm-select-type="2" xm-select-skin="primary" lay-filter="category">
                       <option value=""></option>
                       {foreach name="result" item="vo"}
                           <option value="{$vo.id}">{$vo.title}</option>
@@ -77,25 +77,19 @@ layui.use(['form','table', 'layedit','laydate','formSelects'], function(){
   var form = layui.form;
   var formSelects = layui.formSelects;
   var group = $('#group').val();
-
-
+ 
   formSelects.value('select', {$check});
-form.render('select');
+    
+  form.render('select'); 
   function handlerVals(arr)
   {
     var str = arr.map(function(val){
-      alert(arr);return;
       return val.val;
     }).join(',');
 
     $("input[name='group']").val(str);
   }
-
-  
-
-  form.on('submit(demo1)', function(data){  
-  	var index = parent.layer.getFrameIndex(window.name);
-    formSelects.render({
+  formSelects.render({
       name:'select',
       on:function(data,arr)
       {
@@ -103,6 +97,11 @@ form.render('select');
       }
 
   });
+
+
+  form.on('submit(demo1)', function(data){  
+  	var index = parent.layer.getFrameIndex(window.name);
+ 
   	$.ajax({
 	 	  url:"{:url('admin/edit')}",
 	 	  data:$("form").serialize(),
@@ -133,7 +132,6 @@ form.render('select');
 		  }
 		});
   });
-  return false;
 
 });
 

@@ -31,6 +31,7 @@ class Admin extends Backend
 		$count = $this->model->where($condition)->count();
 		
 		$result = Db::name('admin')->where($condition)->limit($offset,$len)->select();
+		
 		if($result)
 		{
 			$result = $this->model->handleData($result);
@@ -101,23 +102,28 @@ class Admin extends Backend
 	{
 		if($this->request->isAjax())
 		{
-
+			
 			$data=$this->request->get("row/a");
 			$id =  input('param.row.id');
+
 			$group = input('param.group');
-			print_r($group);exit;
-			// if(empty($group))
-			// {
-			// 	return parent::returnJson('请选择分组',0);
-			// }
+			
+			if(empty($group))
+			{
+				return parent::returnJson('请选择分组',0);
+			}
 			$result = $this->model->validate('Admin.edit')->save($data,['id'=>$id]);
-			echo  $this->model->getLastSql();exit;
+		
 			if ($result === false)
             {
             	$msg = $this->model->getError();
+                return parent::returnJson($msg,0);
+            }
+            else
+            {
             	$group = explode(',',$group);
-            	Db::table('auth_group_access')->where('uid',$id)->delete();
-
+            	Db::name('auth_group_access')->where('uid',$id)->delete();
+            
             	foreach ($group as $key => $value) 
             	{
             		$data = array();
@@ -125,10 +131,6 @@ class Admin extends Backend
             		$data['group_id'] = $value;
             		Db::name('auth_group_access')->insert($data);
             	}
-                return parent::returnJson($msg,0);
-            }
-            else
-            {
                 return parent::returnJson('添加成功',1);
             }
             return json($res);

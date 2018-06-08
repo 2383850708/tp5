@@ -25,6 +25,19 @@ class Admin extends Model
 	{
 		foreach ($result as $key => $value) 
 		{
+            $title = '';
+            $auth = DB::name('auth_group_access')
+            ->alias('a')
+            ->field('b.title')
+            ->join('auth_group b','a.group_id=b.id')
+            ->where('a.uid',$value['id'])
+            ->select();
+            foreach($auth as $k=>$v)
+            {
+                $title.=$v['title'].',';
+            }
+            $result[$key]['title'] = rtrim($title,',');
+            $result[$key]['logintime'] = date('Y-m-d H:i',$value['logintime']);
 			if($value['status']==1)
 			{
 				$result[$key]['status'] = '正常';

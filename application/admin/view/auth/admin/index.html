@@ -75,7 +75,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   ,carousel = layui.carousel //轮播
   ,upload = layui.upload //上传
   ,element = layui.element; //元素操作
-  
+  var $ = layui.jquery;
 
 
   $('#parentIframe').click(function(){
@@ -107,7 +107,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
       ,{field: 'id', title: 'ID', width:80, sort: true ,align:'center',fixed: 'left'}
       ,{field: 'username', title: '用户名',  align:'center'}
       ,{field: 'nickname', title: '昵称',  sort: false, align:'center'}
-      ,{field: 'city', title: '所属组别',  align:'center'} 
+      ,{field: 'title', title: '所属组别',  align:'center'} 
       ,{field: 'email', title: 'Email',  align:'center'}
       ,{field: 'status', title: '状态',  sort: false, align:'center',templet: '#status'}
       ,{field: 'logintime', title: '最后登录时间',  sort: true, align:'center',templet: '#time'}

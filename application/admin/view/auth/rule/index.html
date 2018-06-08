@@ -71,6 +71,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   ,table = layui.table //表格
   ,carousel = layui.carousel //轮播
   ,upload = layui.upload //上传
+   ,form = layui.form
   ,element = layui.element; //元素操作
 
   tableIns=table.render({
@@ -105,6 +106,23 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
       content: "{:url('rule/add')}"
     });
   })
+
+   //监听菜单操作
+  form.on('switch(sexDemo)', function(obj){
+    var id = this.id;
+    var type = this.value;
+    $.ajax({
+      url:"{:url('admin/auth.rule/setMenu')}",
+      data:{id:id,type:type},
+      type: "GET",
+      dataType: "json",
+      success:function(data)
+      {
+        layer.msg(data.msg);
+      }
+    });
+    //layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+  });
 
     //监听工具条
   table.on('tool(demo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
@@ -192,6 +210,6 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 
 <script type="text/html" id="type">
   <!-- 这里的 checked 的状态只是演示 -->
-  <input type="checkbox" name="sex" value="{{d.type}}" lay-skin="switch" lay-text="是|否" lay-filter="sexDemo" {{ d.type == 'menu' ? 'checked' : '' }}>
+  <input type="checkbox" name="menu" value="{{d.type}}" id="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="sexDemo" {{ d.type == 'menu' ? 'checked' : '' }}>
 </script>
 </html> 

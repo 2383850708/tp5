@@ -3,6 +3,8 @@ namespace app\admin\common\controller;
 use think\Controller;
 use think\Session;
 use think\Db;
+use think\auth\Auth;
+
 /**
  * 后台控制器基类
  */
@@ -10,11 +12,29 @@ class Backend extends Controller
 {
 	public function _initialize()
     {
-    	//检查用户是否登陆
-    	if(!Session::has('userInfo'))
-    	{
-    		$this->redirect(url('login/index'));
-    	}
+
+        //检查用户是否登陆
+        if(!Session::has('userInfo'))
+        {
+            $this->redirect(url('login/index'));
+        }
+
+        $controller = request()->controller();
+        $action = request()->action();
+        $auth = new Auth();
+         /*echo $controller;
+         echo '<hr>';
+         echo $action;
+         echo '<hr/>';*/
+
+         $info = $this->getUserInfo();
+        
+        if(!$auth->check($controller . '/' . $action, $info['id'])){
+          
+            $this->error('你没有权限访问');
+        }
+       
+    	
     }
 
     /**

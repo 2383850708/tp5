@@ -130,6 +130,31 @@ class Rule extends Backend
 			return parent::returnJson('操作异常',0);
 		}
 	}
+	
+	public function setMenu()
+	{
+
+		$type = input('param.type');
+		$data = array();
+		if($type=='menu')
+		{
+			$data['type'] = 'file';
+		}
+		else
+		{
+			$data['type'] = 'menu';
+		}
+		$res =$this->model->save($data,['id' => input('param.id')]);
+		if($res)
+		{
+			return parent::returnJson('修改成功',1);
+		}
+		else
+		{
+			return parent::returnJson('修改失败',0);
+		}
+	}
+
 
 	function getSubTree($data , $id = 0 , $lev = 0) 
 	{
