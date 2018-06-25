@@ -13,14 +13,14 @@
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">分类名称：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="title" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    <input type="text" name="title" lay-verify="required" placeholder="" value="{$info.title}" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">上级分类：</label>
                   <div class="layui-input-block">
-                    <select   name="pid" id="selected" >
+                    <select  xm-select-type="1" name="pid" value="{$info.pid}" id="selected">
                       <option value="0" >顶级</option>
                       {foreach name="list" item="vo"}
                         <option value="{$vo.id}" >{$vo.title}</option>
@@ -33,10 +33,10 @@
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">分类排序：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="scort" value='0' lay-verify="" placeholder="" autocomplete="off" class="layui-input">
+                    <input type="text" name="scort" value='{$info.scort}' lay-verify="" placeholder="" autocomplete="off" class="layui-input">
                   </div>
                 </div>
-				       
+				       <input type="hidden" name="id" value="{$info.id}">
               <div class="layui-form-item">
                 <div class="layui-input-block">
                   <button class="layui-btn" lay-submit="" lay-filter="demo1" id="sub">立即提交</button>
@@ -58,15 +58,14 @@ layui.use(['form','table', 'layedit','laydate','formSelects'], function(){
   var table = layui.table;
   var form = layui.form
   ,formSelects = layui.formSelects;      
-  
-  $("#selected").find("option[value='{$id}']").prop("selected",true);
-  
+
+  $("#selected").find("option[value='{$info.pid}']").prop("selected",true);
+
   form.render();
-  
   form.on('submit(demo1)', function(data){  
   	var index = parent.layer.getFrameIndex(window.name);
   	$.ajax({
-	 	  url:"{:url('article.category/add')}",
+	 	  url:"{:url('article.category/edit')}",
 	 	  data:$("form").serialize(),
 		  type: "GET",
 		  dataType: "json",
@@ -95,7 +94,6 @@ layui.use(['form','table', 'layedit','laydate','formSelects'], function(){
 		  }
 		});
   });
-
   return false;
 });
 

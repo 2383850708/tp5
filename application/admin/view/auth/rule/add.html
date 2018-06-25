@@ -26,7 +26,7 @@
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">父级：</label>
                   <div class="layui-input-block">
-                  <select name="row[pid]" style="padding-left:100px;">
+                  <select name="row[pid]" style="padding-left:100px;" id="selected">
                   <option value="">请选择问题</option>
                   <option value="0">顶级</option>
                   {volist name="treelist" id="vo" empty="暂时没有数据" }
@@ -109,6 +109,9 @@ layui.use(['form','table', 'layedit','laydate'], function(){
   var table = layui.table;
   var form = layui.form;
  
+  $("#selected").find("option[value='{$id}']").prop("selected",true);
+  
+  form.render(); 
   form.on('submit(demo1)', function(data){  
   	var index = parent.layer.getFrameIndex(window.name);
   	$.ajax({

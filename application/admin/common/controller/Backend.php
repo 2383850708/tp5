@@ -23,7 +23,7 @@ class Backend extends Controller
         $controller = request()->controller();
         $action = request()->action();
        
-        $auth = new Auth();
+        //$auth = new Auth();
 
         $info = $this->getUserInfo();
         

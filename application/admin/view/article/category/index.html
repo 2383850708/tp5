@@ -51,7 +51,7 @@
  <!-- {load href="/static/layuiAdmin/layui/dist/layui.js" /} -->
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script type="text/html" id="barDemo">
-  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="add">添加子类</a>
   <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -79,7 +79,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 
 
   $('#parentIframe').click(function(){
-  	  layer.open({
+  	layer.open({
 	  type: 2,
 	  title:'添加',
 	  area: ['800px', '480px'],
@@ -145,19 +145,22 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 
     var data = obj.data //获得当前行数据
     ,layEvent = obj.event; //获得 lay-event 对应的值
-    if(layEvent === 'detail'){
-
-      layer.msg('暂未开发');
+    if(layEvent === 'add'){
+      var id = data.id;
+      layer.open({
+      type: 2,
+      title:'添加',
+      area: ['800px', '480px'],
+      fixed: false, //不固定
+      maxmin: true,
+      content: "{:url('article.category/add')}?id="+id
+    });
     } else if(layEvent === 'del'){
       layer.confirm('真的删除行么', function(index){
-        var ids = new Array;
         var id = data.id;
-        ids[0] = id;
-        ids = JSON.stringify(ids);
-       
         $.ajax({
-          url:"{:url('admin/del')}",
-          data:{ids:ids},
+          url:"{:url('/article.category/del')}",
+          data:{id:id},
           type: "GET",
           dataType: "json",
           success:function(data)
@@ -176,7 +179,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
                 layer.closeAll();
                 heavyLoad(condition);
               }
-              layer.close('dialog');
+              layer.closeAll('dialog');
             });
           }
         });
@@ -189,7 +192,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 		  area: ['800px', '480px'],
 		  fixed: false, //不固定
 		  maxmin: true,
-		  content: "{:url('admin/edit')}"+'?id='+data.id
+		  content: "{:url('/article.category/edit')}"+'?id='+data.id
 		});
     }
   });

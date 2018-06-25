@@ -59,10 +59,18 @@ class Category extends Backend
 		}
 		else
 		{
-			$list = collection($this->model->field('id,title,pid')->order('scort', 'desc')->select())->toArray();
-			$list = $this->generateTree($list,0,0);
-			$this->assign('list',$list);
+			if(input('?get.id'))
+			{
+				$this->assign('id',input('param.id'));
+			}
+			else
+			{
+				$this->assign('id',0);
+			}
 			
+			$list = $this->getCategoryList();
+	
+			$this->assign('list',$list);
 			return $this->fetch();
 		}
 		
@@ -72,12 +80,68 @@ class Category extends Backend
 	{
 		if($this->request->isAjax())
 		{
+			$data = input('param.');
 
+			$result = $this->model->validate('Category')->save($data,['id'=>$data['id']]);
+		
+			if ($result === false)
+            {
+            	$msg = $this->model->getError();
+                return parent::returnJson($msg,0);
+            }
+            else
+            {
+            	return parent::returnJson('修改成功',1);
+            }
 		}
 		else
 		{
+			$id = input('get.id');
+			$info =  $this->model->get($id)->toArray();
+			$list = $this->getCategoryList();
+	
+			$this->assign('info',$info);
+			$this->assign('list',$list);
 			return $this->fetch();
 		}
+	}
+
+	public function del($id='')
+	{
+		$id = input('param.id');
+
+		if($id)
+		{
+			$info = $this->model->isCheckSubclass($id);
+			if($info)
+			{
+				return parent::returnJson('有子类不能删除',0);
+			}
+			else
+			{
+				$res = $this->model->destroy($id);
+				
+				if($res)
+				{
+					return parent::returnJson('删除成功',1);
+				}
+				else
+				{
+					return parent::returnJson('删除失败',0);
+				}
+			}
+		}
+		else
+		{
+			return parent::returnJson('操作异常',0);
+		}
+	}
+
+	public function getCategoryList()
+	{
+		$list = collection($this->model->field('id,title,pid')->order('scort', 'desc')->select())->toArray();
+		$list = $this->generateTree($list,0,0);
+		return $list;
 	}
 
 	public function checkForm()
