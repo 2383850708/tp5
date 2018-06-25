@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{include file="public/header" title="分类添加"  /}
+	
+</head>
+<body style="padding:15px">
+	<div class="layui-card">
+          <div class="layui-card-body">
+            <form class="layui-form" action="" onsubmit="return false" lay-filter="component-form-element">
+              <div class="layui-row layui-col-space10 layui-form-item">
+				        
+                <div class="layui-col-lg11">
+                  <label class="layui-form-label">分类名称：</label>
+                  <div class="layui-input-block">
+                    <input type="text" name="title" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+
+                <div class="layui-col-lg11">
+                  <label class="layui-form-label">上级分类：</label>
+                  <div class="layui-input-block">
+                    <select  xm-select-type="1" name="pid">
+                      <option value="0" >顶级</option>
+                      {foreach name="list" item="vo"}
+                        <option value="{$vo.id}" >{$vo.title}</option>
+                      {/foreach}
+                    </select>
+                  </div>
+                </div>
+
+
+                <div class="layui-col-lg11">
+                  <label class="layui-form-label">分类排序：</label>
+                  <div class="layui-input-block">
+                    <input type="text" name="scort" value='0' lay-verify="" placeholder="" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+				       
+              <div class="layui-form-item">
+                <div class="layui-input-block">
+                  <button class="layui-btn" lay-submit="" lay-filter="demo1" id="sub">立即提交</button>
+                  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+</body>
+ {include file="public/foot" /} 
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script>
+
+var condition = new Array();
+layui.use(['form','table', 'layedit','laydate','formSelects'], function(){
+  var table = layui.table;
+  var form = layui.form
+  ,formSelects = layui.formSelects;      
+
+
+  form.on('submit(demo1)', function(data){  
+  	var index = parent.layer.getFrameIndex(window.name);
+  	$.ajax({
+	 	  url:"{:url('article.category/add')}",
+	 	  data:$("form").serialize(),
+		  type: "GET",
+		  dataType: "json",
+		  success:function(data)
+		  {
+        layer.alert(data.msg, {
+          skin: data.skin
+          ,closeBtn: 0
+          ,anim: data.anim //动画类型
+          ,icon: data.icon
+        }
+        ,function()
+        {
+          if(data.status==1)
+          {
+            parent.heavyLoad(condition);
+            parent.layer.close(index);
+          }
+          else
+          {
+            layer.closeAll('dialog');
+          }
+        }
+        );
+		  	
+		  }
+		});
+  });
+  return false;
+});
+
+
+
+</script>
+</html> 

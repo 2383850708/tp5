@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	{include file="public/header" title="管理员管理"  /}
+	{include file="public/header" title="分类管理"  /}
 
 </head>
 <body style="padding:15px">
@@ -11,19 +11,19 @@
 		<div class="layui-card-body">
 	
     <div class="layui-form layui-card-header layuiadmin-card-header-auto" style="padding:15px 0px 15px 0px;height:100%;line-height:100%">
-        <div class="layui-form-item">
+          <div class="layui-form-item">
           <div class="layui-inline">
             <label class="layui-form-label">搜索ID</label>
             <div class="layui-input-block">
               <input type="text" name="id" id="id" placeholder="请输入" autocomplete="off" class="layui-input">
             </div>
           </div>
-         <div class="layui-inline">
+          <!-- <div class="layui-inline">
             <label class="layui-form-label">用户名</label>
             <div class="layui-input-block">
               <input type="text" name="username" id="username" placeholder="请输入" autocomplete="off" class="layui-input">
             </div>
-          </div>
+          </div> -->
          
           <div class="layui-inline">
             <button class="layui-btn" data-type="reload" onclick="search()">搜索</button>
@@ -85,7 +85,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 	  area: ['800px', '480px'],
 	  fixed: false, //不固定
 	  maxmin: true,
-	  content: "{:url('admin/add')}"
+	  content: "{:url('article.category/add')}"
 	});
   })
   
@@ -100,17 +100,14 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   tableIns=table.render({
     elem: '#test'
     ,height: 500
-    ,url: '/auth.admin/ajax_load_data' //数据接口
-    ,page: true //开启分页
+    ,url: '/article.category/ajax_load_data' //数据接口
+    ,page: false //开启分页
     ,cols: [[ //表头
        {checkbox:true,fixed: 'left' ,align:'center'}
       ,{field: 'id', title: 'ID', width:80, sort: true ,align:'center',fixed: 'left'}
-      ,{field: 'username', title: '用户名',  align:'center'}
-      ,{field: 'nickname', title: '昵称',  sort: false, align:'center'}
-      ,{field: 'title', title: '所属组别',  align:'center'} 
-      ,{field: 'email', title: 'Email',  align:'center'}
-      ,{field: 'status', title: '状态',  sort: false, align:'center',templet: '#status'}
-      ,{field: 'logintime', title: '最后登录时间',  sort: true, align:'center',templet: '#time'}
+      ,{field: 'title', title: '分类名称',  align:'left'}
+      ,{field: 'scort', title: '排序',  sort: true, align:'center'}
+      ,{field: 'createtime', title: '创建日期',  align:'center'}
       ,{fixed: 'right',  align:'center', toolbar: '#barDemo'}
 
     ]]
@@ -129,7 +126,6 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
       layer.msg(msg);
       return;
     }
-
     
     //得到当前页码
     //console.log(curr); 
@@ -211,11 +207,9 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 	function search()
 	{
 		var id = $('#id').val();
-		var username = $('#username').val();
 
 		var condition = new Array();
 		condition['id'] =id;
-		condition['username'] =username;
 		
 		heavyLoad(condition);
 	}
@@ -225,9 +219,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 	{
 		tableIns.reload({
 		  where: condition
-		  ,page: {
-		    curr: 1 //重新从第 1 页开始
-		  }
+		 
 		});
 	}
 
@@ -239,12 +231,6 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 //在Jquery里格式化Date日期时间数据
 
 </script>
-<script type="text/html" id="status">
-  {{#  if(d.status === '正常'){ }}
-	<span style="color:#18bc9c"><i class="layui-badge-dot layui-bg-green" ></i> {{ d.status }}</span>   
-  {{#  } else { }}
-    <span style="color:red"><i class="layui-badge-dot layui-bg-red" ></i> {{ d.status }}</span>   
-  {{#  } }}
-</script>
+
 
 </html> 

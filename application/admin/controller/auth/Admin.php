@@ -39,6 +39,7 @@ class Admin extends Backend
 
 		$data = array();
 		$data['code'] = 0;
+		$data['status'] = 1;
 		$data['count'] = $count;
 		$data['data'] = $result;
 		$data['msg'] = '';
@@ -89,6 +90,11 @@ class Admin extends Backend
 			return $this->fetch();
 		}
 		
+	}
+
+	public function ceshi()
+	{
+		return $this->fetch();
 	}
 
 	/**

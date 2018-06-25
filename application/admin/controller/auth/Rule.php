@@ -53,7 +53,7 @@ class Rule extends Backend
 		}
 		else
 		{
-			$result = collection($this->model->field('id,pid,name,title,level')->where('status',1)->order('weigh', 'desc')->select())->toArray();
+			$result = collection($this->model->field('id,pid,name,title,level')->where(['status'=>1,'type'=>'menu'])->order('weigh', 'desc')->select())->toArray();
 
 			$treelist = $this->getSubTree($result,0,0);
 			

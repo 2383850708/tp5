@@ -19,21 +19,30 @@ class Backend extends Controller
             $this->redirect(url('login/index'));
         }
 
+        $module = request()->module();
         $controller = request()->controller();
         $action = request()->action();
-        $auth = new Auth();
-         /*echo $controller;
-         echo '<hr>';
-         echo $action;
-         echo '<hr/>';*/
-
-         $info = $this->getUserInfo();
-        
-        if(!$auth->check($controller . '/' . $action, $info['id'])){
-          
-            $this->error('你没有权限访问');
-        }
        
+        $auth = new Auth();
+
+        $info = $this->getUserInfo();
+        
+        /*if(!$auth->check($controller . '/' . $action, $info['id']))
+        {
+            
+            if($this->request->isAjax())
+            {
+                // $data = array();
+                // $data['code'] = 0;
+                // $data['status'] = 0;
+                // $data['msg'] = '没有权限';
+                $this->error('没有权限');
+            }
+            else
+            {
+                $this->error('没有权限',url('admin/Err/auth'));
+            }
+        }*/
     	
     }
 
