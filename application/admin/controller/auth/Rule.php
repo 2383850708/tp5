@@ -1,8 +1,8 @@
 <?php 
 namespace app\admin\controller\auth;
 use app\admin\common\controller\Backend;
-use blog\Tree;
-
+//use blog\Tree;
+use blog\Category;
 class Rule extends Backend
 {
 	public function _initialize()
@@ -21,12 +21,13 @@ class Rule extends Backend
 		//field('id,pid,name,title,level,icon,type,')->
 		$count = $this->model->where('status',1)->count();
 		$result = collection($this->model->order('weigh', 'desc')->select())->toArray();
-		$result = $this->getSubTree($result,0,0);
+		$Category = new Category("AuthRule",array('id','pid','title','fullname'));
+		$categoryList = $Category->getList();
 
 		$data = array();
 		$data['code'] = 0;
 		$data['count'] = $count;
-		$data['data'] = $result;
+		$data['data'] = $categoryList;
 		$data['msg'] = '';
 		return json($data);
 	}
@@ -64,9 +65,12 @@ class Rule extends Backend
 			
 			$result = collection($this->model->field('id,pid,name,title,level')->where(['status'=>1,'type'=>'menu'])->order('weigh', 'desc')->select())->toArray();
 
-			$treelist = $this->getSubTree($result,0,0);
+			$Category = new Category("AuthRule",array('id','pid','title','fullname'));
+			$categoryList = $Category->getList(['status'=>1,'type'=>'menu']);
+
+			//$treelist = $this->getSubTree($result,0,0);
 			
-			$this->assign('treelist',$treelist);
+			$this->assign('treelist',$categoryList);
 			return $this->fetch();
 		}
 		
@@ -93,12 +97,13 @@ class Rule extends Backend
 		else
 		{
 			$result = collection($this->model->field('id,pid,name,title,level')->where('status',1)->order('weigh', 'desc')->select())->toArray();
-			$treelist = $this->getSubTree($result,0,0);
+			$Category = new Category("AuthRule",array('id','pid','title','fullname'));
+			$categoryList = $Category->getList(['status'=>1,'type'=>'menu']);
 
 			$id = input('param.');
 			$info = $this->model->get($id)->toArray();
 			$this->assign('info',$info);
-			$this->assign('treelist',$treelist);
+			$this->assign('treelist',$categoryList);
 			return $this->fetch();
 		}
 	}
