@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {include file="public/header" title="菜单添加"  /}
+
+</head>
+<body style="padding:15px">
+  <div class="layui-card">
+          <div class="layui-card-body">
+            <form class="layui-form" action="" onsubmit="return false" lay-filter="component-form-element">
+              <div class="layui-row layui-col-space10 layui-form-item">
+                
+
+                <div class="layui-col-lg12">
+                  <label class="layui-form-label">标 题：</label>
+                  <div class="layui-input-block">
+                    <input type="text" name="title" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+
+                <div class="layui-col-lg12">
+                  <label class="layui-form-label">作 者：</label>
+                  <div class="layui-input-block">
+                    <input type="text" name="author" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+
+                <div class="layui-form-item">
+                <label class="layui-form-label">状 态：</label>
+                <div class="layui-input-block">
+                  <input type="radio" name="status" checked="checked" value="1" title="发布">
+                  <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
+                  <div>发布</div>
+                  </div>
+                  <input type="radio" name="status" value="2" title="草稿"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>草稿</div></div>
+                </div>
+                </div>
+
+                <div class="layui-col-lg12">
+                  <label class="layui-form-label">类 别：</label>
+                  <div class="layui-input-block">
+                  <select name="pid" style="padding-left:100px;" id="selected">
+                  <option value="">请选择问题</option>
+                  {foreach name="list" item="vo"}
+                  <option value="{$vo.id}">{$vo.fullname}</option>
+                  {/foreach}
+                  </select>
+                  </div>
+                </div>
+
+                <div class="layui-col-lg12">
+                  <label class="layui-form-label">关键字：</label>
+                  <div class="layui-input-block">
+                    <input type="text" name="keyword" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+
+                <div class="layui-col-lg12">
+                  <label class="layui-form-label">简 介：</label>
+                  <div class="layui-input-block">
+                    <textarea name="synopsis" rows="10" placeholder="请输入" class="layui-textarea"></textarea>
+                  </div>
+                </div>
+
+                <div class="layui-col-lg12">
+                  <label class="layui-form-label">新闻内容：</label>
+                  <div class="layui-input-block">
+                    <script id="editor" type="text/plain" style="width:100%"></script>
+                  </div>
+                </div>
+
+                
+                <div class="layui-form-item">
+                  <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="demo1" id="sub">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                  </div>
+                </div>
+                </div>
+            </form>
+          </div>
+        </div>
+</body>
+ {include file="public/foot" /} 
+
+
+  {load href="/static/ueditor1_4_3_3-utf8-php/ueditor.config.js" /}
+  {load href="/static/ueditor1_4_3_3-utf8-php/ueditor.all.min.js" /}
+  <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+  <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+  {load href="/static/ueditor1_4_3_3-utf8-php/lang/zh-cn/zh-cn.js" /}
+
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<!-- 编辑器源码文件 -->
+
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+    var ue = UE.getEditor('editor');
+    ue.ready(function() {
+            ue.setHeight(400);
+           //设置编辑器的内容
+      });
+</script>
+<script>
+
+<!-- 配置文件 -->
+   
+var condition = new Array();
+layui.use(['form','table', 'layedit','laydate'], function(){
+  var table = layui.table;
+  var form = layui.form;
+ 
+  form.on('submit(demo1)', function(data){  
+    var index = parent.layer.getFrameIndex(window.name);
+    $.ajax({
+      url:"{:url('/article.article/add')}",
+      data:$("form").serialize(),
+      type: "POST",
+      dataType: "json",
+      success:function(data)
+      {
+        layer.alert(data.msg, {
+          skin: data.skin
+          ,closeBtn: 0
+          ,anim: data.anim //动画类型
+          ,icon: data.status
+        }
+        ,function()
+        {
+          if(data.status==1)
+          {
+            parent.heavyLoad(condition);
+            parent.layer.close(index);
+          }
+          else
+          {
+            layer.closeAll('dialog');
+          }
+        }
+        );
+      }
+    });
+  });
+
+
+});
+
+
+
+</script>
+</html> 

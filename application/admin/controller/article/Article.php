@@ -8,6 +8,24 @@ class Article extends Backend
 	{
 		return $this->fetch();
 	}
+
+	public function add()
+	{
+		if($this->request->isAjax())
+		{
+			print_r($_REQUEST);exit;
+		}
+		else
+		{
+			$Category = new \blog\Category("Category",array('id','pid','title','fullname'));
+			$categoryList = $Category->getList(array(),' scort desc ');
+			$this->assign('list',$categoryList);
+			return $this->fetch();
+		}
+		
+	}
+
+	
 }
 
 

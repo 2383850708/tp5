@@ -23,7 +23,7 @@
                     <select  xm-select-type="1" name="pid" value="{$info.pid}" id="selected">
                       <option value="0" >顶级</option>
                       {foreach name="list" item="vo"}
-                        <option value="{$vo.id}" >{$vo.title}</option>
+                        <option value="{$vo.id}" >{$vo.fullname}</option>
                       {/foreach}
                     </select>
                   </div>
@@ -42,6 +42,7 @@
                   <button class="layui-btn" lay-submit="" lay-filter="demo1" id="sub">立即提交</button>
                   <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                 </div>
+              </div>
               </div>
             </form>
           </div>

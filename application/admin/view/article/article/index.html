@@ -79,14 +79,16 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 
 
   $('#parentIframe').click(function(){
-  	  layer.open({
-	  type: 2,
-	  title:'添加',
-	  area: ['800px', '480px'],
-	  fixed: false, //不固定
-	  maxmin: true,
-	  content: "{:url('admin/add')}"
-	});
+  var index = layer.open({
+    type: 2,
+    title:'添加',
+    fixed: false, 
+    content: "{:url('/article.article/add')}",
+    area: ['800px', '600px'],
+    maxmin: true
+});
+layer.full(index);
+
   })
   
   //监听Tab切换

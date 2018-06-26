@@ -2,7 +2,7 @@
 namespace app\admin\controller\article;
 use app\admin\common\controller\Backend;
 use think\Db;
-
+use blog\Category as tree;
 class Category extends Backend
 {
 	public function _initialize()
@@ -20,22 +20,21 @@ class Category extends Backend
 	{
 		$condition = $this->checkForm();
 		
-		$result = Db::name('category')->where($condition)->select();
-		if($result)
+		$Category = new tree("Category",array('id','pid','title','fullname'));
+		if($Category)
 		{
-			foreach ($result as $key => $value) 
+			foreach ($Category as $key => $value) 
 			{
-				$result[$key]['createtime'] = date('Y-m-d',$value['createtime']);
+				$Category[$key]['createtime'] = date('Y-m-d',$value['createtime']);
 			}
 		}
-
-		$result = $this->generateTree($result,0,0);
+		$categoryList = $Category->getList(array(),' scort desc ');
 
 		$data = array();
 		$data['code'] = 0;
 		$data['status'] = 1;
 		$data['count'] = 0;
-		$data['data'] = $result;
+		$data['data'] = $categoryList;
 		$data['msg'] = '';
 
 		return json($data);
@@ -67,12 +66,11 @@ class Category extends Backend
 			{
 				$this->assign('id',0);
 			}
-			
-			$list = $this->getCategoryList();
-	
-			$this->assign('list',$list);
-			return $this->fetch();
-		}
+				$Category = new tree("Category",array('id','pid','title','fullname'));
+				$categoryList = $Category->getList(array(),' scort desc ');
+				$this->assign('list',$categoryList);
+				return $this->fetch();
+			}
 		
 	}
 
@@ -98,10 +96,11 @@ class Category extends Backend
 		{
 			$id = input('get.id');
 			$info =  $this->model->get($id)->toArray();
-			$list = $this->getCategoryList();
+			$Category = new tree("Category",array('id','pid','title','fullname'));
+			$categoryList = $Category->getList(array(),' scort desc ');
 	
 			$this->assign('info',$info);
-			$this->assign('list',$list);
+			$this->assign('list',$categoryList);
 			return $this->fetch();
 		}
 	}

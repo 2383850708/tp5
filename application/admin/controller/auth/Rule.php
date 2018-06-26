@@ -18,11 +18,10 @@ class Rule extends Backend
 
 	public function ajax_load_data()
 	{
-		//field('id,pid,name,title,level,icon,type,')->
+
 		$count = $this->model->where('status',1)->count();
-		$result = collection($this->model->order('weigh', 'desc')->select())->toArray();
 		$Category = new Category("AuthRule",array('id','pid','title','fullname'));
-		$categoryList = $Category->getList();
+		$categoryList = $Category->getList(array(),' weigh desc ');
 
 		$data = array();
 		$data['code'] = 0;
@@ -63,13 +62,10 @@ class Rule extends Backend
 				$this->assign('id',0);
 			}
 			
-			$result = collection($this->model->field('id,pid,name,title,level')->where(['status'=>1,'type'=>'menu'])->order('weigh', 'desc')->select())->toArray();
-
-			$Category = new Category("AuthRule",array('id','pid','title','fullname'));
-			$categoryList = $Category->getList(['status'=>1,'type'=>'menu']);
-
-			//$treelist = $this->getSubTree($result,0,0);
 			
+			$Category = new Category("AuthRule",array('id','pid','title','fullname'));
+			$categoryList = $Category->getList(['status'=>1,'type'=>'menu'],' weigh desc ');
+
 			$this->assign('treelist',$categoryList);
 			return $this->fetch();
 		}
@@ -96,9 +92,8 @@ class Rule extends Backend
 		}
 		else
 		{
-			$result = collection($this->model->field('id,pid,name,title,level')->where('status',1)->order('weigh', 'desc')->select())->toArray();
 			$Category = new Category("AuthRule",array('id','pid','title','fullname'));
-			$categoryList = $Category->getList(['status'=>1,'type'=>'menu']);
+			$categoryList = $Category->getList(['status'=>1,'type'=>'menu'],' weigh desc ');
 
 			$id = input('param.');
 			$info = $this->model->get($id)->toArray();
@@ -168,7 +163,6 @@ class Rule extends Backend
 			return parent::returnJson('修改失败',0);
 		}
 	}
-
 
 	function getSubTree($data , $id = 0 , $lev = 0) 
 	{
