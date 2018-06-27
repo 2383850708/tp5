@@ -2,26 +2,137 @@
 <html lang="en">
 <head>
   {include file="public/header" title="菜单添加"  /}
+<style>
+.uploader{
+position:relative;
+display:inline-block;
+overflow:hidden;
+cursor:default;
+padding:0;
+margin:10px 0px;
+-moz-box-shadow:0px 0px 5px #ddd;
+-webkit-box-shadow:0px 0px 5px #ddd;
+box-shadow:0px 0px 5px #ddd;
 
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+border-radius:5px;
+}
+
+.filename{
+float:left;
+display:inline-block;
+outline:0 none;
+height:32px;
+width:180px;
+margin:0;
+padding:8px 10px;
+overflow:hidden;
+cursor:default;
+border:1px solid;
+border-right:0;
+font:9pt/100% Arial, Helvetica, sans-serif; color:#777;
+text-shadow:1px 1px 0px #fff;
+text-overflow:ellipsis;
+white-space:nowrap;
+
+-moz-border-radius:5px 0px 0px 5px;
+-webkit-border-radius:5px 0px 0px 5px;
+border-radius:5px 0px 0px 5px;
+
+background:#f5f5f5;
+background:-moz-linear-gradient(top, #fafafa 0%, #eee 100%);
+background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#fafafa), color-stop(100%,#f5f5f5));
+filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fafafa', endColorstr='#f5f5f5',GradientType=0);
+border-color:#ccc;
+
+-moz-box-shadow:0px 0px 1px #fff inset;
+-webkit-box-shadow:0px 0px 1px #fff inset;
+box-shadow:0px 0px 1px #fff inset;
+
+-moz-box-sizing:border-box;
+-webkit-box-sizing:border-box;
+box-sizing:border-box;
+}
+
+.button{
+float:left;
+height:32px;
+display:inline-block;
+outline:0 none;
+padding:8px 12px;
+margin:0;
+cursor:pointer;
+border:1px solid;
+font:bold 9pt/100% Arial, Helvetica, sans-serif;
+
+-moz-border-radius:0px 5px 5px 0px;
+-webkit-border-radius:0px 5px 5px 0px;
+border-radius:0px 5px 5px 0px;
+
+-moz-box-shadow:0px 0px 1px #fff inset;
+-webkit-box-shadow:0px 0px 1px #fff inset;
+box-shadow:0px 0px 1px #fff inset;
+}
+
+
+.uploader input[type=file]{
+position:absolute;
+top:0; right:0; bottom:0;
+border:0;
+padding:0; margin:0;
+height:30px;
+cursor:pointer;
+filter:alpha(opacity=0);
+-moz-opacity:0;
+-khtml-opacity: 0;
+opacity:0;
+}
+
+input[type=button]::-moz-focus-inner{padding:0; border:0 none; -moz-box-sizing:content-box;}
+input[type=button]::-webkit-focus-inner{padding:0; border:0 none; -webkit-box-sizing:content-box;}
+input[type=text]::-moz-focus-inner{padding:0; border:0 none; -moz-box-sizing:content-box;}
+input[type=text]::-webkit-focus-inner{padding:0; border:0 none; -webkit-box-sizing:content-box;}
+
+/* White Color Scheme ------------------------ */
+
+.white .button{
+color:#555;
+text-shadow:1px 1px 0px #fff;
+background:#ddd;
+background:-moz-linear-gradient(top, #eeeeee 0%, #dddddd 100%);
+background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#dddddd));
+filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#dddddd',GradientType=0);
+border-color:#ccc;
+}
+
+.white:hover .button{
+background:#eee;
+background:-moz-linear-gradient(top, #dddddd 0%, #eeeeee 100%);
+background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#eeeeee));
+filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dddddd', endColorstr='#eeeeee',GradientType=0);
+}
+
+</style>
 </head>
 <body style="padding:15px">
   <div class="layui-card">
           <div class="layui-card-body">
-            <form class="layui-form" action="" onsubmit="return false" lay-filter="component-form-element">
+            <form class="layui-form" action="" onsubmit="return false" lay-filter="component-form-element" id="uploadForm" enctype="multipart/form-data">
               <div class="layui-row layui-col-space10 layui-form-item">
                 
 
                 <div class="layui-col-lg12">
                   <label class="layui-form-label">标 题：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="title" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    <input type="text" name="title" lay-verify="" placeholder="请输入" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
                 <div class="layui-col-lg12">
                   <label class="layui-form-label">作 者：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="author" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    <input type="text" name="author" lay-verify="" placeholder="请输入" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
@@ -34,6 +145,39 @@
                   </div>
                   <input type="radio" name="status" value="2" title="草稿"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>草稿</div></div>
                 </div>
+                </div>
+
+                <div class="layui-form-item">
+                <label class="layui-form-label">推荐：</label>
+                <div class="layui-input-block">
+                  <input type="radio" name="is_good"  value="1" title="推荐">
+                  <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
+                  <div>推荐</div>
+                  </div>
+                  <input type="radio" name="is_good" checked="checked" value="2" title="不推荐"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>不推荐</div></div>
+                </div>
+                </div>
+
+                <div class="layui-form-item">
+                <label class="layui-form-label">标签：</label>
+                <div class="layui-input-block">
+                  <input type="radio" name="tag" checked="checked" value="1" title="转载">
+                  <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
+                  <div>转载</div>
+                  </div>
+                  <input type="radio" name="tag"  value="2" title="原创"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>原创</div></div>
+                </div>
+                </div>
+
+                <div class="layui-col-lg12">
+                  <label class="layui-form-label">封面图片：</label>
+                  <div class="layui-input-block">
+                    <div class="uploader white">
+                    <input type="text" class="filename" readonly/>
+                    <input type="button"  class="button"  value="Browse..."/>
+                    <input type="file" size="30" id="upload" name="file"/>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="layui-col-lg12">
@@ -51,7 +195,7 @@
                 <div class="layui-col-lg12">
                   <label class="layui-form-label">关键字：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="keyword" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    <input type="text" name="keywords" lay-verify="" placeholder="多个已逗号分隔" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
@@ -102,7 +246,14 @@
             ue.setHeight(400);
            //设置编辑器的内容
       });
+    $(function(){
+  $("input[type=file]").change(function(){$(this).parents(".uploader").find(".filename").val($(this).val());});
+  $("input[type=file]").each(function(){
+  if($(this).val()==""){$(this).parents(".uploader").find(".filename").val("No file selected...");}
+  });
+});
 </script>
+
 <script>
 
 <!-- 配置文件 -->
@@ -114,10 +265,19 @@ layui.use(['form','table', 'layedit','laydate'], function(){
  
   form.on('submit(demo1)', function(data){  
     var index = parent.layer.getFrameIndex(window.name);
+   
+    var img_file  = $('#upload').val();
+
+    var ceshi = new FormData($('#uploadForm')[0]);
+ 
     $.ajax({
+
       url:"{:url('/article.article/add')}",
-      data:$("form").serialize(),
+      data:ceshi,
       type: "POST",
+      processData : false, 
+      // 告诉jQuery不要去设置Content-Type请求头
+      contentType : false,
       dataType: "json",
       success:function(data)
       {
