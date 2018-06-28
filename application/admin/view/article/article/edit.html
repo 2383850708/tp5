@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  {include file="public/header" title="文章添加"  /}
+  {include file="public/header" title="文章修改"  /}
 <!-- <style>
 .uploader{
 position:relative;
@@ -127,67 +127,56 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dddddd', endCo
                 <div class="layui-col-lg12">
                   <label class="layui-form-label">标 题：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="title" lay-verify="" placeholder="请输入" autocomplete="off" class="layui-input">
+                    <input type="text" name="title" lay-verify="" value="{$info.title}" placeholder="请输入" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
                 <div class="layui-col-lg12">
                   <label class="layui-form-label">作 者：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="author" lay-verify="" placeholder="请输入" autocomplete="off" class="layui-input">
+                    <input type="text" name="author" lay-verify="" value="{$info.author}" placeholder="请输入" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
                 <div class="layui-form-item">
                 <label class="layui-form-label">状 态：</label>
                 <div class="layui-input-block">
-                  <input type="radio" name="status" checked="checked" value="1" title="发布">
+                  <input type="radio" name="status" {if condition="$info.status eq 1"}checked="checked"{/if}  value="1" title="发布">
                   <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
                   <div>发布</div>
                   </div>
-                  <input type="radio" name="status" value="2" title="待审核"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>待审核</div></div>
+                  <input type="radio" name="status" {if condition="$info.status eq 0"}checked="checked"{/if} value="0" title="待审核"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>待审核</div></div>
                 </div>
                 </div>
 
                 <div class="layui-form-item">
                 <label class="layui-form-label">推荐：</label>
                 <div class="layui-input-block">
-                  <input type="radio" name="is_good"  value="1" title="推荐">
+                  <input type="radio" name="is_good" {if condition="$info.is_good eq 1"}checked="checked"{/if}  value="1" title="推荐">
                   <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
                   <div>推荐</div>
                   </div>
-                  <input type="radio" name="is_good" checked="checked" value="2" title="不推荐"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>不推荐</div></div>
+                  <input type="radio" name="is_good" {if condition="$info.is_good eq 2"}checked="checked"{/if} value="2" title="不推荐"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>不推荐</div></div>
                 </div>
                 </div>
 
                 <div class="layui-form-item">
                 <label class="layui-form-label">标签：</label>
                 <div class="layui-input-block">
-                  <input type="radio" name="tag" checked="checked" value="0" title="转载">
+                  <input type="radio" name="tag"  {if condition="$info.tag eq 0"}checked="checked"{/if} value="0" title="转载">
                   <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
                   <div>转载</div>
                   </div>
-                  <input type="radio" name="tag"  value="1" title="原创"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>原创</div></div>
+                  <input type="radio" name="tag" {if condition="$info.tag eq 1"}checked="checked"{/if} value="1" title="原创"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>原创</div></div>
                 </div>
                 </div>
-
-                <!-- <div class="layui-col-lg12">
-                  <label class="layui-form-label">封面图片：</label>
-                  <div class="layui-input-block">
-                    <div class="uploader white">
-                    <input type="text" class="filename" readonly/>
-                    <input type="button"  class="button"  value="Browse..."/>
-                    <input type="file" size="30" id="upload" name="file"/>
-                    </div>
-                  </div>
-                </div> -->
 
                 <div class="layui-col-lg12">
                   <label class="layui-form-label">封面图片：</label>
                   <div class="layui-input-block">
                     <div class="fileinput fileinput-new" data-provides="fileinput"  id="exampleInputUpload">
                     <div class="fileinput-new thumbnail" style="width: 200px;height: auto;max-height:150px;">
-                        <img id='picImg' style="width: 100%;height: auto;max-height: 140px;" src="/static/fileinput/img/noimage.png" alt="" />
+                        <img id='picImg' style="width: 100%;height: auto;max-height: 140px;" src="/uploads/{$info.pic}" alt="" />
                     </div>
                     <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
                     <div>
@@ -208,7 +197,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dddddd', endCo
                   <select name="categoryid" style="padding-left:100px;" id="selected">
                   <option value="">请选择问题</option>
                   {foreach name="list" item="vo"}
-                  <option value="{$vo.id}">{$vo.fullname}</option>
+                  <option  value="{$vo.id}">{$vo.fullname}</option>
                   {/foreach}
                   </select>
                   </div>
@@ -217,21 +206,21 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dddddd', endCo
                 <div class="layui-col-lg12">
                   <label class="layui-form-label">关键字：</label>
                   <div class="layui-input-block">
-                    <input type="text" name="keywords" lay-verify="" placeholder="多个已逗号分隔" autocomplete="off" class="layui-input">
+                    <input  type="text" name="keywords" lay-verify="" value="{$info.keywords}" placeholder="多个已逗号分隔" autocomplete="off" class="layui-input">
                   </div>
                 </div>
 
                 <div class="layui-col-lg12">
                   <label class="layui-form-label">简 介：</label>
                   <div class="layui-input-block">
-                    <textarea name="synopsis" rows="10" placeholder="请输入" class="layui-textarea"></textarea>
+                    <textarea name="synopsis" rows="10" placeholder="请输入" class="layui-textarea">{$info.synopsis}</textarea>
                   </div>
                 </div>
 
                 <div class="layui-col-lg12">
                   <label class="layui-form-label">新闻内容：</label>
                   <div class="layui-input-block">
-                    <script id="editor" type="text/plain" name="content" style="width:100%"></script>
+                    <script id="editor" type="text/plain" name="content" style="width:100%">{$info.content}</script>
                   </div>
                 </div>
 
@@ -284,7 +273,8 @@ var condition = new Array();
 layui.use(['form','table', 'layedit','laydate'], function(){
   var table = layui.table;
   var form = layui.form;
- 
+  $("#selected").find("option[value={$info.categoryid}]").prop("selected",true);
+  form.render();
   form.on('submit(demo1)', function(data){  
     var index = parent.layer.getFrameIndex(window.name);
    

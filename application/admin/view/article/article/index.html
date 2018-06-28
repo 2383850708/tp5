@@ -19,9 +19,43 @@
             </div>
           </div>
          <div class="layui-inline">
-            <label class="layui-form-label">用户名</label>
+            <label class="layui-form-label">栏目</label>
             <div class="layui-input-block">
-              <input type="text" name="username" id="username" placeholder="请输入" autocomplete="off" class="layui-input">
+              <select   name="pid" id="selected" >
+                <option value="0" >全部</option>
+                {foreach name="list" item="vo"}
+                  <option value="{$vo.id}" >{$vo.fullname}</option>
+                {/foreach}
+              </select>
+            </div>
+          </div>
+
+          <div class="layui-inline">
+            <label class="layui-form-label">作者</label>
+            <div class="layui-input-block">
+              <input type="text" name="author" id="author" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+
+          <div class="layui-inline">
+            <label class="layui-form-label">标签</label>
+            <div class="layui-input-block">
+              <select   name="tag" id="tag" >
+                <option value="-1" >全部</option>
+                <option value="1" >原创</option>
+                <option value="0" >转载</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="layui-inline">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+              <select   name="status" id="status" >
+                <option value="-1" >全部</option>
+                <option value="1" >已发布</option>
+                <option value="0" >待审核</option>
+              </select>
             </div>
           </div>
          
@@ -102,17 +136,18 @@ layer.full(index);
   tableIns=table.render({
     elem: '#test'
     ,height: 500
-    ,url: '/auth.admin/ajax_load_data' //数据接口
+    ,url: '/article.article/ajax_load_data' //数据接口
     ,page: true //开启分页
     ,cols: [[ //表头
        {checkbox:true,fixed: 'left' ,align:'center'}
       ,{field: 'id', title: 'ID', width:80, sort: true ,align:'center',fixed: 'left'}
-      ,{field: 'username', title: '用户名',  align:'center'}
-      ,{field: 'nickname', title: '昵称',  sort: false, align:'center'}
-      ,{field: 'title', title: '所属组别',  align:'center'} 
-      ,{field: 'email', title: 'Email',  align:'center'}
-      ,{field: 'status', title: '状态',  sort: false, align:'center',templet: '#status'}
-      ,{field: 'logintime', title: '最后登录时间',  sort: true, align:'center',templet: '#time'}
+      ,{field: 'title', title: '标题',  align:'center'}
+      ,{field: 'lanmu', title: '栏目',  sort: false, align:'center'}
+      ,{field: 'author', title: '作者',  align:'center'} 
+      ,{field: 'reading', title: '阅读量',  align:'center'}
+      ,{field: 'tag', title: '标签',  align:'center'}
+      ,{field: 'status', title: '状态',  sort: false, align:'center',templet: '#statustmp'}
+      ,{field: 'createtime', title: '发布时间',  sort: true, align:'center',templet: '#time'}
       ,{fixed: 'right',  align:'center', toolbar: '#barDemo'}
 
     ]]
@@ -189,14 +224,17 @@ layer.full(index);
 
       });
     } else if(layEvent === 'edit'){
-    	layer.open({
-		  type: 2,
-		  title:'修改',
-		  area: ['800px', '480px'],
-		  fixed: false, //不固定
-		  maxmin: true,
-		  content: "{:url('admin/edit')}"+'?id='+data.id
+
+      var index = layer.open({
+      type: 2,
+      title:'修改',
+      fixed: false, 
+      content: "{:url('/article.article/edit')}"+'?id='+data.id,
+      area: ['800px', '600px'],
+      maxmin: true
+
 		});
+      layer.full(index);
     }
   });
   
@@ -213,12 +251,16 @@ layer.full(index);
 	function search()
 	{
 		var id = $('#id').val();
-		var username = $('#username').val();
-
+		var categoryid = $('#selected').val();
+    var author = $('#author').val();
+    var tag = $('#tag').val();
+    var status = $('#status').val();
 		var condition = new Array();
 		condition['id'] =id;
-		condition['username'] =username;
-		
+		condition['categoryid'] =categoryid;
+		condition['author'] = author;
+    condition['tag'] = tag;
+    condition['status'] = status;
 		heavyLoad(condition);
 	}
 
@@ -241,11 +283,11 @@ layer.full(index);
 //在Jquery里格式化Date日期时间数据
 
 </script>
-<script type="text/html" id="status">
-  {{#  if(d.status === '正常'){ }}
-	<span style="color:#18bc9c"><i class="layui-badge-dot layui-bg-green" ></i> {{ d.status }}</span>   
+<script type="text/html" id="statustmp">
+  {{#  if(d.status === 1){ }}
+	<span style="color:#18bc9c"><i class="layui-badge-dot layui-bg-green" ></i> 已发布</span>   
   {{#  } else { }}
-    <span style="color:red"><i class="layui-badge-dot layui-bg-red" ></i> {{ d.status }}</span>   
+    <span style="color:red"><i class="layui-badge-dot layui-bg-red" ></i> 审核</span>   
   {{#  } }}
 </script>
 

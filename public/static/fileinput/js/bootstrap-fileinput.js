@@ -31,6 +31,7 @@
   };
   
   Fileinput.prototype.listen = function() {
+
     this.$input.on('change.bs.fileinput', $.proxy(this.change, this));
     $(this.$input[0].form).on('reset.bs.fileinput', $.proxy(this.reset, this));
     
@@ -39,6 +40,7 @@
   };
 
   Fileinput.prototype.change = function(e) {
+
     var files = e.target.files === undefined ? (e.target && e.target.value ? [{ name: e.target.value.replace(/^.+\\/, '')}] : []) : e.target.files;
     
     e.stopPropagation();
@@ -61,7 +63,9 @@
 
       reader.onload = function(re) {
         var $img = $('<img>');
+
         $img[0].src = re.target.result;
+
         files[0].result = re.target.result;
         
         element.find('.fileinput-filename').text(file.name);
@@ -70,6 +74,7 @@
         if (preview.css('max-height') != 'none') $img.css('max-height', parseInt(preview.css('max-height'), 10) - parseInt(preview.css('padding-top'), 10) - parseInt(preview.css('padding-bottom'), 10)  - parseInt(preview.css('border-top'), 10) - parseInt(preview.css('border-bottom'), 10));
         
         preview.html($img);
+       
         element.addClass('fileinput-exists').removeClass('fileinput-new');
 
         element.trigger('change.bs.fileinput', files)
@@ -78,10 +83,11 @@
       reader.readAsDataURL(file)
     } else {
       this.$element.find('.fileinput-filename').text(file.name);
+
       this.$preview.text(file.name);
 
       this.$element.addClass('fileinput-exists').removeClass('fileinput-new');
-      
+ 
       this.$element.trigger('change.bs.fileinput')
     }
   };
@@ -106,7 +112,7 @@
     this.$preview.html('');
     this.$element.find('.fileinput-filename').text('');
     this.$element.addClass('fileinput-new').removeClass('fileinput-exists');
-    
+
     if (e !== undefined) {
       this.$input.trigger('change');
       this.$element.trigger('clear.bs.fileinput')
@@ -121,8 +127,9 @@
     this.$element.find('.fileinput-filename').text('');
 
     if (this.original.exists) this.$element.addClass('fileinput-exists').removeClass('fileinput-new');
+
      else this.$element.addClass('fileinput-new').removeClass('fileinput-exists');
-    
+
     this.$element.trigger('reset.bs.fileinput')
   };
 
