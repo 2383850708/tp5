@@ -156,7 +156,7 @@ layer.full(index);
     none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
     }
     ,
-     done: function(res, curr, count){
+    done: function(res, curr, count){
 
     //如果是异步请求数据方式，res即为你接口返回的信息。
     //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
@@ -178,8 +178,33 @@ layer.full(index);
   
   //监听复选框
   table.on('checkbox(demo)',function(obj){
- 		
+
   })
+
+  var $ = layui.$, active = {
+      getCheckData: function(){ //获取选中数据
+
+        var checkStatus = table.checkStatus('test')
+        ,data = checkStatus.data; 
+        layer.alert(JSON.stringify(data));
+      }
+      ,getCheckLength: function(){ //获取选中数目
+        var checkStatus = table.checkStatus('test')
+        ,data = checkStatus.data;
+        layer.msg('选中了：'+ data.length + ' 个');
+      }
+      ,isAll: function(){ //验证是否全选
+        var checkStatus = table.checkStatus('test');
+        layer.msg(checkStatus.isAll ? '全选': '未全选')
+      }
+    };
+    
+    $('.test-table-operate-btn .layui-btn').on('click', function(){
+
+      var type = $(this).data('type');
+     
+      active[type] ? active[type].call(this) : '';
+    });
 
   //监听工具条
   table.on('tool(demo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
@@ -195,9 +220,9 @@ layer.full(index);
         var id = data.id;
         ids[0] = id;
         ids = JSON.stringify(ids);
-       
+      
         $.ajax({
-          url:"{:url('admin/del')}",
+          url:"{:url('/article.article/del')}",
           data:{ids:ids},
           type: "GET",
           dataType: "json",
@@ -278,7 +303,47 @@ layer.full(index);
 
 	function del()
 	{
-		layer.msg('暂未开发');
+		var checkStatus = table.checkStatus('test')
+        ,data = checkStatus.data; 
+       
+        var arr = new Array;
+       
+        for (var item in data)
+        {
+            arr[item] = data[item]['id'];
+        }
+
+        if(arr.length<=0)
+        {
+          layer.msg('请先勾选');
+          return;
+        }
+        var ids = JSON.stringify(arr);
+        layer.confirm('真的删除行么', function(index){
+          $.ajax({
+          url:"{:url('/article.article/del')}",
+          data:{ids:ids},
+          type: "GET",
+          dataType: "json",
+          success:function(data)
+          {
+            layer.alert(data.msg, {
+              skin: data.skin
+              ,closeBtn: 0
+              ,anim: data.anim //动画类型
+              ,icon: data.icon
+            }
+            ,function()
+            {
+              if(data.status==1)
+              {
+                heavyLoad(condition);
+              }
+              layer.closeAll();
+            });
+          }
+        });
+        });
 	}
 //在Jquery里格式化Date日期时间数据
 

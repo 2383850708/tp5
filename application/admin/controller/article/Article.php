@@ -125,7 +125,29 @@ class Article extends Backend
 	{
 		if($this->request->isAjax())
 		{
+			$data = input('param.');
+			
+			$info = $this->upload();
+			if($info['status']==1)
+			{
+				$data['pic'] = $info['path'];
+			}
+			else if($info['status']==0)
+			{
+				return parent::returnJson($info['path'],0);
+			}
 
+			$result = $this->model->validate('Article')->save($data,['id'=>$data['id']]);
+		
+			if ($result === false)
+            {
+            	$msg = $this->model->getError();
+                return parent::returnJson($msg,0);
+            }
+            else
+            {
+            	return parent::returnJson('修改成功',1);
+            }
 		}
 		else
 		{
@@ -138,6 +160,20 @@ class Article extends Backend
 			$this->assign('info',$info);
 			$this->assign('list',$categoryList);
 			return $this->fetch();
+		}
+	}
+
+	public function del()
+	{
+		$ids = json_decode(input('param.ids'),true);
+		$res = $this->model->destroy($ids);
+		if($res)
+		{
+			return parent::returnJson('删除成功',1);
+		}
+		else
+		{
+			return parent::returnJson('删除失败',0);
 		}
 	}
 
