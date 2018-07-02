@@ -3,6 +3,9 @@
 <head>
 	{include file="public/header" title="管理员管理"  /}
 	{load href="/static/layuiAdmin/css/admin.css" /}
+	{load href="/static/fileinput/css/bootstrap.min.css" /}
+	{load href="/static/fileinput/css/bootstrap-fileinput.css" /}
+	{load href="/static/fileinput/js/bootstrap-fileinput.js" /}
 	<link id="layuicss-layer" rel="stylesheet" href="http://www.layui.com/admin/std/dist/layuiadmin/layui/css/modules/layer/default/layer.css?v=3.1.1" media="all">
 </head>
 <body >
@@ -12,26 +15,26 @@
         <div class="layui-card">
           <div class="layui-card-header">网站设置</div>
           <div class="layui-card-body" pad15="">
-            
+            <form class="layui-form" action="" onsubmit="return false" lay-filter="component-form-element" id="uploadForm" enctype="multipart/form-data">
             <div class="layui-form" wid100="" lay-filter="">
 				<div class="layui-form-item">
 					<label class="layui-form-label">网站名称</label>
 					<div class="layui-input-block">
-					  <input type="text" name="sitename" value="layuiAdmin" class="layui-input">
+					  <input type="text" name="title" lay-verify="required" value="{$info.title}" class="layui-input">
 					</div>
 				</div>
 				<br/>
 				<div class="layui-form-item">
 					<label class="layui-form-label">网站域名</label>
 					<div class="layui-input-block">
-					  <input type="text" name="domain" lay-verify="url" value="http://www.layui.com" class="layui-input">
+					  <input type="text" name="domain_name" lay-verify="required" value="{$info.domain_name}" class="layui-input">
 					</div>
 				</div>
 				<br/>
 				<div class="layui-form-item">
 					<label class="layui-form-label">缓存时间</label>
 					<div class=" layui-input-block">
-					  	<input type="text" name="domain" style="width: 80px;" lay-verify="number"  class="layui-input layui-input-inline">
+					  	<input type="text" name="cache_time" value="{$info.cache_time|default=0}" style="width: 80px;" lay-verify="number"  class="layui-input layui-input-inline">
 					  	<span class="layui-input-inline layui-input-company">分钟</span>
 				    	<span class="layui-form-mid layui-word-aux">本地开发一般推荐设置为 0，线上环境建议设置为 10。</span>
 					</div>
@@ -40,54 +43,77 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">最大文件上传</label>
 					<div class=" layui-input-block">
-					  	<input type="text" name="cache" style="width: 80px;" lay-verify="number"  class="layui-input layui-input-inline">
+					  	<input type="text" name="upload_size" value="{$info.upload_size|default=1024}" style="width: 80px;" lay-verify="number"  class="layui-input layui-input-inline">
 					  	<span class="layui-input-inline layui-input-company">KB</span>
 				    	<span class="layui-form-mid layui-word-aux">提示：1 M = 1024 KB</span>
 					</div>
 				</div>
+
+				<br/>
+				<div class="layui-form-item">
+					<label class="layui-form-label">网站LOGO</label>
+					<div class="layui-input-block">
+						<div class="fileinput fileinput-new" data-provides="fileinput"  id="exampleInputUpload">
+	                    <div class="fileinput-new thumbnail" style="width: 200px;height: auto;max-height:150px;">
+	                        <img id='picImg' style="width: 100%;height: auto;max-height: 140px;" src="{$info.logo|default='/static/fileinput/img/noimage.png'}" alt="" />
+	                    </div>
+	                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+	                    <div>
+	                        <span class="btn btn-primary btn-file">
+	                            <span class="fileinput-new">选择文件</span>
+	                            <span class="fileinput-exists">换一张</span>
+	                            <input type="file" name="file" id="file" />
+	                        </span>
+	                        <a href="javascript:;" class="btn btn-warning fileinput-exists" data-dismiss="fileinput">移除</a>
+	                    </div>
+	                    </div>
+					</div>
+				</div>
+
               	<br/>
 				<div class="layui-form-item">
 					<label class="layui-form-label">上传文件类型</label>
 					<div class="layui-input-block">
-					  <input type="text" name="cache" value="png|gif|jpg|jpeg|zip|rar" class="layui-input">
+					  <input type="text" name="upload_type" placeholder="多个用英文状态 , 号分割" value="{$info.upload_type|default='png,gif,jpg,jpeg,zip,rar'}"  class="layui-input">
 					</div>
 				</div>
 				<br/>
 				<div class="layui-form-item layui-form-text">
 					<label class="layui-form-label">首页标题</label>
 					<div class="layui-input-block">
-					  <textarea name="title" class="layui-textarea">layuiAdmin 通用后台管理模板系统</textarea>
+					  <textarea name="name" value="{$info.name}" class="layui-textarea">layuiAdmin 通用后台管理模板系统</textarea>
 					</div>
 				</div>
 				<br/>
 				<div class="layui-form-item layui-form-text">
 					<label class="layui-form-label">META关键词</label>
 					<div class="layui-input-block">
-					  <textarea name="keywords" class="layui-textarea" placeholder="多个关键词用英文状态 , 号分割"></textarea>
+					  <textarea name="keywords" class="layui-textarea" placeholder="多个关键词用英文状态 , 号分割">{$info.keywords}</textarea>
 					</div>
 				</div>
 				<br/>
 				<div class="layui-form-item layui-form-text">
 					<label class="layui-form-label">META描述</label>
 					<div class="layui-input-block">
-					  <textarea name="descript" class="layui-textarea">layuiAdmin 是 layui 官方出品的通用型后台模板解决方案，提供了单页版和 iframe 版两种开发模式。layuiAdmin 是目前非常流行的后台模板框架，广泛用于各类管理平台。</textarea>
+					  <textarea name="description" class="layui-textarea">{$info.description}</textarea>
 					</div>
 				</div>
 				<br/>
 				<div class="layui-form-item layui-form-text">
 				<label class="layui-form-label">版权信息</label>
 					<div class="layui-input-block">
-					  <textarea name="copyright" class="layui-textarea">© 2018 layui.com MIT license</textarea>
+					  <textarea name="icp" class="layui-textarea">{$info.icp}</textarea>
 					</div>
 				</div>
 				<br/>
+				<input type="hidden" name="id" value="{$info.id}">
 				<div class="layui-form-item">
 					<div class="layui-input-block">
-					  <button class="layui-btn" lay-submit="" lay-filter="set_website">确认保存</button>
+					  <button class="layui-btn" lay-submit=""  lay-filter="set_website">确认保存</button>
 					</div>
 				</div>
             </div>
-            
+            </form>
           </div>
         </div>
       </div>
@@ -118,10 +144,37 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   ,element = layui.element; //元素操作
   var $ = layui.jquery;
 
+form.on('submit(set_website)', function(data){  
 
+    var img_file  = $('#upload').val();
 
+    var formData = new FormData($('#uploadForm')[0]);
+ 
+    $.ajax({
 
-
+      url:"{:url('/set.system/add')}",
+      data:formData,
+      type: "POST",
+      processData : false, 
+      // 告诉jQuery不要去设置Content-Type请求头
+      contentType : false,
+      dataType: "json",
+      success:function(data)
+      {
+        layer.alert(data.msg, {
+          skin: data.skin
+          ,closeBtn: 0
+          ,anim: data.anim //动画类型
+          ,icon: data.status
+        }
+        ,function()
+        {
+          layer.closeAll('dialog');
+        }
+        );
+      }
+    });
+  });
 
 });
 

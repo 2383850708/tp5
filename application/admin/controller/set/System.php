@@ -1,203 +1,101 @@
 <?php 
+/**
+ * 系统设置
+ */
 namespace app\admin\controller\set;
 use app\admin\common\controller\Backend;
 
 use think\Db;
-
-
 
 class System extends Backend
 {
 	public function _initialize()
 	{
 		parent::_initialize();
-		$this->model = model('Admin');
+		$this->model = model('System');
 	}
 
 	public function index()
 	{
-		return $this->fetch();
-	}
-
-	public function ajax_load_data()
-	{
-		
-		$condition = $this->checkForm();
-
-		$len = input('param.limit');
-		$page = input('param.page');
-		$offset = ($page-1)*$len;
-
-		$count = $this->model->where($condition)->count();
-		
-		$result = Db::name('admin')->where($condition)->limit($offset,$len)->select();
-		
-		if($result)
-		{
-			$result = $this->model->handleData($result);
-		}
-
-		$data = array();
-		$data['code'] = 0;
-		$data['status'] = 1;
-		$data['count'] = $count;
-		$data['data'] = $result;
-		$data['msg'] = '';
-
-		return json($data);
-	}
-
-	public function add()
-	{
-		if($this->request->isAjax())
-		{
-			$data=$this->request->get("row/a");
-			$group = input('param.group');
-			if(empty($group))
-			{
-				return parent::returnJson('请选择分组',0);
-			}
-
-			$salt = Random::alnum();//密码盐
-			$data['salt'] = $salt;
-			$data['avatar'] = '/assets/img/avatar.png';
-
-			$result = $this->model->validate('Admin.add')->save($data);
-			if ($result === false)
-            {
-            	$msg = $this->model->getError();
-                return parent::returnJson($msg,0);
-            }
-            else
-            {
-            	$id = $this->model->getLastInsID();
-            	$group = explode(',',$group);
-            	foreach ($group as $key => $value) 
-            	{
-            		$data = array();
-            		$data['uid'] = $id;
-            		$data['group_id'] = $value;
-            		Db::name('auth_group_access')->insert($data);
-            	}
-
-                return parent::returnJson('添加成功',1);
-            }
-		}
-		else
-		{
-			$result = collection(model('authGroup')->field('id,title')->where('status',1)->select())->toArray();
-			$this->assign('result',$result);
-			return $this->fetch();
-		}
-		
-	}
-
-	public function ceshi()
-	{
+		$info = $this->model->get(1);
+	
+		$this->assign('info',$info);
 		return $this->fetch();
 	}
 
 	/**
-	 * 管理员修改
-	 * @param    id 用户id
+	 * 系统设置
 	 * @Author   wyk
-	 * @DateTime 2018-05-30
-	 * @return   json
+	 * @DateTime 2018-07-02
 	 */
-	public function edit()
+	public function add()
 	{
-		if($this->request->isAjax())
+		$data = input('param.');
+		$id = input('param.id');
+		$info = $this->upload();
+		if($info['status']==1)
 		{
-			
-			$data=$this->request->get("row/a");
-			$id =  input('param.row.id');
+			$data['logo'] = $info['path'];
+		}
+		else if($info['status']==0)
+		{
+			return parent::returnJson($info['path'],0);
+		}
 
-			$group = input('param.group');
-			
-			if(empty($group))
-			{
-				return parent::returnJson('请选择分组',0);
-			}
-			$result = $this->model->validate('Admin.edit')->save($data,['id'=>$id]);
-		
-			if ($result === false)
-            {
-            	$msg = $this->model->getError();
-                return parent::returnJson($msg,0);
-            }
-            else
-            {
-            	$group = explode(',',$group);
-            	Db::name('auth_group_access')->where('uid',$id)->delete();
-            
-            	foreach ($group as $key => $value) 
-            	{
-            		$data = array();
-            		$data['uid'] = $id;
-            		$data['group_id'] = $value;
-            		Db::name('auth_group_access')->insert($data);
-            	}
-                return parent::returnJson('添加成功',1);
-            }
-            return json($res);
+		if($id!='')
+		{
+			$result = $this->model->validate('System')->save($data,['id'=>$id]);
 		}
 		else
 		{
-			$id = input('get.id');
-			
-			$info =  $this->model->get($id)->toArray();
-			$result = collection(model('authGroup')->field('id,title')->where('status',1)->select())->toArray();
-			$groups = Db::name('auth_group_access')->where('uid',$id)->select();
+			$result = $this->model->validate('System')->save($data);
+		}
+		
+		if ($result === false)
+        {
+        	$msg = $this->model->getError();
+            return parent::returnJson($msg,0);
+        }
+        else
+        {
+        	if($id!='')
+        	{
+        		return parent::returnJson('修改成功',1);
+        	}
+        	return parent::returnJson('添加成功',1);
+        }
+
+	}
+
+	/**
+	 * 文件上传
+	 * @Author   wyk
+	 * @DateTime 2018-07-02
+	 */
+	public function upload()
+	{
+		$file = $this->request->file('file');
+
 			$data = array();
-			foreach ($groups as $key => $value) 
+			$data['status'] = 3;
+			if($file)
 			{
-				$data[] = $value['group_id'];
-			}
-
-			$this->assign('check',json_encode($data));
-			$this->assign('result',$result);
-			$this->assign('info',$info);
-			
-			return $this->fetch();
-		}
-		
-	}
-
-	public function del($ids='')
-	{
-		if($ids)
-		{
-			$ids = json_decode(input('param.ids'));
-			$res = $this->model->destroy($ids);
-			if($res)
-			{
-				return parent::returnJson('删除成功',1);
-			}
-			else
-			{
-				return parent::returnJson('删除失败',0);
-			}
-		}
-		else
-		{
-			return parent::returnJson('操作异常',0);
-		}
-	}
-
-	public function checkForm()
-	{
-		$data = array();
-
-		if(input('param.id'))
-		{	
-			$data['id'] = input('get.id');
-		}
-
-		if(input('param.username'))
-		{
-			$data['username'] = array('like','%'.input('param.username').'%');
-		}
-		return $data;
+		        $info = $file->validate(['ext'=>'ico'])->move(ROOT_PATH . 'public','faicon.ico');
+		        if($info)
+		        {
+		        	$data['status'] = 1;
+		        	$data['path'] = '/'.$info->getSaveName();
+		        	// $image = \think\Image::open($info->getPathName());
+					// 给原图左上角添加水印并保存water_image.png
+					//$image->text('www.baidu.com','fontlibrary/Lucia.ttf',20,'#ffffff')->save($info->getPathName());
+		        }
+		        else
+		        {
+		            $data['status'] = 0;
+		        	$data['path'] = $file->getError();
+		        }
+		    }
+		    return $data;
 	}
 
 }

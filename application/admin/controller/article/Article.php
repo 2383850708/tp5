@@ -189,7 +189,7 @@ class Article extends Backend
 		        if($info)
 		        {
 		        	$data['status'] = 1;
-		        	$data['path'] = $info->getSaveName();;
+		        	$data['path'] = $info->getSaveName();
 		        	// $image = \think\Image::open($info->getPathName());
 					// 给原图左上角添加水印并保存water_image.png
 					//$image->text('www.baidu.com','fontlibrary/Lucia.ttf',20,'#ffffff')->save($info->getPathName());

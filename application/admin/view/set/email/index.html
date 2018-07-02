@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{include file="public/header" title="管理员管理"  /}
+	{load href="/static/layuiAdmin/css/admin.css" /}
+
+	<link id="layuicss-layer" rel="stylesheet" href="http://www.layui.com/admin/std/dist/layuiadmin/layui/css/modules/layer/default/layer.css?v=3.1.1" media="all">
+</head>
+<body >
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">邮件服务</div>
+          <div class="layui-card-body">
+            
+            <div class="layui-tab">
+              <ul class="layui-tab-title">
+                <li class="layui-this">网站设置</li>
+                <li>注册用户模板</li>
+              </ul>
+              <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                <form class="layui-form" action="" onsubmit="return false" lay-filter="component-form-element" id="uploadForm" >
+                  	<div class="layui-form" wid100="" lay-filter="">
+                  	<br>
+		              <div class="layui-form-item">
+		                <label class="layui-form-label">SMTP服务器</label>
+		                <div class="layui-input-inline">
+		                  <input type="text" name="smtp_server"  value="{$info.smtp_server}" class="layui-input">
+		                </div>
+		                <div class="layui-form-mid layui-word-aux">如：smtp.163.com</div>
+		              </div>
+		              <br>
+		              <div class="layui-form-item">
+		                <label class="layui-form-label">SMTP端口号</label>
+		                <div class="layui-input-inline" style="width: 80px;">
+		                  <input type="text" name="smtp_port" lay-verify="number" value="{$info.smtp_port}" class="layui-input">
+		                </div>
+		                <div class="layui-form-mid layui-word-aux">一般为 25 或 465</div>
+		              </div>
+		              <br>
+		              <div class="layui-form-item">
+		                <label class="layui-form-label">发件人邮箱</label>
+		                <div class="layui-input-inline">
+		                  <input type="text" name="send_email" value="{$info.send_email}" lay-verify="email" autocomplete="off" class="layui-input">
+		                </div>
+		              </div>
+		              <br>
+		              <div class="layui-form-item">
+		                <label class="layui-form-label">发件人昵称</label>
+		                <div class="layui-input-inline">
+		                  <input type="text" name="send_nickname" value="{$info.send_nickname}"  autocomplete="off" class="layui-input">
+		                </div>
+		              </div>
+		              <br>
+		              <div class="layui-form-item">
+		                <label class="layui-form-label">邮箱登入密码</label>
+		                <div class="layui-input-inline">
+		                  <input type="password" name="send_password"  value="{$info.send_password}"  autocomplete="off" class="layui-input">
+		                </div>
+		              </div>
+		              <br>
+		              <input type="hidden" name="id" value="{$info.id}">
+		              <div class="layui-form-item">
+		                <div class="layui-input-block">
+		                  <button class="layui-btn" lay-submit="" lay-filter="set_system_email">确认保存</button>
+		                </div>
+		              </div>
+		            </div>
+		            </form>
+                </div>
+                <div class="layui-tab-item">内容2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+{include file="public/foot" /} 
+
+<script>
+
+var condition = new Array();
+layui.config({
+  version: '1527505940714' //为了更新 js 缓存，可忽略
+});
+
+ var tableIns = '';
+
+layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function(){
+  var laydate = layui.laydate //日期
+
+  ,laypage = layui.laypage //分页
+  layer = layui.layer //弹层
+  ,table = layui.table //表格
+  ,form = layui.form
+  ,carousel = layui.carousel //轮播
+  ,upload = layui.upload //上传
+  ,element = layui.element; //元素操作
+  var $ = layui.jquery;
+
+form.on('submit(set_system_email)', function(data){  
+
+    var img_file  = $('#upload').val();
+
+    var formData = new FormData($('#uploadForm')[0]);
+ 
+    $.ajax({
+
+      url:"{:url('/set.email/add')}",
+      data:formData,
+      type: "POST",
+      processData : false, 
+      // 告诉jQuery不要去设置Content-Type请求头
+      contentType : false,
+      dataType: "json",
+      success:function(data)
+      {
+        layer.alert(data.msg, {
+          skin: data.skin
+          ,closeBtn: 0
+          ,anim: data.anim //动画类型
+          ,icon: data.status
+        }
+        ,function()
+        {
+          layer.closeAll('dialog');
+        }
+        );
+      }
+    });
+  });
+
+});
+
+
+</script>
+
+
+</html> 
