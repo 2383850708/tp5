@@ -116,7 +116,7 @@ layui.use(['form','table', 'layedit','laydate'], function(){
   form.on('submit(demo1)', function(data){  
   	var index = parent.layer.getFrameIndex(window.name);
   	$.ajax({
-	 	  url:"{:url('rule/add')}",
+	 	  url:"{:url('auth.rule/add')}",
 	 	  data:$("form").serialize(),
 		  type: "GET",
 		  dataType: "json",

@@ -9,7 +9,7 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-/*return [
+return [
     '__pattern__' => [
         'name' => '\w+',
     ],
@@ -18,9 +18,9 @@
         ':name' => ['index/hello', ['method' => 'post']],
     ],
 
-];*/
+];
 
-use think\Route;
+/*use think\Route;
 Route::rule([
     'admin/index'  =>  'admin/auth.admin/index',
     'admin/add'  =>  'admin/auth.admin/add',
@@ -38,6 +38,6 @@ Route::rule([
     
 
 ],'','POST',['ext'=>'html']);
-
+*/
 
 

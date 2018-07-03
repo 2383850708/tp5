@@ -17,7 +17,6 @@ class Login extends Controller
 
 	  	if($this->request->isPost())
 		{
-			$this->checkForm();exit;
 			$geetest_id=config('GEETEST_ID');
 	        $geetest_key=config('GEETEST_KEY');
 			$GtSdk = new \blog\GeetestLib($geetest_id,$geetest_key);
@@ -121,6 +120,17 @@ class Login extends Controller
 		Session::set('geetest.gtserver',$status);
 		Session::set('geetest.user_id',$arr['user_id']);
         echo $geetest->get_response_str();
+    }
+
+    /**
+     * 注销登录
+     * @Author   wyk
+     * @DateTime 2018-06-01
+     */
+    public function loginOut()
+    {
+        session(null);
+        $this->success('退出成功',url('login/index'));
     }
 }
 

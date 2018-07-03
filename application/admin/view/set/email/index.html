@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	{include file="public/header" title="管理员管理"  /}
-	{load href="/static/layuiAdmin/css/admin.css" /}
+	{include file="public/header" title="邮件配置"  /}
 
-	<link id="layuicss-layer" rel="stylesheet" href="http://www.layui.com/admin/std/dist/layuiadmin/layui/css/modules/layer/default/layer.css?v=3.1.1" media="all">
 </head>
 <body >
 <div class="layui-fluid">
@@ -25,15 +23,16 @@
                   	<div class="layui-form" wid100="" lay-filter="">
                   	<br>
 		              <div class="layui-form-item">
-		                <label class="layui-form-label">SMTP服务器</label>
+		                <label class="layui-form-label" style="padding-right: 30px" >SMTP服务器</label>
+
 		                <div class="layui-input-inline">
 		                  <input type="text" name="smtp_server"  value="{$info.smtp_server}" class="layui-input">
 		                </div>
 		                <div class="layui-form-mid layui-word-aux">如：smtp.163.com</div>
 		              </div>
-		              <br>
+                  <br>
 		              <div class="layui-form-item">
-		                <label class="layui-form-label">SMTP端口号</label>
+		                <label class="layui-form-label" style="padding-right: 30px">SMTP端口号</label>
 		                <div class="layui-input-inline" style="width: 80px;">
 		                  <input type="text" name="smtp_port" lay-verify="number" value="{$info.smtp_port}" class="layui-input">
 		                </div>
@@ -41,21 +40,21 @@
 		              </div>
 		              <br>
 		              <div class="layui-form-item">
-		                <label class="layui-form-label">发件人邮箱</label>
+		                <label class="layui-form-label" style="padding-right: 30px">发件人邮箱</label>
 		                <div class="layui-input-inline">
 		                  <input type="text" name="send_email" value="{$info.send_email}" lay-verify="email" autocomplete="off" class="layui-input">
 		                </div>
 		              </div>
 		              <br>
 		              <div class="layui-form-item">
-		                <label class="layui-form-label">发件人昵称</label>
+		                <label class="layui-form-label" style="padding-right: 30px">发件人昵称</label>
 		                <div class="layui-input-inline">
 		                  <input type="text" name="send_nickname" value="{$info.send_nickname}"  autocomplete="off" class="layui-input">
 		                </div>
 		              </div>
 		              <br>
 		              <div class="layui-form-item">
-		                <label class="layui-form-label">邮箱登入密码</label>
+		                <label class="layui-form-label" style="padding-right: 30px">邮箱登入密码</label>
 		                <div class="layui-input-inline">
 		                  <input type="password" name="send_password"  value="{$info.send_password}"  autocomplete="off" class="layui-input">
 		                </div>

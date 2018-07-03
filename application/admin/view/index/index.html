@@ -54,7 +54,7 @@
               <dd><a lay-href="set/user/info.html">基本资料</a></dd>
               <dd><a lay-href="set/user/password.html">修改密码</a></dd>
               <hr>
-              <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
+              <dd lay-href="" style="text-align: center;"><a href="{:url('login/loginOut')}">退出</a></dd>
             </dl>
           </li>
           
@@ -91,13 +91,13 @@
               </a>
               <dl class="layui-nav-child">
                 <dd>
-                  <a href="javascript:;" lay-href="{:url('admin/index')}">管理员管理</a>
+                  <a href="javascript:;" lay-href="{:url('auth.admin/index')}">管理员管理</a>
                 </dd>
                 <dd>
-                  <a href="javascript:;" lay-href="{:url('group/index')}">角色组</a>
+                  <a href="javascript:;" lay-href="{:url('auth.group/index')}">角色组</a>
                 </dd>
                 <dd>
-                  <a href="javascript:;" lay-href="{:url('rule/index')}">菜单规则</a>
+                  <a href="javascript:;" lay-href="{:url('auth.rule/index')}">菜单规则</a>
                 </dd>
                 <dd>
                   <a href="javascript:;" >管理员日志</a>
@@ -138,8 +138,8 @@
                 <dd>
                   <a href="javascript:;">我的设置</a>
                   <dl class="layui-nav-child">
-                    <dd><a lay-href="set/user/info.html">基本资料</a></dd>
-                    <dd><a lay-href="set/user/password.html">修改密码</a></dd>
+                    <dd><a lay-href="{:url('set.basic_information/index')}">基本资料</a></dd>
+                    <dd><a lay-href="{:url('set.modify_passwork/index')}">修改密码</a></dd>
                   </dl>
                 </dd>
               </dl>

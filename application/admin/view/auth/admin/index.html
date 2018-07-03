@@ -85,7 +85,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 	  area: ['800px', '480px'],
 	  fixed: false, //不固定
 	  maxmin: true,
-	  content: "{:url('admin/add')}"
+	  content: "{:url('auth.admin/add')}"
 	});
   })
   
@@ -160,7 +160,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
         ids = JSON.stringify(ids);
        
         $.ajax({
-          url:"{:url('admin/del')}",
+          url:"{:url('auth.admin/del')}",
           data:{ids:ids},
           type: "GET",
           dataType: "json",
@@ -193,7 +193,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 		  area: ['800px', '480px'],
 		  fixed: false, //不固定
 		  maxmin: true,
-		  content: "{:url('admin/edit')}"+'?id='+data.id
+		  content: "{:url('auth.admin/edit')}"+'?id='+data.id
 		});
     }
   });

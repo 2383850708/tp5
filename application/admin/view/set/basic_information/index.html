@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{include file="public/header" title="设置我的资料"  /}
+
+</head>
+<body >
+	<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">设置我的资料</div>
+          <div class="layui-card-body" pad15="">
+            <form class="layui-form" action="" onsubmit="return false" lay-filter="component-form-element" id="uploadForm" >
+            <div class="layui-form" lay-filter="">
+              <div class="layui-form-item">
+                <label class="layui-form-label" style="padding-right: 30px">我的角色</label>
+                <div class="layui-input-inline">
+                 	<select xm-select="select" xm-select-type="2" xm-select-skin="primary" lay-filter="category">
+                      {foreach name="groups" item="vo"}
+                          <option value="{$vo.id}">{$vo.title}</option>
+                      {/foreach}
+                    </select>
+                </div>
+                <div class="layui-form-mid layui-word-aux"></div>
+              </div>
+              <br/>
+              <div class="layui-form-item">
+                <label class="layui-form-label" style="padding-right: 30px">用户名</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="row[username]" value="{$result.username}" readonly="" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">不可修改。一般用于后台登入名</div>
+              </div>
+              <br/>
+              <div class="layui-form-item">
+                <label class="layui-form-label" style="padding-right: 30px">昵称</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="row[nickname]" value="{$result.nickname}" lay-verify="nickname" autocomplete="off" placeholder="请输入昵称" class="layui-input">
+                </div>
+              </div>
+              <br/>
+              <div class="layui-form-item">
+                <label class="layui-form-label" style="padding-right: 30px">性别</label>
+                <div class="layui-input-block">
+                  <input type="radio"  name="row[sex]" {if condition="$result.sex eq 1"}checked="checked"{/if} value="1" title="男"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>男</div></div>
+                  <input type="radio" name="row[sex]" {if condition="$result.sex eq 2"}checked="checked"{/if} value="2" title="女" ><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>女</div></div>
+                  <input type="radio" name="row[sex]" {if condition="$result.sex eq 3"}checked="checked"{/if} value="3" title="保密" ><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>保密</div></div>
+                </div>
+              </div>
+              <br/>
+             
+              <div class="layui-form-item">
+                <label class="layui-form-label" style="padding-right: 30px">手机</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="row[mobile]" value="{$result.mobile}" lay-verify="mobile" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <br/>
+              <div class="layui-form-item">
+                <label class="layui-form-label" style="padding-right: 30px">邮箱</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="row[email]" value="{$result.email}" lay-verify="email" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <br/>
+             <!--  <div class="layui-form-item layui-form-text">
+               <label class="layui-form-label" style="padding-right: 30px">备注</label>
+               <div class="layui-input-block">
+                 <textarea name="remarks" style="width:500px"  placeholder="请输入内容" class="layui-textarea"></textarea>
+               </div>
+             </div>
+             <br/> -->
+              <input type="hidden" name="row[id]" value="{$result.id}" >
+              <input type="hidden" name="group" value="">
+              <div class="layui-form-item">
+                <div class="layui-input-block" >
+                  <button class="layui-btn" lay-submit="" lay-filter="setmyinfo">确认修改</button>
+                  <!-- <button type="reset" class="layui-btn layui-btn-primary">重新填写</button> -->
+                </div>
+              </div>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+{include file="public/foot" /} 
+
+<script>
+
+var condition = new Array();
+
+var tableIns = '';
+
+layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element','formSelects'], function(){
+	var laydate = layui.laydate //日期
+
+	,laypage = layui.laypage //分页
+	layer = layui.layer //弹层
+	,table = layui.table //表格
+	,form = layui.form
+	,carousel = layui.carousel //轮播
+	,upload = layui.upload //上传
+	,element = layui.element; //元素操作
+	var $ = layui.jquery;
+	var formSelects = layui.formSelects;
+
+	var group = $('#group').val();
+
+	formSelects.value('select', {$check});
+
+	form.render('select'); 
+
+	function handlerVals(arr)
+	{
+	var str = arr.map(function(val){
+	  return val.val;
+	}).join(',');
+
+	$("input[name='group']").val(str);
+	}
+	formSelects.render({
+	  name:'select',
+	  on:function(data,arr)
+	  {
+	    handlerVals(arr);
+	  }
+	});
+
+	form.on('submit(setmyinfo)', function(data){  
+
+	var formData = new FormData($('#uploadForm')[0]);
+
+	$.ajax({
+
+	  url:"{:url('/set.basic_information/edit')}",
+	  data:formData,
+	  type: "POST",
+	  processData : false, 
+	  // 告诉jQuery不要去设置Content-Type请求头
+	  contentType : false,
+	  dataType: "json",
+	  success:function(data)
+	  {
+	    layer.alert(data.msg, {
+	      skin: data.skin
+	      ,closeBtn: 0
+	      ,anim: data.anim //动画类型
+	      ,icon: data.status
+	    }
+	    ,function()
+	    {
+	      layer.closeAll('dialog');
+	    }
+	    );
+	  }
+	});
+	});
+
+});
+
+
+</script>
+
+
+</html> 

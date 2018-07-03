@@ -92,11 +92,6 @@ class Admin extends Backend
 		
 	}
 
-	public function ceshi()
-	{
-		return $this->fetch();
-	}
-
 	/**
 	 * 管理员修改
 	 * @param    id 用户id
@@ -110,14 +105,11 @@ class Admin extends Backend
 		{
 			
 			$data=$this->request->get("row/a");
+
 			$id =  input('param.row.id');
 
 			$group = input('param.group');
 			
-			if(empty($group))
-			{
-				return parent::returnJson('请选择分组',0);
-			}
 			$result = $this->model->validate('Admin.edit')->save($data,['id'=>$id]);
 		
 			if ($result === false)
@@ -127,17 +119,21 @@ class Admin extends Backend
             }
             else
             {
-            	$group = explode(',',$group);
-            	Db::name('auth_group_access')->where('uid',$id)->delete();
-            
-            	foreach ($group as $key => $value) 
+            	if(!empty($group))
             	{
-            		$data = array();
-            		$data['uid'] = $id;
-            		$data['group_id'] = $value;
-            		Db::name('auth_group_access')->insert($data);
+            		$group = explode(',',$group);
+	            	Db::name('auth_group_access')->where('uid',$id)->delete();
+	            
+	            	foreach ($group as $key => $value) 
+	            	{
+	            		$data = array();
+	            		$data['uid'] = $id;
+	            		$data['group_id'] = $value;
+	            		Db::name('auth_group_access')->insert($data);
+	            	}
             	}
-                return parent::returnJson('添加成功',1);
+            	
+                return parent::returnJson('修改成功',1);
             }
             return json($res);
 		}

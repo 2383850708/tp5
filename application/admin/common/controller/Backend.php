@@ -58,16 +58,7 @@ class Backend extends Controller
     	return $info;
     }
 
-    /**
-     * 注销登录
-     * @Author   wyk
-     * @DateTime 2018-06-01
-     */
-    protected function cancellation()
-    {
-        session(null);
-        $this->success('退出成功',url('login/index'));
-    }
+    
 
     public function returnJson($msg,$type=0)
     {

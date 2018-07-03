@@ -104,7 +104,7 @@ layui.use(['form','table', 'layedit','laydate','formSelects'], function(){
   	var index = parent.layer.getFrameIndex(window.name);
  
   	$.ajax({
-	 	  url:"{:url('admin/edit')}",
+	 	  url:"{:url('auth.admin/edit')}",
 	 	  data:$("form").serialize(),
 		  type: "GET",
 		  dataType: "json",
