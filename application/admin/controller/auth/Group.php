@@ -116,6 +116,7 @@ class Group extends Backend
 		$id = input('param.id');
 
 		$result = collection(model('AuthRule')->field(array('id'=>'value','pid','title'))->where(['status'=>1])->order('weigh', 'desc')->select())->toArray();
+
 		if(!empty($id))
 		{
 			$rules =  $this->model->where('id',$id)->value('rules');
@@ -129,11 +130,11 @@ class Group extends Backend
 				}
 			}
 		}
-		
-		$tree = new Tree('value','pid','data');
+
+		$tree = new Tree('value','pid','data','arr');
 		$tree->load($result);
 		$treelist=$tree->DeepTree();//所有分类树结构
-		print_r($treelist);exit;
+		
 		return json($treelist);
 	}
 
