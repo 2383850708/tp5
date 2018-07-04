@@ -129,11 +129,11 @@ class Group extends Backend
 				}
 			}
 		}
-
-		$tree = new Tree('value','pid','data','arr');
+		
+		$tree = new Tree('value','pid','data');
 		$tree->load($result);
 		$treelist=$tree->DeepTree();//所有分类树结构
-
+		print_r($treelist);exit;
 		return json($treelist);
 	}
 

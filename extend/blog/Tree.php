@@ -51,11 +51,7 @@ class Tree{
         //遍历2
       // print_r($OriginalList);
         foreach($OriginalList as $k=>$v){
-            if($this->type=='arr')
-            {
-                $OriginalList[$k]['data'] = array();
-            }
-            
+                      
             if($v[$this->parentKey]==$root){//根分类直接添加引用到tree中
                 
                 $tree[]=&$OriginalList[$k];

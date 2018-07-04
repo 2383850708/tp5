@@ -21,7 +21,7 @@ class Rule extends Backend
 
 		$count = $this->model->where('status',1)->count();
 		$Category = new Category("AuthRule",array('id','pid','title','fullname'));
-		$categoryList = $Category->getList(array(),' weigh desc ');
+		$categoryList = $Category->getList(null,0,'weigh desc');
 
 		$data = array();
 		$data['code'] = 0;
