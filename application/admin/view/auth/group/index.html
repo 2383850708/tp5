@@ -59,21 +59,6 @@
 
 var condition = new Array();
 var tableIns = '';
-layui.config({
-  version: '1527505940714' //为了更新 js 缓存，可忽略
-});
-
-
-$('#parentIframe').click(function(){
-    layer.open({
-    type: 2,
-    title:'添加',
-    area: ['800px', '480px'],
-    fixed: false, //不固定
-    maxmin: true,
-    content: "{:url('admin/auth.group/add')}"
-  });
-  })
 
 layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function(){
   var laydate = layui.laydate //日期
@@ -83,7 +68,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   ,carousel = layui.carousel //轮播
   ,upload = layui.upload //上传
   ,element = layui.element; //元素操作
- 
+
   tableIns=table.render({
     elem: '#demo'
     ,height: 'full'
@@ -111,6 +96,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
       layer.msg(msg);
       return;
     }
+
 
     
     //得到当前页码
@@ -174,8 +160,21 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     });
     }
   });
+
+ 
   
 });
+
+   $('#parentIframe').click(function(){
+    layer.open({
+    type: 2,
+    title:'添加',
+    area: ['800px', '480px'],
+    fixed: false, //不固定
+    maxmin: true,
+    content: "{:url('admin/auth.group/add')}"
+  });
+  })
 
   function refresh()
   {

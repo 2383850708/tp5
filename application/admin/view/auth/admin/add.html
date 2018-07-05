@@ -83,7 +83,8 @@ var condition = new Array();
 layui.use(['form','table', 'layedit','laydate','formSelects'], function(){
   var table = layui.table;
   var form = layui.form
-  ,formSelects = layui.formSelects;      
+  ,formSelects = layui.formSelects; 
+  var $ = layui.jquery;     
   function handlerVals(arr)
   {
     var str = arr.map(function(val){

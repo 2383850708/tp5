@@ -78,14 +78,14 @@
           <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
 
           
-            <li data-name="dash" class="layui-nav-item" >
+             <li data-name="dash" class="layui-nav-item" >
               <a href="javascript:;" lay-href="{:url('dashboard/index')}" lay-tips="控制台" lay-direction="1">
                 <i class="layui-icon layui-icon-console"></i>
                 <cite>控制台</cite>
               </a>
-            </li>
-           
-            <li data-name="user" class="layui-nav-item">
+              </li>
+                       
+              <li data-name="user" class="layui-nav-item">
               <a href="javascript:;" lay-tips="用户" lay-direction="2">
                 <i class="layui-icon layui-icon-user"></i>
                 <cite>权限管理</cite>
@@ -104,11 +104,11 @@
                   <a href="javascript:;" >管理员日志</a>
                 </dd>
               </dl>
-            </li>
-
-            <li data-name="user" class="layui-nav-item">
+               </li>
+                         
+                         <li data-name="user" class="layui-nav-item">
               <a href="javascript:;" lay-tips="用户" lay-direction="2">
-                <i class="layui-icon layui-icon-user"></i>
+                <i class="layui-icon layui-icon-list"></i>
                 <cite>文章管理</cite>
               </a>
               <dl class="layui-nav-child">
@@ -121,9 +121,9 @@
                   <a href="javascript:;" lay-href="{:url('article.category/index')}">分类管理</a>
                 </dd>
               </dl>
-            </li>
-
-            <li data-name="set" class="layui-nav-item">
+                         </li>
+                         
+                         <li data-name="set" class="layui-nav-item">
               <a href="javascript:;" lay-tips="设置" lay-direction="2">
                 <i class="layui-icon layui-icon-set"></i>
                 <cite>设置</cite>
@@ -144,13 +144,24 @@
                   </dl>
                 </dd>
               </dl>
-            </li>
-            <li data-name="get" class="layui-nav-item">
+              </li>
+              <li data-name="zhifu" class="layui-nav-item">
+              <a href="javascript:;" lay-tips="用户" lay-direction="2">
+                <i class="layui-icon layui-icon-rmb"></i>
+                <cite>支付管理</cite>
+              </a>
+              <dl class="layui-nav-child">
+                <dd>
+                  <a href="javascript:;" lay-href="{:url('auth.admin/index')}">支付宝</a>
+                </dd>
+              </dl>
+               </li>
+              <li data-name="get" class="layui-nav-item">
               <a href="javascript:;" lay-href="system/get.html" lay-tips="授权" lay-direction="2">
                 <i class="layui-icon layui-icon-auz"></i>
                 <cite>授权</cite>
               </a>
-            </li>
+              </li>
           </ul>
         </div>
       </div>
@@ -191,23 +202,70 @@
       <div class="layadmin-body-shade" layadmin-event="shade"></div>
     </div>
   </div>
-  <script>
- 
+
+ {include file="public/foot" /} 
+   <script>
+layui.use([ 'layer','jquery','element'], function(){
+
+  layer = layui.layer; //弹层
+  var element = layui.element;
+  var $ = layui.jquery;
+
   function menu()
   {
+    var html = '';
     $.ajax({
-          url:"{:url('index/menu')}",
-          type: "GET",
-          dataType: "json",
-          success:function(data)
-          {
-            console.log(data);
-          }
-        });
+      url:"{:url('/index/menu')}",
+      type: "POST",
+      dataType: "json",
+      success:function(obj)
+      {
+        var data = obj['data'];
+
+       /* for (item in data) 
+        {
+          if(data[item].hasOwnProperty('children') && data[item]['title']!='设置')
+          {*/
+
+           html+='<li data-name="user" class="layui-nav-item">';
+              html+='<a href="javascript:;" lay-tips="用户" lay-direction="2">';
+                html+='<i class="layui-icon layui-icon-list"></i>';
+                html+='<cite>文章管理</cite>';
+              html+='</a>';
+              html+='<dl class="layui-nav-child">';
+                html+='<dd>';
+                  html+='<a href="javascript:;" lay-href="">文章列表</a>';
+                html+='</dd>';
+              html+='</dl>';
+              html+='<dl class="layui-nav-child">';
+                html+='<dd>';
+                  html+='<a href="javascript:;" lay-href="">分类管理</a>';
+                html+='</dd>';
+              html+='</dl>';
+            html+='</li>';
+
+          /*}
+          else
+          {*/
+           /* html+='<li data-name="dash" class="layui-nav-item" >';
+              html+='<a href="javascript:;" lay-href="'+data[item]["name"]+'" lay-tips="'+data[item]["title"]+'" lay-direction="1">';
+                html+='<i class="'+data[item]["icon"]+'"></i>';
+                html+='<cite>'+data[item]["title"]+'</cite>';
+              html+='</a>';
+            html+='</li>';*/
+        /*  }
+        
+        }*/
+         $('#LAY-system-side-menu').append(html);
+         element.init();
+         
+      }
+    });
   }
 
+
+});
   </script>
- {include file="public/foot" /} 
 </body>
 </html>
 

@@ -60,9 +60,6 @@
 <script>
 
 var condition = new Array();
-layui.config({
-  version: '1527505940714' //为了更新 js 缓存，可忽略
-});
 
  var tableIns = '';
 
@@ -76,7 +73,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   ,carousel = layui.carousel //轮播
   ,upload = layui.upload //上传
   ,element = layui.element; //元素操作
-  var $ = layui.jquery;
+ 
 
 
   $('#parentIframe').click(function(){
@@ -198,44 +195,46 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 		});
     }
   });
+
+  function refresh()
+  {
+    heavyLoad(condition);
+  }
+
+  /**
+  * 搜索
+  */
+  function search()
+  {
+    var id = $('#id').val();
+    var username = $('#username').val();
+
+    var condition = new Array();
+    condition['id'] =id;
+    condition['username'] =username;
+    
+    heavyLoad(condition);
+  }
+
+  
+
+  function del()
+  {
+    layer.msg('暂未开发');
+  }
   
 });
 
-	function refresh()
-	{
-		heavyLoad(condition);
-	}
-
-	/**
-	* 搜索
-	*/
-	function search()
-	{
-		var id = $('#id').val();
-		var username = $('#username').val();
-
-		var condition = new Array();
-		condition['id'] =id;
-		condition['username'] =username;
-		
-		heavyLoad(condition);
-	}
-
-	/*重载方法*/
-	function heavyLoad(condition)
-	{
-		tableIns.reload({
-		  where: condition
-		  ,page: {
-		    curr: 1 //重新从第 1 页开始
-		  }
-		});
-	}
-
-	function del()
-	{
-		layer.msg('暂未开发');
-	}
+/*重载方法*/
+function heavyLoad(condition)
+{
+  tableIns.reload({
+    where: condition
+    ,page: {
+      curr: 1 //重新从第 1 页开始
+    }
+  });
+}
 //在Jquery里格式化Date日期时间数据
 
 </script>

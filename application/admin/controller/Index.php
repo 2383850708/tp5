@@ -9,9 +9,39 @@ class Index extends Backend
 		return $this->fetch();
 	}
 
+	/**
+     * 获取侧边栏菜单
+     */
+    public  function getMenu()
+    {
+    	$userInfo = parent::getUserInfo();
+        $menu           = [];
+        $admin_id       = $userInfo['id'];
+        $auth           = new \think\auth\Auth();
+   
+        $auth_rule_list = Db::name('auth_rule')->field('id,pid,title,icon,name')->where(['status'=>1,'type'=>'menu'])->order(['weigh' => 'DESC', 'id' => 'ASC'])->select();
+        foreach ($auth_rule_list as $value) {
+            if ($auth->check($value['name'], $admin_id) || $admin_id == 1) {
+                $menu[] = $value;
+            }
+        }
+        $menu = !empty($menu) ? $this->new_tree($menu) : [];
+      	print_r($menu);exit;
+        $this->assign('menu', $menu);
+    }
+
+    public function new_tree($reles)
+	{
+		$tree = new \blog\Tree();
+		$tree->load($reles);
+		$list = $tree->DeepTree();
+		return $list;
+	}
+
 	public function menu()
 	{
 		$data = $this->tree();
+		
 		\think\Config::set('default_return_type','json');
 		if($data)
 		{
@@ -26,7 +56,7 @@ class Index extends Backend
 
 	public function rules()
 	{
-		$list = Db::name('auth_rule')->field('id,pid,title,icon')->where(['status'=>1,'type'=>'menu'])->order('weigh desc')->select();
+		$list = Db::name('auth_rule')->field('id,pid,title,icon,name')->where(['status'=>1,'type'=>'menu'])->order('weigh desc')->select();
 		return $list;
 	}
 
@@ -76,6 +106,8 @@ class Index extends Backend
 		$list = $tree->DeepTree();
 		return $list;
 	}
+
+	
 
 
 }

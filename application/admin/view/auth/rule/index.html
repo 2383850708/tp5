@@ -59,10 +59,6 @@
 
 var condition = new Array();
 
-layui.config({
-  version: '1527505940714' //为了更新 js 缓存，可忽略
-});
-
  var tableIns = '';
 layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function(){
   var laydate = layui.laydate //日期
@@ -73,6 +69,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   ,upload = layui.upload //上传
    ,form = layui.form
   ,element = layui.element; //元素操作
+  var $ = layui.jquery;
 
   tableIns=table.render({
     elem: '#demo'
@@ -202,12 +199,18 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     });
     }
   });
-  
+
 });
+  function del()
+  {
+    layer.msg('暂不支持批量删除');
+  }
+
   function refresh()
   {
     heavyLoad(condition);
   }
+
 /*重载方法*/
   function heavyLoad(condition)
   {
@@ -216,10 +219,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
       ,where: condition
     });
   }
-  function del()
-  {
-    layer.msg('暂不支持批量删除');
-  }
+ 
 
 </script>
 <script type="text/html" id="icon">

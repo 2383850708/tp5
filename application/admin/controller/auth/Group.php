@@ -138,38 +138,6 @@ class Group extends Backend
 		return json($treelist);
 	}
 
-	function getSubTree($data , $id = 0 , $lev = 0) 
-	{
-	    static $son = array();
-
-	    foreach($data as $key => $value) 
-	    {
-	        if($value['pid'] == $id) 
-	        {
-	        	$data[$key]['level'] = $lev;
-	        	if($value['pid']==0)
-	        	{
-					$value['title'] = str_repeat('&nbsp;',$lev*7).$value['title'];
-	        	}
-	        	else
-	        	{
-					if($value['level']==3)
-					{
-						$value['title'] = str_repeat('&nbsp;',$lev*7).'└ '.$value['title'];
-					}
-					else
-					{
-						$value['title'] = str_repeat('&nbsp;',$lev*7).'|— '.$value['title'];
-					}
-	        	}
-	        	
-	            $son[] = $value;
-	           
-	            $this->getSubTree($data , $value['id'] , $lev+1);
-	        }
-	    }
-    	return $son;
- 	}
 
 	public function checkForm()
 	{
