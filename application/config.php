@@ -253,4 +253,6 @@ return [
     'auth_rule'         => 'auth_rule', // 权限规则不带前缀表
     'auth_user'         => 'admin', // 用户信息不带前缀表
     ],
+
+    'data_backup_puth' => 'data/',//数据库备份路径
 ];

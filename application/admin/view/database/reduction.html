@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	{include file="public/header" title="数据库备份"  /}
+	{include file="public/header" title="数据还原"  /}
 
 </head>
 <body style="padding:15px">
@@ -17,9 +17,7 @@
             <div class="layui-input-block">
               <select name="operation" value='' lay-filter="select">
                 <option value=0>批量操作</option>
-                <option value=1>数据表优化</option>
-                <option value=2>数据表修复</option>
-                <option value=3>数据表备份</option>
+                <option value=1>删除备份</option>
               </select>
             </div>
           </div>
@@ -50,11 +48,9 @@
 
  <!-- {load href="/static/layuiAdmin/layui/dist/layui.js" /} -->
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
-<!-- <script type="text/html" id="barDemo">
-  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-</script> -->
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="import">还原</a>
+</script>
 
 <script>
 
@@ -98,16 +94,17 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   tableIns=table.render({
     elem: '#test'
     ,height: 500
-    ,url: '/database/backups' //数据接口
+    ,url: '/database/reduction' //数据接口
     ,page: false //开启分页
     ,cols: [[ //表头
        {checkbox:true,fixed: 'left' ,align:'center'}
-      ,{field: 'name', title: '数据表名',templet:'#name'}
-      ,{field: 'engine', title: '类型',  sort: false, align:'center'}
-      ,{field: 'rows', title: '记录数',  align:'center'} 
-      ,{field: 'data_length', title: '数据',  align:'center'}
-      ,{field: 'create_time', title: '创建时间',  sort: false, align:'center',templet: '#status'}
-      ,{field: '', title: '状态',   align:'center',templet: '#bk_status'}
+      ,{field: 'time', title: '备份名称'}
+      ,{field: 'part', title: '卷数',  sort: false, align:'center'}
+      ,{field: 'compress', title: '压缩类型',  sort: false, align:'center'}
+      ,{field: 'size', title: '数据大小',  align:'center'} 
+      ,{field: 'date_time', title: '备份时间',  align:'center'}
+      ,{field: '', title: '状态',  sort: false, align:'center',templet: '#status'}
+      ,{fixed: 'right', title:'操作',  align:'center', toolbar: '#barDemo'}
    
 
     ]]
@@ -120,15 +117,13 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 
     //如果是异步请求数据方式，res即为你接口返回的信息。
     //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-    var msg = res.msg;
+    /*var msg = res.msg;
     if(msg.length>0)
     {
       layer.msg(msg);
       return;
-    }
-  
-   
-    
+    }*/
+
     //得到当前页码
     //console.log(curr); 
     
@@ -137,7 +132,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   	}
   });
 
-  $('#caozuo').click(function(){
+    $('#caozuo').click(function(){
     var checkStatus = table.checkStatus('test')
           ,data = checkStatus.data; 
         
@@ -162,99 +157,22 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 
           if(type==3)
           {
-            url = "{:url('/database/export')}";
-            sendbk(url,arr);
+        
           }
 
           
          
    })
-
-   function sendbk(url,arr)
-   {
-     $('#caozuo').attr("disabled","disabled");
-     $('#caozuo').html("正在发送备份请求...");
-    
-      $.ajax({
-        url:url,
-        data:{tables:arr},
-        type: "POST",
-        success:function(data)
-        {
-          if(data.code)
-          {
-
-              tables = data.data.tables;
-
-              $('#caozuo').html(data.msg + "开始备份，请不要关闭本页面！");
-              backup(data.data.tab);
-              window.onbeforeunload = function(){ return "正在备份数据库，请不要关闭！" }
-          }
-          else 
-          {
-              layer.msg(data.msg);
-              $('#caozuo').attr("disabled",false);
-              $('#caozuo').html("立即备份");
-          }
-        }
-      });
-   }
-
-   function backup(tab)
-   {
-      showmsg(tab.id, "开始备份...(0%)");
-      $.get(url, tab, function(data)
-      {
-
-          if(data.code)
-          {
-              if(!$.isPlainObject(data.data.tab))
-              {
-                  id = data.data.tid-1;
-                  showmsg(id, data.msg);
-                  $('#caozuo').attr("disabled",false);
-                  $('#caozuo').html("备份完成，点击重新备份");
-                  window.onbeforeunload = function(){ return null }
-                  return;
-              }
-              else
-              {
-                id = data.data.tab.id-1;
-                showmsg(id, data.msg);
-                backup(data.data.tab, data.data.tab.id);
-              }
-             
-          }
-          else 
-          {
-              //updateAlert(data.info,'alert-error');
-              layer.msg(data.info);
-              $('#caozuo').removeClass("disabled");
-              $('#caozuo').html("立即备份");
-             /* setTimeout(function()
-              {
-                $('#top-alert').find('button').click();
-                $(that).removeClass('disabled').prop('disabled',false);
-              },1500);*/
-          }
-      }, "json");
-
-    }
-
-    function showmsg(id, msg)
-    {
-      $('table').find("span[value=" + tables[id] + "]").closest("tr").find(".bk_status").html(msg);
-    }
-
-   form.on('select(select)', function(data){
-      type = data.value;
-      
-   });
   
   //监听复选框
   table.on('checkbox(demo)',function(obj){
  		
   })
+
+  form.on('select(select)', function(data){
+      type = data.value;
+      
+   });
 
   //监听工具条
   table.on('tool(demo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
@@ -320,22 +238,6 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   {
     heavyLoad(condition);
   }
-/**
-  * 搜索
-  */
-  function search()
-  {
-    var id = $('#id').val();
-    var username = $('#username').val();
-
-    var condition = new Array();
-    condition['id'] =id;
-    condition['username'] =username;
-    
-    heavyLoad(condition);
-  }
-
-  
 
   function del()
   {
@@ -352,12 +254,9 @@ function heavyLoad(condition)
 //在Jquery里格式化Date日期时间数据
 
 </script>
-<script type="text/html" id="bk_status">
-  <span class="bk_status">未备份</span>
+<script type="text/html" id="status">
+  <span class="status">-</span>
 </script>
 
-<script type="text/html" id="name">
-  <span value="{{d.name}}">{{d.name}}</span>
-</script>
 
 </html> 
