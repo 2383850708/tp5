@@ -295,6 +295,16 @@
               element.init();
            });
         }
+        else
+        {
+            html+='<li data-name="" class="layui-nav-item" >';
+            html+='<a href="javascript:;" lay-tips="" lay-direction="2">';
+            html+='<i class=""></i>';
+            html+='<cite>'+obj.message+'</cite>';
+            html+='</a>';
+            html+='</li>';
+            $('#LAY-system-side-menu').html(html);
+        }
       }
 
     });

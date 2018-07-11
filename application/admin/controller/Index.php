@@ -22,13 +22,21 @@ class Index extends Backend
         $auth           = new \think\auth\Auth();
    		
         $auth_rule_list = Db::name('auth_rule')->field('id,pid,title,icon,name')->where(['status'=>1,'type'=>'menu'])->order(['weigh' => 'DESC', 'id' => 'ASC'])->select();
+
         foreach ($auth_rule_list as $value) {
+
             if ($auth->check($value['name'], $admin_id) || $admin_id == 1) {
                 $menu[] = $value;
             }
         }
+       
         $menu = !empty($menu) ? $this->new_tree($menu) : [];
-      	return ['data'=>$menu,'code'=>1,'message'=>'操作完成'];
+        if(!empty($menu))
+        {
+			return ['data'=>$menu,'code'=>1,'message'=>'操作完成'];
+        }
+        return ['data'=>null,'code'=>0,'message'=>'没有权限'];
+      	
     }
 
     public function new_tree($reles)
