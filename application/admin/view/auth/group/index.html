@@ -139,7 +139,8 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
             {
               if(data.status==1)
               {
-                obj.del();//删除对应行（tr）的DOM结构
+                //obj.del();//删除对应行（tr）的DOM结构
+                window.parent.menu();
                 layer.closeAll();
                 heavyLoad(condition);
               }

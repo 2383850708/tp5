@@ -69,16 +69,20 @@
       </div>
       
       <!-- 侧边菜单 -->
-      <div class="layui-side layui-side-menu">
+
+   
+
+
+    <div class="layui-side layui-side-menu" lay-filter="test1" >
         <div class="layui-side-scroll">
           <div class="layui-logo" lay-href="home/console.html">
             <span>layuiAdmin</span>
           </div>
-          
+        
           <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-
+                
           
-             <li data-name="dash" class="layui-nav-item" >
+             <!-- <li data-name="dash" class="layui-nav-item" >
               <a href="javascript:;" lay-href="{:url('dashboard/index')}" lay-tips="控制台" lay-direction="1">
                 <i class="layui-icon layui-icon-console"></i>
                 <cite>控制台</cite>
@@ -152,10 +156,10 @@
               </a>
               <dl class="layui-nav-child">
                 <dd>
-                  <a href="javascript:;" lay-href="{:url('database.backups/index')}">数据库备份</a>
+                  <a href="javascript:;" lay-href="{:url('database/backups')}">数据库备份</a>
                 </dd>
                 <dd>
-                  <a href="javascript:;" lay-href="{:url('database.reduction/index')}">数据库还原</a>
+                  <a href="javascript:;" lay-href="{:url('database/reduction')}">数据库还原</a>
                 </dd>
               </dl>
                </li>
@@ -175,11 +179,11 @@
                 <i class="layui-icon layui-icon-auz"></i>
                 <cite>授权</cite>
               </a>
-              </li>
-          </ul>
+              </li> -->
+          </ul> 
         </div>
       </div>
-
+    
       <!-- 页面标签 -->
       <div class="layadmin-pagetabs" id="LAY_app_tabs">
         <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
@@ -219,66 +223,82 @@
 
  {include file="public/foot" /} 
    <script>
-layui.use([ 'layer','jquery','element'], function(){
+   menu();
+  layui.use([ 'layer','jquery','element'], function(){
 
-  layer = layui.layer; //弹层
-  var element = layui.element;
-  var $ = layui.jquery;
+    layer = layui.layer; //弹层
+     var element = layui.element;
+  
+  
+   element.init('nav','test1');
+
+  });
 
   function menu()
   {
     var html = '';
     $.ajax({
-      url:"{:url('/index/menu')}",
+      cace:true,
+      url:"{:url('index/a')}",
       type: "POST",
       dataType: "json",
       success:function(obj)
       {
-        var data = obj['data'];
-
-       /* for (item in data) 
+        if(obj.code==1)
         {
-          if(data[item].hasOwnProperty('children') && data[item]['title']!='设置')
-          {*/
-
-           html+='<li data-name="user" class="layui-nav-item">';
-              html+='<a href="javascript:;" lay-tips="用户" lay-direction="2">';
-                html+='<i class="layui-icon layui-icon-list"></i>';
-                html+='<cite>文章管理</cite>';
-              html+='</a>';
-              html+='<dl class="layui-nav-child">';
+          var navs = obj.data;
+          $.each(navs,function(i,item){
+            html+='<li data-name="'+item.name+'" class="layui-nav-item" >';
+            if(item.children !== undefined && item.children.length > 0)
+            {
+              html+='<a href="javascript:;" lay-tips="'+item.title+'" lay-direction="2">';
+            }
+            else
+            {
+              html+='<a href="javascript:;" lay-href="'+item.name+'" lay-tips="'+item.title+'" lay-direction="1">';
+            }
+            html+='<i class="'+item.icon+'"></i>';
+            html+='<cite>'+item.title+'</cite>';
+            html+='</a>';
+            if(item.children !== undefined && item.children.length > 0)
+            {
+              $.each(item.children,function(j,item2){
+                html+='<dl class="layui-nav-child">';
                 html+='<dd>';
-                  html+='<a href="javascript:;" lay-href="">文章列表</a>';
+                if(item2.children !== undefined && item2.children.length > 0)
+                {
+                  html+='<a href="javascript:;">'+item2.title+'</a>';
+                  html+='<dl class="layui-nav-child">';
+                  $.each(item2.children,function(h,item3)
+                  {
+                    html+='<dd><a lay-href="'+item3.name+'">'+item3.title+'</a></dd>';
+                  })
+                  html+='</dl>';
+                }
+                else
+                {
+                  html+='<a href="javascript:;" lay-href="'+item2.name+'">'+item2.title+'</a>';
+                }
                 html+='</dd>';
-              html+='</dl>';
-              html+='<dl class="layui-nav-child">';
-                html+='<dd>';
-                  html+='<a href="javascript:;" lay-href="">分类管理</a>';
-                html+='</dd>';
-              html+='</dl>';
+                html+='</dl>';
+              })
+              
+            }
             html+='</li>';
-
-          /*}
-          else
-          {*/
-           /* html+='<li data-name="dash" class="layui-nav-item" >';
-              html+='<a href="javascript:;" lay-href="'+data[item]["name"]+'" lay-tips="'+data[item]["title"]+'" lay-direction="1">';
-                html+='<i class="'+data[item]["icon"]+'"></i>';
-                html+='<cite>'+data[item]["title"]+'</cite>';
-              html+='</a>';
-            html+='</li>';*/
-        /*  }
-        
-        }*/
-         $('#LAY-system-side-menu').append(html);
-         element.init();
-         
+            });
+      
+          //渲染html
+           $('#LAY-system-side-menu').html(html);
+           layui.use('element', function() 
+           {
+              var element = layui.element;
+              element.init();
+           });
+        }
       }
+
     });
   }
-
-
-});
   </script>
 </body>
 </html>

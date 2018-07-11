@@ -49,7 +49,7 @@
  <!-- {load href="/static/layuiAdmin/layui/dist/layui.js" /} -->
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script type="text/html" id="barDemo">
-  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="import">还原</a>
+  <a class="layui-btn layui-btn-primary layui-btn-xs"  lay-event="import">还原</a>
 </script>
 
 <script>
@@ -98,7 +98,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     ,page: false //开启分页
     ,cols: [[ //表头
        {checkbox:true,fixed: 'left' ,align:'center'}
-      ,{field: 'time', title: '备份名称'}
+      ,{field: 'name', title: '备份名称'}
       ,{field: 'part', title: '卷数',  sort: false, align:'center'}
       ,{field: 'compress', title: '压缩类型',  sort: false, align:'center'}
       ,{field: 'size', title: '数据大小',  align:'center'} 
@@ -145,7 +145,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
          
           for (var item in data)
           {
-              arr.push(data[item]['name']);
+              arr.push(data[item]['time']);
           }
 
           if(arr.length<=0)
@@ -153,15 +153,34 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
             layer.msg('请先勾选');
             return;
           }
-          //var tables = JSON.stringify(arr);
+          $.ajax({
+                cache:true,
+                type :"POST",
+                url  :"{:url('database/del')}",
+                data :{time:arr},
+                async:false,
+                   success:function(data)
+                   {
+                    layer.alert(data.msg, {
+                    skin: data.skin
+                    ,closeBtn: 0
+                    ,anim: data.anim //动画类型
+                    ,icon: data.icon
+                    }
+                    ,function()
+                    {
+                      if(data.status==1)
+                      {
+                        heavyLoad(condition);
+                      }
+                      layer.closeAll();
+                    });
+                   },
+                   error:function(request){
+                    layer.msg('页面错误');
+                   }
+              }); 
 
-          if(type==3)
-          {
-        
-          }
-
-          
-         
    })
   
   //监听复选框
@@ -179,10 +198,54 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 
     var data = obj.data //获得当前行数据
     ,layEvent = obj.event; //获得 lay-event 对应的值
-    if(layEvent === 'detail'){
+    if(layEvent === 'import')
+    {
 
-      layer.msg('暂未开发');
-    } else if(layEvent === 'del'){
+      var time = data.time;
+
+      var self = this, status = ".";
+
+            $.get("{:url('database/import')}?time="+time, success, "json");
+            window.onbeforeunload = function(){ return "正在还原数据库，请不要关闭！" }
+            return false;
+        
+            function success(data){
+                if(data.code){
+                    if(data.data.gz)
+                    {
+                        data.msg += status;
+                        if(status.length === 5)
+                        {
+                            status = ".";
+                        } 
+                        else 
+                        {
+                            status += ".";
+                        }
+                    }
+                   
+                    $('span[value='+time+']').html(data.msg);
+                    if(data.data.part)
+                    {
+                        $.get("{:url('database/import')}?time="+time, 
+                            {"part" : data.data.part, "start" : data.data.start}, 
+                            success, 
+                            "json"
+                        );
+                    }  
+                    else 
+                    {
+                        window.onbeforeunload = function(){ return null; }
+                    }
+                } 
+                else 
+                {
+                layer.msg(data.msg);
+                }
+            }
+    }
+    else if(layEvent === 'del')
+    {
       layer.confirm('真的删除行么', function(index){
         var ids = new Array;
         var id = data.id;
@@ -216,7 +279,9 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
         });
 
       });
-    } else if(layEvent === 'edit'){
+    }
+    else if(layEvent === 'edit')
+    {
     	layer.open({
 		  type: 2,
 		  title:'修改',
@@ -227,10 +292,6 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 		});
     }
   });
-
-  
-
-  
   
 });
 
@@ -255,7 +316,7 @@ function heavyLoad(condition)
 
 </script>
 <script type="text/html" id="status">
-  <span class="status">-</span>
+  <span class="status" value="{{d.time}}">-</span>
 </script>
 
 

@@ -15,7 +15,7 @@ return [
     // 服务器地址
     'hostname'        => \think\Env::get('database.hostname', '127.0.0.1'),
     // 数据库名
-    'database'        => \think\Env::get('database.database', 'bdm114585572_db'),
+    'database'        => \think\Env::get('database.database'),
     // 用户名
     'username'        => \think\Env::get('database.username', 'root'),
     // 密码

@@ -165,6 +165,49 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
             url = "{:url('/database/export')}";
             sendbk(url,arr);
           }
+          else
+          {
+            index = layer.load(1, {
+            offset: ['50%', '50%'],
+            shade: [0.1,'#fff'] //0.1透明度的白色背景
+          });
+          if(type==1)
+          { 
+            url = "{:url('/database/optimize')}";//表优化
+          }
+          else
+          { 
+            url = "{:url('/database/repair')}";//表修复
+          }
+          $.ajax({
+                cache:true,
+                type :"POST",
+                url  :url,
+                data :{tables:arr},
+                async:false,
+                   success:function(data){
+                    layer.close(index);
+                    layer.alert(data.msg, {
+                    skin: data.skin
+                    ,closeBtn: 0
+                    ,anim: data.anim //动画类型
+                    ,icon: data.icon
+                    }
+                    ,function()
+                    {
+                      if(data.status==1)
+                      {
+                        heavyLoad(condition);
+                      }
+                      layer.closeAll();
+                    });
+                   },
+                   error:function(request)
+                   {
+                    layer.msg('页面错误');
+                   }
+              }); 
+          }
 
           
          

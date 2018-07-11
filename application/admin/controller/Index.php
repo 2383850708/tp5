@@ -9,16 +9,18 @@ class Index extends Backend
 		return $this->fetch();
 	}
 
+	
 	/**
      * 获取侧边栏菜单
      */
-    public  function getMenu()
+    public  function a()
     {
+    	Config('default_return_type','json');
     	$userInfo = parent::getUserInfo();
         $menu           = [];
         $admin_id       = $userInfo['id'];
         $auth           = new \think\auth\Auth();
-   
+   		
         $auth_rule_list = Db::name('auth_rule')->field('id,pid,title,icon,name')->where(['status'=>1,'type'=>'menu'])->order(['weigh' => 'DESC', 'id' => 'ASC'])->select();
         foreach ($auth_rule_list as $value) {
             if ($auth->check($value['name'], $admin_id) || $admin_id == 1) {
@@ -26,8 +28,7 @@ class Index extends Backend
             }
         }
         $menu = !empty($menu) ? $this->new_tree($menu) : [];
-      	print_r($menu);exit;
-        $this->assign('menu', $menu);
+      	return ['data'=>$menu,'code'=>1,'message'=>'操作完成'];
     }
 
     public function new_tree($reles)
@@ -45,11 +46,11 @@ class Index extends Backend
 		\think\Config::set('default_return_type','json');
 		if($data)
 		{
-			return ['data'=>$data,'status'=>1,'message'=>'操作完成'];
+			return ['data'=>$data,'code'=>1,'message'=>'操作完成'];
 		}
 		else
 		{
-			return ['data'=>null,'status'=>0,'message'=>'没有权限'];
+			return ['data'=>null,'code'=>0,'message'=>'没有权限'];
 		}
 		
 	}

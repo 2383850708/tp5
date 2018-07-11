@@ -121,6 +121,7 @@ layui.use(['form','table', 'layedit','laydate','formSelects'], function(){
         {
           if(data.status==1)
           {
+            window.parent.parent.menu();
             parent.heavyLoad(condition);
             parent.layer.close(index);
           }

@@ -136,6 +136,7 @@ layui.use(['form','table', 'layedit','laydate'], function(){
           if(data.status==1)
           {
             parent.heavyLoad(condition);
+            window.parent.parent.menu();
             parent.layer.close(index);
           }
           else
