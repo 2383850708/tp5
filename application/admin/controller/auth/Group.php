@@ -35,6 +35,7 @@ class Group extends Backend
 		{
 			$data = $this->request->get("row/a");
 			$group =  $this->request->get('group/a');
+
 			if(empty($group))
 			{
 				return parent::returnJson('权限不能为空',0);
@@ -42,6 +43,7 @@ class Group extends Backend
 			$data['rules'] = implode(',', $group);
 
 			$result = $this->model->validate('AuthGroup')->save($data);
+			
 			if(false === $result)
 			{
 			    return parent::returnJson($this->model->getError(),0);

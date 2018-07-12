@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{include file="public/header" title="幻灯片添加"  /}
+	<style>
+  
+  </style>
+</head>
+<body style="padding:15px">
+	<div class="layui-card">
+          <div class="layui-card-body">
+            <form class="layui-form" action="" onsubmit="return false" lay-filter="component-form-element">
+              <div class="layui-row layui-col-space10 layui-form-item">
+
+
+                <div class="layui-col-lg11">
+                  <label class="layui-form-label">广告名称：</label>
+                  <div class="layui-input-block">
+                    <input type="text" name="row[name]" lay-verify="required" placeholder="请输入广告名称" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+
+                <div class="layui-col-lg11">
+                  <label class="layui-form-label">广告地址：</label>
+                  <div class="layui-input-block">
+                    <input type="text" name="row[rul]" lay-verify="" placeholder="请输入广告地址 http://" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+
+                <div class="layui-col-lg11">
+                  <label class="layui-form-label">广告图片：</label>
+                  <div class="layui-input-block">
+                    <div class="layui-upload">
+                      <button type="button" class="layui-btn layui-btn-normal" id="test8">选择文件</button>
+                      <button type="button" class="layui-btn" id="test9">开始上传</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="layui-form-item">
+                <label class="layui-form-label">状态：</label>
+                <div class="layui-input-block">
+                  <input type="radio" name="row[type]" checked="checked" value="1" title="启用">
+                  <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
+                  <div>启用</div>
+                  </div>
+                  <input type="radio" name="row[type]" value="2" title="禁用"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>禁用</div></div>
+                </div>
+                </div>
+
+
+                <div class="layui-col-lg11">
+                  <label class="layui-form-label">排序：</label>
+                  <div class="layui-input-block">
+                    <input type="text" name="row[scort]" value='0'  lay-verify="" placeholder="" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+
+                
+                
+                <div class="layui-form-item">
+                  <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="demo1" id="sub">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                  </div>
+                </div>
+                </div>
+            </form>
+          </div>
+        </div>
+</body>
+ {include file="public/foot" /} 
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+
+var condition = new Array();
+layui.use(['form','table', 'layedit','laydate','upload'], function(){
+  var table = layui.table;
+  var form = layui.form;
+  var upload = layui.upload;
+  //选完文件后不自动上传
+  upload.render({
+    elem: '#test8'
+    ,url: "{:url('/miscellaneous.slide/upload')}"
+    ,auto: false
+    //,multiple: true
+    ,bindAction: '#test9'
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+
+  form.on('submit(demo1)', function(data){  
+  	var index = parent.layer.getFrameIndex(window.name);
+  	$.ajax({
+	 	  url:"{:url('auth.rule/add')}",
+	 	  data:$("form").serialize(),
+		  type: "GET",
+		  dataType: "json",
+		  success:function(data)
+		  {
+        layer.alert(data.msg, {
+          skin: data.skin
+          ,closeBtn: 0
+          ,anim: data.anim //动画类型
+          ,icon: data.status
+        }
+        ,function()
+        {
+          if(data.status==1)
+          {
+            parent.heavyLoad(condition);
+            parent.layer.close(index);
+          }
+          else
+          {
+            layer.closeAll('dialog');
+          }
+        }
+        );
+		  }
+		});
+  });
+
+
+});
+
+
+
+</script>
+</html> 

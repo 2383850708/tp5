@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{include file="public/header" title="关灯片管理"  /}
+
+</head>
+<body style="padding:15px">
+
+	<div class="layui-card">
+		
+		<div class="layui-card-body">
+	
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" style="padding:15px 0px 15px 0px;height:100%;line-height:100%">
+        <div class="layui-form-item">
+          <div class="layui-inline">
+            <label class="layui-form-label">搜索ID</label>
+            <div class="layui-input-block">
+              <input type="text" name="id" id="id" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">作者</label>
+            <div class="layui-input-block">
+              <input type="text" name="author" id="author" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+
+          <div class="layui-inline">
+            <label class="layui-form-label">标签</label>
+            <div class="layui-input-block">
+              <select   name="tag" id="tag" >
+                <option value="-1" >全部</option>
+                <option value="1" >原创</option>
+                <option value="0" >转载</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="layui-inline">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+              <select   name="status" id="status" >
+                <option value="-1" >全部</option>
+                <option value="1" >已发布</option>
+                <option value="0" >待审核</option>
+              </select>
+            </div>
+          </div>
+         
+          <div class="layui-inline">
+            <button class="layui-btn" data-type="reload" onclick="search()">搜索</button>
+          </div>
+        </div>
+      </div>
+
+
+		<blockquote class="layui-elem-quote" style="padding:10px;border-left:5px solid #18bc9c">
+		    <a class="layui-btn layui-btn-sm" onclick="refresh()" title="刷新" style="background: #2c3e50"><i class="layui-icon layui-icon-refresh" ></i></a>
+			<a class="layui-btn layui-btn-sm layui-btn-warm"  id="parentIframe" style="background: #18bc9c"><i class="layui-icon layui-icon-add-circle-fine"></i> 添加</a>
+			<a class="layui-btn layui-btn-sm layui-btn-normal" style="background: #e74c3c" onclick="del()"><i class="layui-icon"></i> 删除</a>
+	
+		</blockquote>
+		<div class="admin-main">
+			<table class="layui-hide" id="test" lay-filter="demo"></table>
+		</div>
+		</div>
+	</div>
+	
+
+</body>
+
+ {include file="public/foot" /} 
+ <!-- {load href="/static/layuiAdmin/layui/dist/layui.js" /} -->
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script>
+
+var condition = new Array();
+
+var tableIns = '';
+
+layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function(){
+  var laydate = layui.laydate //日期
+
+  ,laypage = layui.laypage //分页
+  layer = layui.layer //弹层
+  ,table = layui.table //表格
+  ,form = layui.form
+  ,carousel = layui.carousel //轮播
+  ,upload = layui.upload //上传
+  ,element = layui.element; //元素操作
+  var $ = layui.jquery;
+
+
+  $('#parentIframe').click(function(){
+  layer.open({
+    type: 2,
+    title:'添加',
+    fixed: false, 
+    content: "{:url('/miscellaneous.slide/add')}",
+    area: ['800px', '600px'],
+    maxmin: true
+});
+
+
+  })
+  
+  //监听Tab切换
+  element.on('tab(demo)', function(data){
+    layer.msg('切换了：'+ this.innerHTML);
+    console.log(data);
+  });
+ 
+
+  //执行一个 table 实例
+  tableIns=table.render({
+    elem: '#test'
+    ,height: 500
+    ,url: '/miscellaneous.slide/ajax_load_data' //数据接口
+    ,page: true //开启分页
+    ,cols: [[ //表头
+       {checkbox:true,fixed: 'left' ,align:'center'}
+      ,{field: 'id', title: 'ID', width:80, sort: true ,align:'center',fixed: 'left'}
+      ,{field: 'title', title: '标题',  align:'center'}
+      ,{field: 'lanmu', title: '栏目',  sort: false, align:'center'}
+      ,{field: 'author', title: '作者',  align:'center'} 
+      ,{field: 'reading', title: '阅读量',  align:'center'}
+      ,{field: 'tag', title: '标签',  align:'center'}
+      ,{field: 'status', title: '状态',  sort: false, align:'center',templet: '#statustmp'}
+      ,{field: 'createtime', title: '发布时间',  sort: true, align:'center',templet: '#time'}
+      ,{fixed: 'right',  align:'center', toolbar: '#barDemo'}
+
+    ]]
+    ,
+    text: {
+    none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+    }
+    ,
+    done: function(res, curr, count){
+
+    //如果是异步请求数据方式，res即为你接口返回的信息。
+    //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+    var msg = res.msg;
+    if(msg.length>0)
+    {
+      layer.msg(msg);
+      return;
+    }
+
+    
+    //得到当前页码
+    //console.log(curr); 
+    
+    //得到数据总量
+    //console.log(count);
+  	}
+  });
+  
+  //监听复选框
+  table.on('checkbox(demo)',function(obj){
+
+  })
+
+  var $ = layui.$, active = {
+      getCheckData: function(){ //获取选中数据
+
+        var checkStatus = table.checkStatus('test')
+        ,data = checkStatus.data; 
+        layer.alert(JSON.stringify(data));
+      }
+      ,getCheckLength: function(){ //获取选中数目
+        var checkStatus = table.checkStatus('test')
+        ,data = checkStatus.data;
+        layer.msg('选中了：'+ data.length + ' 个');
+      }
+      ,isAll: function(){ //验证是否全选
+        var checkStatus = table.checkStatus('test');
+        layer.msg(checkStatus.isAll ? '全选': '未全选')
+      }
+    };
+    
+    $('.test-table-operate-btn .layui-btn').on('click', function(){
+
+      var type = $(this).data('type');
+     
+      active[type] ? active[type].call(this) : '';
+    });
+
+  //监听工具条
+  table.on('tool(demo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+
+    var data = obj.data //获得当前行数据
+    ,layEvent = obj.event; //获得 lay-event 对应的值
+    if(layEvent === 'detail'){
+
+      layer.msg('暂未开发');
+    } else if(layEvent === 'del'){
+      layer.confirm('真的删除行么', function(index){
+        var ids = new Array;
+        var id = data.id;
+        ids[0] = id;
+        ids = JSON.stringify(ids);
+      
+        $.ajax({
+          url:"{:url('/article.article/del')}",
+          data:{ids:ids},
+          type: "GET",
+          dataType: "json",
+          success:function(data)
+          {
+            layer.alert(data.msg, {
+              skin: data.skin
+              ,closeBtn: 0
+              ,anim: data.anim //动画类型
+              ,icon: data.icon
+            }
+            ,function()
+            {
+              if(data.status==1)
+              {
+                obj.del();//删除对应行（tr）的DOM结构
+                layer.closeAll();
+                heavyLoad(condition);
+              }
+              layer.close('dialog');
+            });
+          }
+        });
+
+      });
+    } else if(layEvent === 'edit'){
+
+      var index = layer.open({
+      type: 2,
+      title:'修改',
+      fixed: false, 
+      content: "{:url('/article.article/edit')}"+'?id='+data.id,
+      area: ['800px', '600px'],
+      maxmin: true
+
+		});
+      layer.full(index);
+    }
+  });
+  
+});
+
+	function refresh()
+	{
+		heavyLoad(condition);
+	}
+
+	/**
+	* 搜索
+	*/
+	function search()
+	{
+		var id = $('#id').val();
+		var categoryid = $('#selected').val();
+    var author = $('#author').val();
+    var tag = $('#tag').val();
+    var status = $('#status').val();
+		var condition = new Array();
+		condition['id'] =id;
+		condition['categoryid'] =categoryid;
+		condition['author'] = author;
+    condition['tag'] = tag;
+    condition['status'] = status;
+		heavyLoad(condition);
+	}
+
+	/*重载方法*/
+	function heavyLoad(condition)
+	{
+		tableIns.reload({
+		  where: condition
+		  ,page: {
+		    curr: 1 //重新从第 1 页开始
+		  }
+		});
+	}
+
+
+	function del()
+	{
+		var checkStatus = table.checkStatus('test')
+        ,data = checkStatus.data; 
+       
+        var arr = new Array;
+       
+        for (var item in data)
+        {
+            arr[item] = data[item]['id'];
+        }
+
+        if(arr.length<=0)
+        {
+          layer.msg('请先勾选');
+          return;
+        }
+        var ids = JSON.stringify(arr);
+        layer.confirm('真的删除行么', function(index){
+          $.ajax({
+          url:"{:url('/article.article/del')}",
+          data:{ids:ids},
+          type: "GET",
+          dataType: "json",
+          success:function(data)
+          {
+            layer.alert(data.msg, {
+              skin: data.skin
+              ,closeBtn: 0
+              ,anim: data.anim //动画类型
+              ,icon: data.icon
+            }
+            ,function()
+            {
+              if(data.status==1)
+              {
+                heavyLoad(condition);
+              }
+              layer.closeAll();
+            });
+          }
+        });
+        });
+	}
+//在Jquery里格式化Date日期时间数据
+
+</script>
+<script type="text/html" id="statustmp">
+  {{#  if(d.status === 1){ }}
+	<span style="color:#18bc9c"><i class="layui-badge-dot layui-bg-green" ></i> 已发布</span>   
+  {{#  } else { }}
+    <span style="color:red"><i class="layui-badge-dot layui-bg-red" ></i> 审核</span>   
+  {{#  } }}
+</script>
+
+</html> 

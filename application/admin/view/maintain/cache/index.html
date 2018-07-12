@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {include file="public/header" title="清理缓存"  /}
+
+</head>
+<body >
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">清理缓存</div>
+          <div class="layui-card-body">
+            <form class="layui-form" action="{:url('/maintain.cache/clear')}" onsubmit="return true" lay-filter="component-form-element" id="uploadForm" >
+                <div class="layui-row layui-col-space30">
+                  <div class="layui-col-xs6 " style="text-align:right">
+                    <div class="grid-demo " >清理数据缓存</div>
+                  </div>
+                  <div class="layui-col-xs6 " >
+                    <div class="grid-demo" >
+                      <input type="checkbox" name="data[]" value="cache" lay-skin="primary" title="清理数据缓存" checked=''>
+                      <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>清理数据缓存</span><i class="layui-icon layui-icon-ok"></i></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="layui-row layui-col-space30">
+                  <div class="layui-col-xs6 " style="text-align:right">
+                    <div class="grid-demo " >清理模板缓存</div>
+                  </div>
+                  <div class="layui-col-xs6 " >
+                    <div class="grid-demo" >
+                      <input type="checkbox" name="data[]" value="temp" lay-skin="primary" title="清理模板缓存" >
+                      <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>清理模板缓存</span><i class="layui-icon layui-icon-ok"></i></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- <div class="layui-row layui-col-space30">
+                  <div class="layui-col-xs6 " style="text-align:right">
+                    <div class="grid-demo " >清理数据目录</div>
+                  </div>
+                  <div class="layui-col-xs6 " >
+                    <div class="grid-demo" >
+                      <input type="checkbox" name="data[]" value="Data" lay-skin="primary" title="清理数据目录" >
+                      <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>清理数据目录</span><i class="layui-icon layui-icon-ok"></i></div>
+                    </div>
+                  </div>
+                </div> -->
+
+                <div class="layui-row layui-col-space30">
+                  <div class="layui-col-xs6 " style="text-align:right">
+                    <div class="grid-demo " >清理日志文件</div>
+                  </div>
+                  <div class="layui-col-xs6 " >
+                    <div class="grid-demo" >
+                      <input type="checkbox" name="data[]" value="log" lay-skin="primary" title="清理日志文件" >
+                      <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>清理日志文件</span><i class="layui-icon layui-icon-ok"></i></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="layui-row layui-col-space30">
+                  <div class="layui-col-xs12 " style="text-align:center;">
+                    <div class="grid-demo " ><button class="layui-btn" lay-submit="" lay-filter="set_system_email">确认保存</button></div>
+                  </div>
+                </div>
+
+                </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+{include file="public/foot" /} 
+
+<script>
+
+var condition = new Array();
+layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function(){
+  var laydate = layui.laydate //日期
+
+  ,laypage = layui.laypage //分页
+  layer = layui.layer //弹层
+  ,table = layui.table //表格
+  ,form = layui.form;
+
+  var $ = layui.jquery;
+
+form.on('submit(set_system_email)', function(data){  
+
+    var img_file  = $('#upload').val();
+
+    var formData = new FormData($('#uploadForm')[0]);
+ 
+    $.ajax({
+
+      url:"{:url('/set.email/add')}",
+      data:formData,
+      type: "POST",
+      processData : false, 
+      // 告诉jQuery不要去设置Content-Type请求头
+      contentType : false,
+      dataType: "json",
+      success:function(data)
+      {
+        layer.alert(data.msg, {
+          skin: data.skin
+          ,closeBtn: 0
+          ,anim: data.anim //动画类型
+          ,icon: data.status
+        }
+        ,function()
+        {
+          layer.closeAll('dialog');
+        }
+        );
+      }
+    });
+  });
+
+});
+
+
+</script>
+
+
+</html> 
