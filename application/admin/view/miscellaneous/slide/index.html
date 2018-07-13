@@ -126,13 +126,12 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     ,cols: [[ //表头
        {checkbox:true,fixed: 'left' ,align:'center'}
       ,{field: 'id', title: 'ID', width:80, sort: true ,align:'center',fixed: 'left'}
-      ,{field: 'title', title: '标题',  align:'center'}
-      ,{field: 'lanmu', title: '栏目',  sort: false, align:'center'}
-      ,{field: 'author', title: '作者',  align:'center'} 
-      ,{field: 'reading', title: '阅读量',  align:'center'}
-      ,{field: 'tag', title: '标签',  align:'center'}
-      ,{field: 'status', title: '状态',  sort: false, align:'center',templet: '#statustmp'}
-      ,{field: 'createtime', title: '发布时间',  sort: true, align:'center',templet: '#time'}
+      ,{field: 'scort', title: '排序', width:80,  align:'center'}
+      ,{field: 'name', title: '广告名称',  sort: false, align:'center'}
+      ,{field: 'url', title: '广告地址',  align:'center'} 
+      ,{field: 'pic_min', title: '广告图片',  align:'center',templet: '#img'}
+      ,{field: 'status', title: '状态',  align:'center',templet: '#statustmp'}
+      ,{field: 'datetime', title: '创建时间',  sort: false, align:'center'}
       ,{fixed: 'right',  align:'center', toolbar: '#barDemo'}
 
     ]]
@@ -335,10 +334,14 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 </script>
 <script type="text/html" id="statustmp">
   {{#  if(d.status === 1){ }}
-	<span style="color:#18bc9c"><i class="layui-badge-dot layui-bg-green" ></i> 已发布</span>   
+	<span style="color:#18bc9c"><i class="layui-badge-dot layui-bg-green" ></i> 启用</span>   
   {{#  } else { }}
-    <span style="color:red"><i class="layui-badge-dot layui-bg-red" ></i> 审核</span>   
+    <span style="color:red"><i class="layui-badge-dot layui-bg-red" ></i> 禁用</span>   
   {{#  } }}
+</script>
+
+<script type="text/html" id="img">
+  <img src="/uploads/{{d.pic_min}}" alt="">
 </script>
 
 </html> 

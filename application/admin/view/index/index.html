@@ -224,15 +224,6 @@
  {include file="public/foot" /} 
    <script>
    menu();
-  layui.use([ 'layer','jquery','element'], function(){
-
-    layer = layui.layer; //弹层
-     var element = layui.element;
-  
-  
-   element.init('nav','test1');
-
-  });
 
   function menu()
   {
@@ -255,7 +246,7 @@
             }
             else
             {
-              html+='<a href="javascript:;" lay-href="'+item.name+'" lay-tips="'+item.title+'" lay-direction="1">';
+              html+='<a href="javascript:;" lay-href="/'+item.name+'" lay-tips="'+item.title+'" lay-direction="1">';
             }
             html+='<i class="'+item.icon+'"></i>';
             html+='<cite>'+item.title+'</cite>';
@@ -271,13 +262,13 @@
                   html+='<dl class="layui-nav-child">';
                   $.each(item2.children,function(h,item3)
                   {
-                    html+='<dd><a lay-href="'+item3.name+'">'+item3.title+'</a></dd>';
+                    html+='<dd><a lay-href="/'+item3.name+'">'+item3.title+'</a></dd>';
                   })
                   html+='</dl>';
                 }
                 else
                 {
-                  html+='<a href="javascript:;" lay-href="'+item2.name+'">'+item2.title+'</a>';
+                  html+='<a href="javascript:;" lay-href="/'+item2.name+'">'+item2.title+'</a>';
                 }
                 html+='</dd>';
                 html+='</dl>';
