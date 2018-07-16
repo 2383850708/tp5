@@ -3,7 +3,15 @@
 <head>
 	{include file="public/header" title="幻灯片添加"  /}
 	<style>
-  
+  #img{
+    margin: 40px auto;
+    padding: 10px;
+    display: none;
+    position:relative;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius:20px;
+    background: white;
+    -webkit-box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
   </style>
 </head>
 <body style="padding:15px">
@@ -33,6 +41,15 @@
                     <div class="layui-upload">
                       <button type="button" class="layui-btn layui-btn-normal" id="test8">选择文件</button>
                       <button type="button" class="layui-btn" id="test9">开始上传</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="layui-col-lg11" id="img_none" style="display: none">
+                  <label class="layui-form-label"></label>
+                  <div class="layui-input-block">
+                    <div class="layui-upload">
+                      <span id="img"></span>
                     </div>
                   </div>
                 </div>
@@ -96,6 +113,10 @@ layui.use(['form','table', 'layedit','laydate','upload'], function(){
       layer.msg(res.msg);
       if(res.status==1)
       {
+        $('#img_none').css('display','block');
+        $('#test9').html('重新上传');
+        $('#img').css('display','block');
+        $('#img').html('<img style="width:100%" src="/uploads/'+res.pic+'" alt="">');
         $('#pic').val(res.pic);
         $('#pic_min').val(res.pic_min);
       }

@@ -12,7 +12,7 @@ class Article extends Backend
 		$this->model = model('Article');
 	}
 
-	public function checkForm()
+	public function getCondition()
 	{
 		$data = array();
 
@@ -31,7 +31,7 @@ class Article extends Backend
 			$data['a.tag'] = input('param.tag');
 		}
 
-		if(input('param.status')!=-1 && input('param.tag')!='')
+		if(input('param.status')!=-1 && input('param.status')!='')
 		{
 			$data['a.status'] = input('param.status');
 		}
@@ -49,7 +49,7 @@ class Article extends Backend
 
 	public function ajax_load_data()
 	{
-		$condition = $this->checkForm();
+		$condition = $this->getCondition();
 
 		$len = input('param.limit');
 		$page = input('param.page');

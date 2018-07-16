@@ -19,6 +19,11 @@ class Slide extends Model
 		return Session::get('userInfo.id');
 	}
 
+	protected function setUpdateuidAttr($value)
+	{
+		return Session::get('userInfo.id');
+	}
+
 	public function profile()
     {
         return $this->belongsTo('admin','uid','id',['slide'=>'a','admin'=>'b'])->field('id');

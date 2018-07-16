@@ -24,10 +24,10 @@ class Index extends Backend
         $auth_rule_list = Db::name('auth_rule')->field('id,pid,title,icon,name')->where(['status'=>1,'type'=>'menu'])->order(['weigh' => 'DESC', 'id' => 'ASC'])->select();
 
         foreach ($auth_rule_list as $value) {
-
-            if ($auth->check($value['name'], $admin_id) || $admin_id == 1) {
+$menu[] = $value;
+            /*if ($auth->check($value['name'], $admin_id) || $admin_id == 1) {
                 $menu[] = $value;
-            }
+            }*/
         }
        
         $menu = !empty($menu) ? $this->new_tree($menu) : [];

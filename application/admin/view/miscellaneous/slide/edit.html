@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{include file="public/header" title="幻灯片修改"  /}
+	<style>
+  #img{
+    margin: 40px auto;
+    padding: 10px;
+    position:relative;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius:20px;
+    background: white;
+    -webkit-box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  </style>
+</head>
+<body style="padding:15px">
+	<div class="layui-card">
+          <div class="layui-card-body">
+            <form class="layui-form" action="" onsubmit="return false" lay-filter="component-form-element">
+              <div class="layui-row layui-col-space10 layui-form-item">
+
+
+                <div class="layui-col-lg11">
+                  <label class="layui-form-label">广告名称：</label>
+                  <div class="layui-input-block">
+                    <input type="text" name="name" value="{$info.name}" lay-verify="required" placeholder="请输入广告名称" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+
+                <div class="layui-col-lg11">
+                  <label class="layui-form-label">广告地址：</label>
+                  <div class="layui-input-block">
+                    <input type="text" name="url" lay-verify="" value="{$info.url}" value="#" placeholder="请输入广告地址 http://" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+
+                <div class="layui-col-lg11">
+                  <label class="layui-form-label">广告图片：</label>
+                  <div class="layui-input-block">
+                    <div class="layui-upload">
+                      <button type="button" class="layui-btn layui-btn-normal" id="test8">选择文件</button>
+                      <button type="button" class="layui-btn" id="test9">开始上传</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="layui-col-lg11" id="img_none" style="display: block">
+                  <label class="layui-form-label"></label>
+                  <div class="layui-input-block">
+                    <div class="layui-upload">
+                      <div id="img"><img style="width:100%" src="/uploads/{$info.pic}"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="layui-form-item">
+                <label class="layui-form-label">状态：</label>
+                <div class="layui-input-block">
+                  <input type="radio" name="status" {if condition="$info.status eq 1"}checked="checked"{/if} value="1" title="启用">
+                  <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
+                  <div>启用</div>
+                  </div>
+                  <input type="radio" name="status" value="2" {if condition="$info.status eq 2"}checked="checked"{/if} title="禁用"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>禁用</div></div>
+                </div>
+                </div>
+
+
+                <div class="layui-col-lg11">
+                  <label class="layui-form-label">排序：</label>
+                  <div class="layui-input-block">
+                    <input type="text" name="scort" value="{$info.scort}"  lay-verify="" placeholder="" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+
+                <input type="hidden" name="pic" id="pic" value="{$info.pic}">
+                <input type="hidden" name="pic_min" id="pic_min" value="{$info.pic_min}">
+                <input type="hidden" name="id" value="{$info.id}">
+                <div class="layui-form-item">
+                  <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="demo1" >立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                  </div>
+                </div>
+                </div>
+            </form>
+          </div>
+        </div>
+</body>
+ {include file="public/foot" /} 
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+
+var condition = new Array();
+layui.use(['form','table', 'layedit','laydate','upload'], function(){
+  var table = layui.table;
+  var form = layui.form;
+  var upload = layui.upload;
+  //选完文件后不自动上传
+ 
+  upload.render({
+    elem: '#test8'
+    ,url: "{:url('/miscellaneous.slide/upload')}"
+    ,auto: false
+    //,multiple: true
+    ,before:function(input)
+    {
+      this.data={'pic':$('#pic').val(),'pic_min':$('#pic_min').val()};
+    }
+    ,bindAction: '#test9'
+    ,done: function(res){
+      layer.msg(res.msg);
+      if(res.status==1)
+      {
+        $('#img_none').css('display','block');
+        $('#test9').html('重新上传');
+        $('#img').css('display','block');
+        $('#img').html('<img style="width:100%" src="/uploads/'+res.pic+'" alt="">');
+        $('#pic').val(res.pic);
+        $('#pic_min').val(res.pic_min);
+      }
+      
+    }
+  });
+
+  form.on('submit(demo1)', function(data){  
+  	var index = parent.layer.getFrameIndex(window.name);
+  	$.ajax({
+	 	  url:"{:url('miscellaneous.slide/edit')}",
+	 	  data:$("form").serialize(),
+		  type: "POST",
+		  dataType: "json",
+		  success:function(data)
+		  {
+        layer.alert(data.msg, {
+          skin: data.skin
+          ,closeBtn: 0
+          ,anim: data.anim //动画类型
+          ,icon: data.status
+        }
+        ,function()
+        {
+          if(data.status==1)
+          {
+            parent.heavyLoad(condition);
+            parent.layer.close(index);
+          }
+          else
+          {
+            layer.closeAll('dialog');
+          }
+        }
+        );
+		  }
+		});
+  });
+
+
+});
+
+
+
+</script>
+</html> 

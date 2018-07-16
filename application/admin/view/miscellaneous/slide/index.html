@@ -19,20 +19,9 @@
             </div>
           </div>
           <div class="layui-inline">
-            <label class="layui-form-label">作者</label>
+            <label class="layui-form-label">广告名称</label>
             <div class="layui-input-block">
-              <input type="text" name="author" id="author" placeholder="请输入" autocomplete="off" class="layui-input">
-            </div>
-          </div>
-
-          <div class="layui-inline">
-            <label class="layui-form-label">标签</label>
-            <div class="layui-input-block">
-              <select   name="tag" id="tag" >
-                <option value="-1" >全部</option>
-                <option value="1" >原创</option>
-                <option value="0" >转载</option>
-              </select>
+              <input type="text" name="name" id="name" placeholder="请输入" autocomplete="off" class="layui-input">
             </div>
           </div>
 
@@ -41,8 +30,8 @@
             <div class="layui-input-block">
               <select   name="status" id="status" >
                 <option value="-1" >全部</option>
-                <option value="1" >已发布</option>
-                <option value="0" >待审核</option>
+                <option value="1" >启用</option>
+                <option value="2" >禁用</option>
               </select>
             </div>
           </div>
@@ -122,15 +111,16 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     elem: '#test'
     ,height: 500
     ,url: '/miscellaneous.slide/ajax_load_data' //数据接口
-    ,page: true //开启分页
+    ,page: false //开启分页
     ,cols: [[ //表头
        {checkbox:true,fixed: 'left' ,align:'center'}
       ,{field: 'id', title: 'ID', width:80, sort: true ,align:'center',fixed: 'left'}
-      ,{field: 'scort', title: '排序', width:80,  align:'center'}
+      ,{field: 'scort', title: '排序', width:80, sort: true, align:'center'}
       ,{field: 'name', title: '广告名称',  sort: false, align:'center'}
-      ,{field: 'url', title: '广告地址',  align:'center'} 
       ,{field: 'pic_min', title: '广告图片',  align:'center',templet: '#img'}
+      ,{field: 'url', title: '广告地址',  align:'center'} 
       ,{field: 'status', title: '状态',  align:'center',templet: '#statustmp'}
+      ,{field: 'username', title: '创建人',  align:'center'}
       ,{field: 'datetime', title: '创建时间',  sort: false, align:'center'}
       ,{fixed: 'right',  align:'center', toolbar: '#barDemo'}
 
@@ -206,7 +196,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
         ids = JSON.stringify(ids);
       
         $.ajax({
-          url:"{:url('/article.article/del')}",
+          url:"{:url('/miscellaneous.slide/del')}",
           data:{ids:ids},
           type: "GET",
           dataType: "json",
@@ -234,16 +224,16 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
       });
     } else if(layEvent === 'edit'){
 
-      var index = layer.open({
+      layer.open({
       type: 2,
       title:'修改',
       fixed: false, 
-      content: "{:url('/article.article/edit')}"+'?id='+data.id,
-      area: ['800px', '600px'],
+      content: "{:url('/miscellaneous.slide/edit')}"+'?id='+data.id,
+      area: ['800px', '700px'],
       maxmin: true
 
 		});
-      layer.full(index);
+     
     }
   });
   
@@ -260,15 +250,11 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 	function search()
 	{
 		var id = $('#id').val();
-		var categoryid = $('#selected').val();
-    var author = $('#author').val();
-    var tag = $('#tag').val();
+		var name = $('#name').val();
     var status = $('#status').val();
 		var condition = new Array();
 		condition['id'] =id;
-		condition['categoryid'] =categoryid;
-		condition['author'] = author;
-    condition['tag'] = tag;
+		condition['name'] =name;
     condition['status'] = status;
 		heavyLoad(condition);
 	}
@@ -278,9 +264,6 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 	{
 		tableIns.reload({
 		  where: condition
-		  ,page: {
-		    curr: 1 //重新从第 1 页开始
-		  }
 		});
 	}
 
@@ -305,7 +288,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
         var ids = JSON.stringify(arr);
         layer.confirm('真的删除行么', function(index){
           $.ajax({
-          url:"{:url('/article.article/del')}",
+          url:"{:url('/miscellaneous.slide/del')}",
           data:{ids:ids},
           type: "GET",
           dataType: "json",
