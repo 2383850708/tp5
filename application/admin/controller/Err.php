@@ -7,6 +7,11 @@ class Err extends Controller
 	{
 		return $this->fetch();
 	}
+
+	public function error()
+	{
+		return $this->fetch();
+	}
 }
 
 

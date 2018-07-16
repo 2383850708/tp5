@@ -9,11 +9,16 @@ class Index extends Backend
 		return $this->fetch();
 	}
 
+	public function _empty($name)
+    {
+        echo $name.'方法不存在';
+    }
+
 	
 	/**
      * 获取侧边栏菜单
      */
-    public  function a()
+    public  function getMenu()
     {
     	Config('default_return_type','json');
     	$userInfo = parent::getUserInfo();
@@ -24,10 +29,10 @@ class Index extends Backend
         $auth_rule_list = Db::name('auth_rule')->field('id,pid,title,icon,name')->where(['status'=>1,'type'=>'menu'])->order(['weigh' => 'DESC', 'id' => 'ASC'])->select();
 
         foreach ($auth_rule_list as $value) {
-$menu[] = $value;
-            /*if ($auth->check($value['name'], $admin_id) || $admin_id == 1) {
+
+            if ($auth->check($value['name'], $admin_id) || $admin_id == 1) {
                 $menu[] = $value;
-            }*/
+            }
         }
        
         $menu = !empty($menu) ? $this->new_tree($menu) : [];
@@ -47,7 +52,7 @@ $menu[] = $value;
 		return $list;
 	}
 
-	public function menu()
+	/*public function menu()
 	{
 		$data = $this->tree();
 		
@@ -114,7 +119,7 @@ $menu[] = $value;
 		$tree->load($reles);
 		$list = $tree->DeepTree();
 		return $list;
-	}
+	}*/
 
 	
 

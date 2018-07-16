@@ -23,11 +23,11 @@ class Backend extends Controller
         $controller = request()->controller();
         $action = request()->action();
        
-        //$auth = new Auth();
+        $auth = new Auth();
 
         $info = $this->getUserInfo();
         
-        /*if(!$auth->check($controller . '/' . $action, $info['id']))
+        /*if(!$auth->check($controller . '/' . $action, $info['id']) && $controller . '/' . $action != 'Index/getmenu')
         {
             
             if($this->request->isAjax())
@@ -40,7 +40,8 @@ class Backend extends Controller
             }
             else
             {
-                $this->error('没有权限',url('admin/Err/auth'));
+                //$this->error('没有权限',url('admin/Err/auth'),0);
+                $this->redirect(url('admin/Err/auth'));
             }
         }*/
     	

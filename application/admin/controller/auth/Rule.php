@@ -11,6 +11,11 @@ class Rule extends Backend
 		$this->model = model('AuthRule');
 	}
 
+	public function _empty($name)
+    {
+        echo $name.'方法不存在';
+    }
+
 	public function index()
 	{
 		return $this->fetch();
@@ -22,7 +27,6 @@ class Rule extends Backend
 		$count = $this->model->where('status',1)->count();
 		$Category = new Category("AuthRule",array('id','pid','title','fullname'));
 		$categoryList = $Category->getList(null,0,'weigh desc');
-
 		$data = array();
 		$data['code'] = 0;
 		$data['count'] = $count;
@@ -56,6 +60,9 @@ class Rule extends Backend
 			if(input('?get.id'))
 			{
 				$this->assign('id',input('param.id'));
+				$rules = $this->model->get(input('param.id'))->toArray();
+				$name = substr($rules['name'],0,strpos($rules['name'],'/',1)+1);
+				$this->assign('name',$name);
 			}
 			else
 			{

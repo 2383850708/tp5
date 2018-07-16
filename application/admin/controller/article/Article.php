@@ -12,6 +12,11 @@ class Article extends Backend
 		$this->model = model('Article');
 	}
 
+	public function _empty($name)
+    {
+        echo $name.'方法不存在';
+    }
+
 	public function getCondition()
 	{
 		$data = array();

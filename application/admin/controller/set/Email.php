@@ -15,6 +15,11 @@ class Email extends Backend
 		$this->model = model('EmailSet');
 	}
 
+	public function _empty($name)
+    {
+        echo $name.'方法不存在';
+    }
+
 	public function index()
 	{
 		$info = $this->model->get(1);

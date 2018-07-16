@@ -15,6 +15,16 @@ class BasicInformation extends Backend
 		$this->model = model('Admin');
 	}
 
+	public function _empty($name)
+    {
+        echo $name.'方法不存在';
+    }
+
+	public function _empty($name)
+    {
+        echo $name.'方法不存在';
+    }
+
 	public function index()
 	{
 		$info = parent::getUserInfo();

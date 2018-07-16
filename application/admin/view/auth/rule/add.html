@@ -19,7 +19,7 @@
                   <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
                   <div>是</div>
                   </div>
-                  <input type="radio" name="row[type]" value="2" title="否"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>否</div></div>
+                  <input type="radio" name="row[type]"  value="2" title="否"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>否</div></div>
                 </div>
                 </div>
 
@@ -46,7 +46,11 @@
                 <div class="layui-col-lg11">
                   <label class="layui-form-label">规则：</label>
                   <div class="layui-input-block">
+                  {present name="name"}
+                    <input type="text" name="row[name]" lay-verify="required" value="{$name}" placeholder="" autocomplete="off" class="layui-input">
+                  {else /}
                     <input type="text" name="row[name]" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                  {/present}
                   </div>
                 </div>
 
@@ -139,6 +143,7 @@ layui.use(['form','table', 'layedit','laydate'], function(){
           {
             layer.closeAll('dialog');
           }
+
         }
         );
 		  }

@@ -33,8 +33,9 @@
 		<blockquote class="layui-elem-quote" style="padding:10px;border-left:5px solid #18bc9c">
 		    <a class="layui-btn layui-btn-sm" onclick="refresh()" title="刷新" style="background: #2c3e50"><i class="layui-icon layui-icon-refresh" ></i></a>
 			<a class="layui-btn layui-btn-sm layui-btn-warm"  id="parentIframe" style="background: #18bc9c"><i class="layui-icon layui-icon-add-circle-fine"></i> 添加</a>
+
 			<a class="layui-btn layui-btn-sm layui-btn-normal" style="background: #e74c3c" onclick="del()"><i class="layui-icon"></i> 删除</a>
-	
+	   <a class="layui-btn layui-btn-sm layui-btn-warm"  id="parentIframe" style="background: gray" onclick="hiend(this)" > 隐藏功能</a>
 		</blockquote>
 		
     <div class="admin-main">
@@ -58,7 +59,7 @@
 <script>
 
 var condition = new Array();
-
+var type = 'hidden';
  var tableIns = '';
 layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function(){
   var laydate = layui.laydate //日期
@@ -230,6 +231,36 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     });
   }
  
+  function hiend(obj)
+  {
+    if(type=='hidden')
+    {
+      var status = 'none';
+      $(obj).html('显示功能');
+    }
+    else
+    {
+      var status = 'block';
+      $(obj).html('隐藏功能');
+    }
+
+    $('input[value=file]').each(function(){
+      $(this).closest('tr').css('display',status);
+    })
+    if(type=='hidden')
+    {
+      type='show';
+    }
+    else
+    {
+       tableIns.reload({
+      page: false
+      ,where: condition
+    });
+      type = 'hidden';
+
+    }
+  }
 
 </script>
 <script type="text/html" id="icon">

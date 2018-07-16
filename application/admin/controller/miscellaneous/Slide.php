@@ -11,6 +11,11 @@ class Slide extends Backend
 		$this->model = model('Slide');
 	}
 
+	public function _empty($name)
+    {
+        echo $name.'方法不存在';
+    }
+
 	public function index()
 	{
 		return $this->fetch();

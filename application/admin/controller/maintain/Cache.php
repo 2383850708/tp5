@@ -12,6 +12,11 @@ class Cache extends Backend
 		return $this->fetch();
 	}
 
+	public function _empty($name)
+    {
+        echo $name.'方法不存在';
+    }
+
 	public function clear()
 	{
 		$data = $_REQUEST['data'];

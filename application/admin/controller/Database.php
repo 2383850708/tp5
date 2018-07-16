@@ -10,6 +10,11 @@ use think\Session;
 class Database extends Backend
 {
 
+    public function _empty($name)
+    {
+        echo $name.'方法不存在';
+    }
+
 	/**
 	 * 数据库备份
 	 * @Author   wyk

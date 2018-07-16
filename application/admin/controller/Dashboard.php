@@ -8,6 +8,11 @@ class Dashboard extends Backend
 		return $this->fetch();
 	}
 
+	public function _empty($name)
+    {
+        echo $name.'方法不存在';
+    }
+
 	
 }
 

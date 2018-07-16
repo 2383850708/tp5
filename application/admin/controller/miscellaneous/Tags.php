@@ -11,6 +11,11 @@ class Tags extends Backend
 		//$this->model = model('Tags');
 	}
 
+	public function _empty($name)
+    {
+        echo $name.'方法不存在';
+    }
+
 	public function index()
 	{
 		return $this->fetch();
@@ -51,7 +56,7 @@ class Tags extends Backend
 		->order('a.id desc,a.scort')
 		->select();
 		$data = array();
-		$data['code'] = 0;
+		$data['code'] = 1;
 		$data['status'] = 1;
 		$data['count'] = 0;
 		$data['data'] = $result;

@@ -15,11 +15,11 @@
                 <div class="layui-form-item">
                 <label class="layui-form-label">菜单：</label>
                 <div class="layui-input-block">
-                  <input type="radio" name="row[type]" checked="checked" value="1" title="是">
+                  <input type="radio" name="row[type]" {if condition="$info.type eq 'menu' "}checked="checked"{/if} value="1" title="是">
                   <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
                   <div>是</div>
                   </div>
-                  <input type="radio" name="row[type]" value="2" title="否"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>否</div></div>
+                  <input type="radio" name="row[type]" {if condition="$info.type eq 'file' "}checked="checked"{/if} value="2" title="否"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>否</div></div>
                 </div>
                 </div>
 
