@@ -38,6 +38,7 @@ class System extends Backend
 		$data = input('param.');
 		$id = input('param.id');
 		$info = $this->upload();
+
 		if($info['status']==1)
 		{
 			$data['logo'] = $info['path'];
@@ -85,11 +86,12 @@ class System extends Backend
 			$data['status'] = 3;
 			if($file)
 			{
-		        $info = $file->validate(['ext'=>'ico'])->move(ROOT_PATH . 'public','faicon.ico');
+		        $info = $file->move('./logo/','logo');
+		        
 		        if($info)
 		        {
 		        	$data['status'] = 1;
-		        	$data['path'] = '/'.$info->getSaveName();
+		        	$data['path'] = $info->getSaveName();
 		        	// $image = \think\Image::open($info->getPathName());
 					// 给原图左上角添加水印并保存water_image.png
 					//$image->text('www.baidu.com','fontlibrary/Lucia.ttf',20,'#ffffff')->save($info->getPathName());

@@ -246,7 +246,7 @@
             }
             else
             {
-              html+='<a href="javascript:;" lay-href="/'+item.name+'" lay-tips="'+item.title+'" lay-direction="1">';
+              html+='<a href="javascript:;" lay-href="/admin.php/'+item.name+'" lay-tips="'+item.title+'" lay-direction="1">';
             }
             html+='<i class="'+item.icon+'"></i>';
             html+='<cite>'+item.title+'</cite>';
@@ -262,13 +262,13 @@
                   html+='<dl class="layui-nav-child">';
                   $.each(item2.children,function(h,item3)
                   {
-                    html+='<dd><a lay-href="/'+item3.name+'">'+item3.title+'</a></dd>';
+                    html+='<dd><a lay-href="/admin.php/'+item3.name+'">'+item3.title+'</a></dd>';
                   })
                   html+='</dl>';
                 }
                 else
                 {
-                  html+='<a href="javascript:;" lay-href="/'+item2.name+'">'+item2.title+'</a>';
+                  html+='<a href="javascript:;" lay-href="/admin.php/'+item2.name+'">'+item2.title+'</a>';
                 }
                 html+='</dd>';
                 html+='</dl>';

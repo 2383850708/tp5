@@ -2,6 +2,8 @@
 namespace app\admin\controller;
 use app\admin\common\controller\Backend;
 use think\Db;
+use League\Pipeline\Pipeline;
+
 class Index extends Backend
 {
 	public function index()
@@ -14,6 +16,18 @@ class Index extends Backend
         echo $name.'方法不存在';
     }
 
+    public function ceshi()
+    {
+    	$pipe1 = function ($payload)
+    	{ 
+    	return $payload + 1; 
+    	}; 
+    	$pipe2 = function ($payload) 
+    	{ 
+    	return $payload * 3; 
+    	}; 
+
+    }
 	
 	/**
      * 获取侧边栏菜单
