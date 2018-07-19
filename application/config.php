@@ -186,13 +186,60 @@ return [
 
     'cache'                  => [
         // 驱动方式
-        'type'   => 'File',
+        //'type'   => 'File',//File
         // 缓存保存目录
-        'path'   => CACHE_PATH,
+        //'path'   => CACHE_PATH,
         // 缓存前缀
-        'prefix' => '',
+        //'prefix' => '',
         // 缓存有效期 0表示永久缓存
+        // 'expire' => 0,
+        // 'redis' =>[
+        //     'type' => 'redis',
+        //     'host' =>'127.0.0.1',
+        // ]
+        // 使用复合缓存类型
+        'type'  =>  'complex',
+        // 默认使用的缓存
         'expire' => 0,
+        'default'   =>  [
+            // 驱动方式
+            'type'   => 'File',
+            // 缓存保存目录
+            'path'   => CACHE_PATH,
+        ],
+        // 文件缓存
+        'file'   =>  [
+            // 驱动方式
+            'type'   => 'file',
+            // 设置不同的缓存保存目录
+            'path'   => RUNTIME_PATH . 'file/',
+        ],  
+        // redis缓存
+        'redis'   =>  [
+            'type'   => 'redis',
+            'host'   => '127.0.0.1',
+            'port'   => '6379',
+            'password' => '',
+            //'timeout'=> 3600
+        ],
+        'redis_zu'   =>  [
+            'host' => '127.0.0.1',
+            'port' => "6379",
+            'password' => '',
+            'select' => 0,
+            'timeout' => 0,
+            'expire'=>0,
+            'persistent'=>false,
+            'prefix'=>''
+        ],
+        
+        'redis_congku'   =>  [
+            'type'   => 'redis',
+            'host'   => '127.0.0.1',
+            'port'   => '6380',
+            'password' => '',
+            //'timeout'=> 3600
+        ],
     ],
 
     // +----------------------------------------------------------------------

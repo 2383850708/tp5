@@ -65,7 +65,7 @@ $(document).ready(function(){
 		<div class="line">
 			<div class="xl12 xs3 xm3 xb2">
 				<button class="button icon-navicon float-right" data-target="#header-demo"></button>
-				<a href="/"><img src="/logo/{$system.logo}" class="ring-hover"/></a>
+				<a href="/"><img src="/logo/{$config.logo}" class="ring-hover"/></a>
 			</div>
 			<div class=" xl12 xs9 xm9 xb10 nav-navicon" id="header-demo">
 				<div class="xs8 xm6 xb8 padding-small">
@@ -120,8 +120,8 @@ $(document).ready(function(){
 	</div>
 	<div class="main_image">
 		<ul>
-	{foreach name="banner" item="vo"}
-	<li><span class="img"><img src="{$vo.adpic}"  width="100%" height="400px"/></span></li>
+	{foreach name="slide" item="vo"}
+	<li><span class="img"><img src="./uploads/{$vo.pic}"  width="100%" height="400px"/></span></li>
 	{/foreach}
 		</ul>
 		<a href="javascript:;" id="btn_prev"></a>

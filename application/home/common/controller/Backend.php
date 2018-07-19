@@ -3,7 +3,8 @@ namespace app\home\common\controller;
 use think\Controller;
 use think\Session;
 use think\Db;
-
+//use think\Cache;
+use blog\Redis;
 
 /**
  * 前台控制器基类
@@ -13,14 +14,32 @@ class Backend extends Controller
 	public function _initialize()
     {
 
-        /*$system = Db::name('system')->find(1);
-        $this->assign('system',$system);
+        $res = Redis::getInstance(config('cache.redis_zu'));
 
-        $category = Db::name('category')->select();
-        $tree = new \blog\Tree();
-        $tree->load($category);
-        $category_list = $tree->DeepTree();
-        $this->assign('category_list',$category_list);*/
+        print_r($res->hgetall('ceshi')) ;exit;
+        /*$config = Cache::remember('config',function(){
+            return Db::name('system')->find(1);
+        });
+
+        $category_list = Cache::remember('category_list',function(){
+            $category = Db::name('category')->select();
+            $tree = new \blog\Tree();
+            $tree->load($category);
+            return $tree->DeepTree();
+        });
+
+        $slide = Cache::remember('slide',function(){
+            return Db::name('slide')->field('name,url,pic')->where('status',1)->select();
+        });
+
+
+       $this->assign('category_list',$category_list);
+        
+       $this->assign('config',$config);
+
+       $this->assign('slide',$slide);*/
+        //Cache::store('redis')->set('name','value');
+
         //检查用户是否登陆
         /*if(!Session::has('userInfo'))
         {

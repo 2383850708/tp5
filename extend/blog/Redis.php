@@ -45,6 +45,7 @@ class Redis
         'prefix'=>''
 
     );
+    //protected $config = config('cache.redis');
      
     //什么时候重新建立连接
     protected $expireTime;
@@ -56,17 +57,18 @@ class Redis
     private function __construct($config = array(),$attr=array())
     {
         $this->attr        =    array_merge($this->attr,$attr);
-        $this->redis    =    new Redis();
+
+        $this->redis    =    new \Redis();
 
         if (!empty($config)) {
             $this->config = array_merge($this->config, $config);
         }
 
-
         $this->port        =    $this->config['port'];
-        $this->host        =    $this->$config['host'];
+        $this->host        =    $this->config['host'];
+    
         $this->redis->connect($this->host, $this->port, $this->attr['timeout']);
-         
+       
         if($config['auth'])
         {
             $this->auth($this->config['auth']);
@@ -96,8 +98,9 @@ class Redis
          
         $attr['db_id']    =    $attr['db_id'] ? $attr['db_id'] : 0;
         
-         
+       
         $k    =    md5(implode('', $config).$attr['db_id']);
+
         if(! (static::$_instance[$k] instanceof self))
         {
            
