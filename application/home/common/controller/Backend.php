@@ -3,8 +3,8 @@ namespace app\home\common\controller;
 use think\Controller;
 use think\Session;
 use think\Db;
-//use think\Cache;
-use blog\Redis;
+use think\Cache;
+//use blog\Redis;
 
 /**
  * 前台控制器基类
@@ -14,13 +14,21 @@ class Backend extends Controller
 	public function _initialize()
     {
 
-        $res = Redis::getInstance(config('cache.redis_zu'));
+       // $redis = Redis::getInstance(config('cache.redis_congku'));
+      
+        /*$config = $redis->hGetAll('config');
 
-        print_r($res->hgetall('ceshi')) ;exit;
-        /*$config = Cache::remember('config',function(){
-            return Db::name('system')->find(1);
+        if(!$redis->EXISTS('config'))
+        {
+            $config = Db::name('system')->find(1);
+        }*/
+
+        $config = Cache::remember('config',function(){
+            $category = Db::name('system')->find(1);
+     
+            return $tree->DeepTree();
         });
-
+        
         $category_list = Cache::remember('category_list',function(){
             $category = Db::name('category')->select();
             $tree = new \blog\Tree();
@@ -37,7 +45,7 @@ class Backend extends Controller
         
        $this->assign('config',$config);
 
-       $this->assign('slide',$slide);*/
+       $this->assign('slide',$slide);
         //Cache::store('redis')->set('name','value');
 
         //检查用户是否登陆

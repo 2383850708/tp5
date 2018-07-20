@@ -3,12 +3,15 @@ namespace app\admin\controller\article;
 use app\admin\common\controller\Backend;
 use think\Db;
 use blog\Category as tree;
+use blog\Redis;
 class Category extends Backend
 {
 	public function _initialize()
 	{
 		parent::_initialize();
 		$this->model = model('Category');
+		
+
 	}
 
 	public function _empty($name)
@@ -18,6 +21,7 @@ class Category extends Backend
 
 	public function index()
 	{
+
 		return $this->fetch();
 	}
 
@@ -58,6 +62,7 @@ class Category extends Backend
             }
             else
             {
+
             	return parent::returnJson('添加成功',1);
             }
 		}

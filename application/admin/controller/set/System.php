@@ -64,6 +64,9 @@ class System extends Backend
         }
         else
         {
+        	/*$redis = \blog\Redis::getInstance(config('cache.redis_zu'));
+        	$redis->hMset('config',$data);*/
+
         	if($id!='')
         	{
         		return parent::returnJson('修改成功',1);

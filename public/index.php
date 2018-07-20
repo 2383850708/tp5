@@ -12,6 +12,7 @@
 // [ 应用入口文件 ]
 
 // 定义应用目录
+
 define('APP_PATH', __DIR__ . '/../application/');
 define('BIND_MODULE','home');
 define('RETIMEPATH', __DIR__ . '/../runtime/');
